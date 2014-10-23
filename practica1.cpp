@@ -84,7 +84,7 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
    // dibujar usando vértices indexados
    // params.: (1) tipo de primitivas (2) número de índices
    // (3) tipo de índices (4) puntero a tabla de triáng.
-   glDrawElements( GL_TRIANGLES, caras.size(), GL_UNSIGNED_INT, caras_t[0].idx );
+   glDrawElements( GL_TRIANGLES, 3*caras_t.size(), GL_UNSIGNED_INT, caras_t[0].idx );
 }
 
 // ---------------------------------------------------------------------
@@ -102,7 +102,7 @@ void P1_Inicializar( int argc, char *argv[] )
    }
 
 
-   for (unsigned int i = 0; i < caras.size()-15; i += 3)
+   for (unsigned int i = 0; i < caras.size(); i += 3)
    {
       caras_t.push_back(Tupla3i(caras[i+0], caras[i+1], caras[i+2]));
    }
