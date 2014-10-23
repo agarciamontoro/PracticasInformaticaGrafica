@@ -19,10 +19,8 @@
 // coordenadas de los vértices del cubo:
 
 const unsigned num_verts_cubo = 8 ;
-std::vector<float> vertices;
-std::vector<struct Tupla3f> vertices_t;
-std::vector<int> caras;
-std::vector<struct Tupla3i> caras_t;
+std::vector<struct Tupla3f> vertices;
+std::vector<struct Tupla3i> caras;
 enum modo_visualizacion modo_actual = ALAMBRE;
 
 GLfloat coords_verts_cubo[num_verts_cubo][3] = 
@@ -80,11 +78,11 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
 
 
    // especificar puntero a tabla de coords. de vértices
-   glVertexPointer( 3, GL_FLOAT, 0, vertices_t[0].coo );
+   glVertexPointer( 3, GL_FLOAT, 0, vertices[0].coo );
    // dibujar usando vértices indexados
    // params.: (1) tipo de primitivas (2) número de índices
    // (3) tipo de índices (4) puntero a tabla de triáng.
-   glDrawElements( GL_TRIANGLES, 3*caras_t.size(), GL_UNSIGNED_INT, caras_t[0].idx );
+   glDrawElements( GL_TRIANGLES, 3*caras.size(), GL_UNSIGNED_INT, caras[0].idx );
 }
 
 // ---------------------------------------------------------------------
@@ -94,24 +92,27 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
 
 void P1_Inicializar( int argc, char *argv[] )
 {
-   ply::read(argv[1], vertices, caras);
+   std::vector<float> vertices_raw;
+   std::vector<int> caras_raw;
 
-   for (unsigned int i = 0; i < vertices.size(); i += 3)
+   ply::read(argv[1], vertices_raw, caras_raw);
+
+   for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
    {
-      vertices_t.push_back(Tupla3f(vertices[i+0], vertices[i+1], vertices[i+2]));
+      vertices.push_back(Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]));
    }
 
 
-   for (unsigned int i = 0; i < caras.size(); i += 3)
+   for (unsigned int i = 0; i < caras_raw.size(); i += 3)
    {
-      caras_t.push_back(Tupla3i(caras[i+0], caras[i+1], caras[i+2]));
+      caras.push_back(Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]));
    }
 
    struct Tupla3i aux;
    std::vector<struct Tupla3i>::iterator izqda, dcha;
 
-   izqda = caras_t.begin();
-   dcha = caras_t.size()%2 == 0 ? caras_t.end() : caras_t.end()-1;
+   izqda = caras.begin();
+   dcha = caras.size()%2 == 0 ? caras.end() : caras.end()-1;
 
    for (; izqda < dcha; izqda += 2, dcha -= 2)
    {
