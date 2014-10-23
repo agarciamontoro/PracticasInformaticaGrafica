@@ -107,6 +107,19 @@ void P1_Inicializar( int argc, char *argv[] )
       caras_t.push_back(Tupla3i(caras[i+0], caras[i+1], caras[i+2]));
    }
 
+   struct Tupla3i aux;
+   std::vector<struct Tupla3i>::iterator izqda, dcha;
+
+   izqda = caras_t.begin();
+   dcha = caras_t.size()%2 == 0 ? caras_t.end() : caras_t.end()-1;
+
+   for (; izqda < dcha; izqda += 2, dcha -= 2)
+   {
+      aux = *izqda;
+      *izqda = *dcha;
+      *dcha = aux;
+   }
+
 }
 
 // ---------------------------------------------------------------------
