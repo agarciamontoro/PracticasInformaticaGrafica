@@ -18,5 +18,6 @@ enum modo_visualizacion{
 
 void P1_DibujarObjetos() ; 
 void P1_Inicializar( int argc, char *argv[] ) ;
+void CambiarVisualizacion(enum modo_visualizacion modo);
 
 #endif

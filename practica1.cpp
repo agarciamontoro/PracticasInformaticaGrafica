@@ -55,7 +55,7 @@ void CambiarVisualizacion(enum modo_visualizacion modo){
 // ---------------------------------------------------------------------
 //  dibujar caras de malla TVT
 
-void DibujarMallaTVT(std::vector<float> & vertices, std::vector<int> & caras)
+void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/)
 {
    glColor3f( 0.20, 0.15, 0.40 );
    glPointSize(4);
@@ -101,5 +101,5 @@ void P1_Inicializar( int argc, char *argv[] )
 void P1_DibujarObjetos() 
 {
    //DibujarCuboPuntos() ;
-   DibujarMallaTVT(vertices,caras);
+   DibujarMallaTVT(/*vertices,caras*/);
 }

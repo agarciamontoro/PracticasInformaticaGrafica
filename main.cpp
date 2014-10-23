@@ -241,14 +241,14 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case '-' :
          frustum_factor_escala /= 1.05;
          break;
-      case 'W' :
-         glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
+      case 'A' :
+         CambiarVisualizacion(ALAMBRE);
          break;
       case 'S' :
-         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+         CambiarVisualizacion(SOLIDO);
          break;
-      case 'C' :
-         glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+      case 'Z' :
+         CambiarVisualizacion(AJEDREZ);
          break;
       default:
          redisp = false ;
