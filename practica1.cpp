@@ -6,7 +6,7 @@
 // **
 // *********************************************************************
 
-
+#include <stdio.h>
 #include <GL/glut.h>
 #include <vector>
 
@@ -20,7 +20,9 @@
 
 const unsigned num_verts_cubo = 8 ;
 std::vector<float> vertices;
+std::vector<struct Tupla3f> vertices_t;
 std::vector<int> caras;
+std::vector<struct Tupla3i> caras_t;
 enum modo_visualizacion modo_actual = ALAMBRE;
 
 GLfloat coords_verts_cubo[num_verts_cubo][3] = 
@@ -78,11 +80,11 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
 
 
    // especificar puntero a tabla de coords. de vértices
-   glVertexPointer( 3, GL_FLOAT, 0, &(vertices[0]) );
+   glVertexPointer( 3, GL_FLOAT, 0, vertices_t[0].coo );
    // dibujar usando vértices indexados
    // params.: (1) tipo de primitivas (2) número de índices
    // (3) tipo de índices (4) puntero a tabla de triáng.
-   glDrawElements( GL_TRIANGLES, caras.size(), GL_UNSIGNED_INT, &(caras[0]) );
+   glDrawElements( GL_TRIANGLES, caras.size(), GL_UNSIGNED_INT, caras_t[0].idx );
 }
 
 // ---------------------------------------------------------------------
@@ -93,6 +95,18 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
 void P1_Inicializar( int argc, char *argv[] )
 {
    ply::read(argv[1], vertices, caras);
+
+   for (unsigned int i = 0; i < vertices.size(); i += 3)
+   {
+      vertices_t.push_back(Tupla3f(vertices[i+0], vertices[i+1], vertices[i+2]));
+   }
+
+
+   for (unsigned int i = 0; i < caras.size()-15; i += 3)
+   {
+      caras_t.push_back(Tupla3i(caras[i+0], caras[i+1], caras[i+2]));
+   }
+
 }
 
 // ---------------------------------------------------------------------

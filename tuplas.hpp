@@ -172,9 +172,26 @@ inline Tupla4f::Tupla4f( const float coot[4] )
 struct Tupla3i
 {
    int idx[3] ;
+
+   inline Tupla3i( const float x, const float y, const float z );
+   inline Tupla3i( const float idxt[3] );
+   Tupla3i() {};
 } ;
 
-
+// ---------------------------------------------------------------------
+inline Tupla3i::Tupla3i( const float x, const float y, const float z )
+{
+   idx[X] = x ;
+   idx[Y] = y ;
+   idx[Z] = z ;
+}
+// ---------------------------------------------------------------------
+inline Tupla3i::Tupla3i( const float idxt[3] )
+{
+   idx[X] = idxt[X] ;
+   idx[Y] = idxt[Y] ;
+   idx[Z] = idxt[Z] ;
+}
 
 
 
