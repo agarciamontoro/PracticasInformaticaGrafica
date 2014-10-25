@@ -53,7 +53,7 @@ private:
 public:
 	VBO(){}
 
-	VBO(GLuint tipo_t, std::vector<Tupla3f> datos_t){
+	VBO(GLuint tipo_t, std::vector<Tupla3f>& datos_t){
 		this->tipo = tipo_t;
 		this->tam = sizeof(GLfloat) * 3 * datos_t.size();
 		this->puntero_datos = datos_t[0].coo;
@@ -61,7 +61,7 @@ public:
 		this->identificador = Inicializar(tipo, tam, puntero_datos);
 	}
 
-	VBO(GLuint tipo_t, std::vector<Tupla3i> datos_t){
+	VBO(GLuint tipo_t, std::vector<Tupla3i>& datos_t){
 		this->tipo = tipo_t;
 		this->tam = sizeof(GLuint) * 3 * datos_t.size();
 		this->puntero_datos = datos_t[0].idx;
@@ -110,6 +110,13 @@ private:
 			VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
 			VBO_caras_pares		= VBO(GL_ARRAY_BUFFER, caras_pares);
 			VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
+
+			std::cout << "VBO: Vertices" << std::endl
+					  << "\tTipo: " << VBO_vertices.get_tipo() << std::endl
+					  << "\tTam: " << VBO_vertices.get_tam() << std::endl
+					  << "\tPuntero:\t\t" << VBO_vertices.get_puntero() << std::endl
+					  << "\tPuntero original:\t" << vertices[0].coo << std::endl
+					  << "\tID: " << VBO_vertices.get_id() << std::endl;
 		}
 	}
 
@@ -181,28 +188,34 @@ public:
 	}
 
 	void DibujarMallaTVT(){
+		// Ajustes iniciales
 		glPointSize(4);
-
 		cambiar_color(color_principal);
-
-		// habilitar ’vertex arrays’
-		glEnableClientState( GL_VERTEX_ARRAY );
-
-		// especificar puntero a tabla de coords. de vértices
-		glVertexPointer( 3, GL_FLOAT, 0, vertices[0].coo );
-
 		// especificar modo de visualizacion
 		glPolygonMode(GL_FRONT_AND_BACK,render_actual);
 
-		// renderizar las primitivas, separando la visualización de las pares e impares
-		glDrawElements( GL_TRIANGLES, 3*caras_pares.size(), GL_UNSIGNED_INT, caras_pares[0].idx );
+		glEnableClientState( GL_VERTEX_ARRAY ); // act. uso VA
+
+		// especificar formato de los vértices en su VBO (y offset)
+		glBindBuffer( GL_ARRAY_BUFFER, VBO_vertices.get_id() ); // act. VBO
+		glVertexPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
+		glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
+
+		// visualizar con glDrawElements (puntero a tabla == NULL)
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, VBO_caras_pares.get_id() );
+		glDrawElements( GL_TRIANGLES, 3*caras_pares.size(), GL_UNSIGNED_INT, NULL ) ;
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
 		// cambiar el color de las caras si el modo de visualización es ajedrez
 		if(visualizacion_actual == AJEDREZ)
 			cambiar_color(color_secundario);
 
-		glDrawElements( GL_TRIANGLES, 3*caras_impares.size(), GL_UNSIGNED_INT, caras_impares[0].idx );
+		// visualizar con glDrawElements (puntero a tabla == NULL)
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, VBO_caras_impares.get_id() );
+		glDrawElements( GL_TRIANGLES, 3*caras_impares.size(), GL_UNSIGNED_INT, NULL ) ;
+		glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
+		// desactivar uso de array de vértices
 		glDisableClientState( GL_VERTEX_ARRAY );
 	}
 };

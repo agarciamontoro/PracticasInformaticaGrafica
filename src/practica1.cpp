@@ -126,8 +126,6 @@ void P1_Inicializar( int argc, char *argv[] )
       malla = Malla_TVT(argv[1], Tupla3f(0.20, 0.15, 0.40), Tupla3f(1.0, 0.0, 0.0));
    else
       malla = Malla_TVT("PLY/beethoven.ply", Tupla3f(0.20, 0.15, 0.40), Tupla3f(1.0, 0.0, 0.0));
-
-   std::cout << "holi" << std::endl;
 }
 
 // ---------------------------------------------------------------------
