@@ -201,14 +201,16 @@ void DibujarObjetos()
 
 void FGE_Redibujado()
 {
+   CError();
    using namespace std ;
-   //cout << "redibujado......" << endl << flush ;
+   //cout << "redibujado......" << endl << flush ;  
    FijarViewportProyeccion() ; // necesario pues la escala puede cambiar
    FijarCamara();
    LimpiarVentana();
    DibujarEjes() ;
    DibujarObjetos();
    glutSwapBuffers();
+   CError();
 }
 
 // ---------------------------------------------------------------------
@@ -216,6 +218,7 @@ void FGE_Redibujado()
 
 void FGE_CambioTamano( int nuevoAncho, int nuevoAlto )
 {
+   CError();
    // guardar nuevo tamaño de la ventana
    ventana_tam_x  = nuevoAncho;
    ventana_tam_y  = nuevoAlto ;
@@ -225,6 +228,7 @@ void FGE_CambioTamano( int nuevoAncho, int nuevoAlto )
    
    // forzar un nuevo evento de redibujado, para actualizar ventana
    glutPostRedisplay();
+   CError();
 }
 
 // ---------------------------------------------------------------------
@@ -236,6 +240,7 @@ void FGE_CambioTamano( int nuevoAncho, int nuevoAlto )
 
 void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
 {
+   CError();
 
    bool redisp = true ;
    switch (toupper(tecla))
@@ -268,6 +273,7 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
    // si se ha cambiado algo, forzar evento de redibujado
    if (redisp)
       glutPostRedisplay();
+   CError();
 }
 
 // ---------------------------------------------------------------------
@@ -280,6 +286,7 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
 
 void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
 {
+   CError();
    bool redisp = true ;
    const float da = 5.0 ; // incremento en grados de ángulos de camara
    
@@ -312,9 +319,11 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
    // si se ha cambiado algo, forzar evento de redibujado
    if ( redisp )
       glutPostRedisplay();
+   CError();
 }
 
 void mouseButton(int button, int state, int x, int y) {
+   CError();
    bool redisp = true;
 
    switch(button){
@@ -339,11 +348,14 @@ void mouseButton(int button, int state, int x, int y) {
       default:
          redisp = false;
    }
-   if (redisp)
+   if (redisp)      
       glutPostRedisplay();
+
+   CError();
 }
 
 void mouseMove(int x, int y) {
+   CError();
    int desp_x, desp_y;
    float rotation_speed = 0.2;
 
@@ -363,6 +375,7 @@ void mouseMove(int x, int y) {
 
       glutPostRedisplay();
    }
+   CError();
 }
 
 // *********************************************************************
@@ -399,12 +412,14 @@ void Inicializa_GLUT( int argc, char * argv[] )
 
    // inicializa glew
    GLenum err = glewInit();
-   if(err != GLEW_OK)
-      std::cout << ":__________(" << std::endl;
+   if(err != GLEW_OK){
+      std::cout << "ERROR: GLEW no se ha inicializado correctamente." << std::endl;
+      exit(1);
+   }
    
    // establece función gestora del evento de redibujado:
    glutDisplayFunc( FGE_Redibujado );
-   
+
    // establece función gestora del evento de cambio de tamaño:
    glutReshapeFunc( FGE_CambioTamano );
    
@@ -433,7 +448,7 @@ void Inicializa_OpenGL( )
    // es necesario, no está habilitado por defecto:
    // https://www.opengl.org/wiki/Depth_Buffer
    glEnable( GL_DEPTH_TEST );
-   
+
    // establecer color de fondo: (1,1,1) (blanco)
    glClearColor( 1.0, 1.0, 1.0, 1.0 ) ;
    
