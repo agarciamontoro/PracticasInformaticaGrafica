@@ -104,7 +104,7 @@ void P1_Inicializar( int argc, char *argv[] )
 
    // si no se ha proporcionado un archivo PLY se carga el archivo beethoven.ply por defecto
    if(argc < 2)
-      sprintf(ruta_archivo, "beethoven.ply");
+      sprintf(ruta_archivo, "./PLY/beethoven.ply");
    else
       sprintf(ruta_archivo, "%s", argv[1]);
 

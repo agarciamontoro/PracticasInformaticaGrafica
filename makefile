@@ -42,7 +42,7 @@ gtk_ld_libs         :=
 
 
 units               := $(basename $(units_ext))
-objs                := $(addsuffix .o, $(notdir $(units)))
+objs                := $(addprefix $(OBJ)/, $(addsuffix .o, $(notdir $(units))))
 c_flags             := -I $(INC) $(src_dir) $(opt_dbg_flag) $(exit_first) $(warn_all) $(gtk_c_flags)
 ld_libs             := $(gtk_ld_libs) $(gl_libs) $(other_ld_libs)
 
@@ -54,6 +54,7 @@ exec: $(target_name)
 	./$(target_name)
 
 all:
+	echo $(objs)
 	make clean
 	make compile
 
@@ -61,13 +62,13 @@ compile: $(target_name)
 	@echo "compilando fuentes: " $(units_ext)
 	@make --no-print-directory $(target_name)
 
-$(target_name) : $(OBJ)/$(objs)
+$(target_name) : $(objs)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo "Enlazando      :" $(target_name) 
 	@echo "Unidades(ext)  :" $(units_ext) 
 	@echo "Objetos        :" $(objs) 
 	@tput sgr0
-	g++ -o $(target_name) $(OBJ)/$(objs) $(ld_libs) 
+	g++ -o $(target_name) $(objs) $(ld_libs) 
 	@echo ---------------------------------------------------------------
 	
 	
@@ -75,19 +76,19 @@ $(OBJ)/%.o: $(SRC)/%.cpp $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
-	@g++ $(c_flags) -c $<
+	@g++ $(c_flags) -c $< -o $@
 
 $(OBJ)/%.o: $(SRC)/%.cc $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
-	@g++ $(c_flags) -c $<
+	@g++ $(c_flags) -c $< -o $@
 	
 $(OBJ)/%.o: $(SRC)/%.c $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
-	@g++ $(c_flags) -c $<
+	@g++ $(c_flags) -c $< -o $@
 
 clean:
 	rm -f $(OBJ)/*.o $(target_name)
