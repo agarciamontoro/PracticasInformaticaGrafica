@@ -19,8 +19,10 @@
 // coordenadas de los vértices del cubo:
 
 const unsigned num_verts_cubo = 8 ;
+
 std::vector<struct Tupla3f> vertices;
 std::vector<struct Tupla3i> caras_pares, caras_impares;
+
 enum modo_visualizacion visualizacion_actual = ALAMBRE;
 GLenum render_actual = GL_LINE;
 
@@ -92,8 +94,16 @@ void P1_Inicializar( int argc, char *argv[] )
 {
    std::vector<float> vertices_raw;
    std::vector<int> caras_raw;
+   char ruta_archivo[256];
 
-   ply::read(argv[1], vertices_raw, caras_raw);
+   // si no se ha proporcionado un archivo PLY se carga el archivo beethoven.ply por defecto
+   if(argc < 2)
+      sprintf(ruta_archivo, "beethoven.ply");
+   else
+      sprintf(ruta_archivo, "%s", argv[1]);
+
+   // lectura del archivo PLY
+   ply::read(ruta_archivo, vertices_raw, caras_raw);
 
    for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
    {
