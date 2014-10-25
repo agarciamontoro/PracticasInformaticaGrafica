@@ -25,6 +25,8 @@
 #include "error-ogl.hpp"
 #include "practica1.hpp"
 
+// defines de variables de botones
+
 #define GLUT_MOUSE_WHEEL_UP   3
 #define GLUT_MOUSE_WHEEL_DOWN 4
 
@@ -60,8 +62,9 @@ int
    ventana_tam_x  ,  // ancho inicial y actual de la ventana, en pixels
    ventana_tam_y  ;  // alto inicial actual de la ventana, en pixels
 
-float angle = 0.0f;
-float deltaAngle = 0.0f;
+// ---------------------------------------------------------------------
+// variables para la gestión de la posición del ratón
+
 int xOrigin = -1;
 int yOrigin = -1;
 
@@ -310,9 +313,6 @@ void mouseButton(int button, int state, int x, int y) {
    bool redisp = true;
 
    switch(button){
-      case GLUT_MOUSE_WHEEL_UP:
-         frustum_factor_escala *= 1.05;
-         break;
       case GLUT_MOUSE_WHEEL_DOWN:
          frustum_factor_escala /= 1.05;
          break;
