@@ -334,21 +334,7 @@ void mouseButton(int button, int state, int x, int y) {
    if (redisp)
       glutPostRedisplay();
 }
-/*
-   // only start motion if the left button is pressed
-   if (button == GLUT_LEFT_BUTTON) {
 
-      // when the button is released
-      if (state == GLUT_UP) {
-         angle += deltaAngle;
-         xOrigin = -1;
-      }
-      else  {// state = GLUT_DOWN
-         xOrigin = x;
-      }
-   }
-}
-*/
 void mouseMove(int x, int y) {
    int desp_x, desp_y;
    float rotation_speed = 0.2;
@@ -415,9 +401,10 @@ void Inicializa_GLUT( int argc, char * argv[] )
    // establece función gestora del evento de pulsación de tecla especial:
    glutSpecialFunc( FGE_PulsarTeclaEspecial );
 
-   //Funciones para controlar la cámara con el ratón
-   //glutMouseFunc(mouseButton);
+   // establece función gestora del evento de pulsación de botón del ratón:
    glutMouseFunc(mouseButton);
+
+   // establece función gestora del movimiento del ratón:
    glutMotionFunc(mouseMove);
 }
 
