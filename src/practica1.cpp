@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 const unsigned num_verts_cubo = 8 ;
-
+/*
 // Variables para la Malla TVT
 std::vector<struct Tupla3f> vertices;
 std::vector<struct Tupla3i> caras_pares, caras_impares;
@@ -21,6 +21,9 @@ std::vector<struct Tupla3i> caras_pares, caras_impares;
 // Variables para gestionar el modo de visualización
 enum modo_visualizacion visualizacion_actual = ALAMBRE;
 GLenum render_actual = GL_LINE;
+*/
+
+Malla_TVT malla;
 
 GLfloat coords_verts_cubo[num_verts_cubo][3] = 
    {  { -0.5, -0.5, +0.5 } ,
@@ -47,14 +50,15 @@ void DibujarCuboPuntos()
    glEnd();
 }
 
+
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
 void CambiarVisualizacion(enum modo_visualizacion modo){
-   visualizacion_actual = modo;
-   render_actual        = modo == ALAMBRE ? GL_LINE : GL_FILL;
+   malla.set_visualizacion(modo);
 }
 
+/*
 // ---------------------------------------------------------------------
 //  dibujar caras de malla TVT
 
@@ -88,9 +92,10 @@ void DibujarMallaTVT()
 // Función para implementar en la práctica 1 para inicialización.
 // Se llama una vez al inicio, cuando ya se ha creado la ventana e 
 // incializado OpenGL. El PLY se debe cargar aquí.
-
+*/
 void P1_Inicializar( int argc, char *argv[] )
 {
+   /*
    // Variables locales para la lectura del archivo PLY
    std::vector<float> vertices_raw;
    std::vector<int> caras_raw;
@@ -116,7 +121,13 @@ void P1_Inicializar( int argc, char *argv[] )
    {
       caras_pares.push_back(Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]));
       caras_impares.push_back(Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]));
-   }
+   }*/
+   if(argc >= 2)
+      malla = Malla_TVT(argv[1], Tupla3f(0.20, 0.15, 0.40), Tupla3f(1.0, 0.0, 0.0));
+   else
+      malla = Malla_TVT("PLY/beethoven.ply", Tupla3f(0.20, 0.15, 0.40), Tupla3f(1.0, 0.0, 0.0));
+
+   std::cout << "holi" << std::endl;
 }
 
 // ---------------------------------------------------------------------
@@ -124,5 +135,5 @@ void P1_Inicializar( int argc, char *argv[] )
 
 void P1_DibujarObjetos() 
 {
-   DibujarMallaTVT();
+   malla.DibujarMallaTVT();
 }

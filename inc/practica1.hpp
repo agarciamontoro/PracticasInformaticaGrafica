@@ -41,7 +41,8 @@ private:
 
 		assert( tipo_t == GL_ARRAY_BUFFER || tipo_t == GL_ELEMENT_ARRAY_BUFFER );
 
-		glGenBuffers( 1, & id_vbo ); // crear nuevo VBO, obtener identificador
+		glGenBuffers( 1, &id_vbo ); // crear nuevo VBO, obtener identificador
+
 		glBindBuffer( tipo_t, id_vbo ); // activar el VBO usando su identificador
 		glBufferData( tipo_t, tam_t, puntero_datos_t, GL_STATIC_DRAW ); // transferencia RAM –> GPU
 		glBindBuffer( tipo_t, 0 ); // desactivación del VBO (activar 0)
@@ -104,6 +105,7 @@ private:
 	Tupla3f color_secundario;
 
 	void InicializarTabla(char* archivo_PLY){
+
 		if( LeerPLY(archivo_PLY) ){
 			VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
 			VBO_caras_pares		= VBO(GL_ARRAY_BUFFER, caras_pares);
@@ -115,10 +117,9 @@ private:
 	   // Variables locales para la lectura del archivo PLY
 	   std::vector<float> vertices_raw;
 	   std::vector<int> caras_raw;
-	   char ruta_archivo[256];
 
 	   // lectura del archivo PLY
-	   ply::read(ruta_archivo, vertices_raw, caras_raw);
+	   ply::read(archivo_PLY, vertices_raw, caras_raw);
 
 	   // Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
 	   for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
@@ -149,7 +150,7 @@ public:
 	Malla_TVT(char* archivo_PLY,
 			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
 			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
-			  enum modo_visualizacion visualizacion_t = AJEDREZ)
+			  enum modo_visualizacion visualizacion_t = ALAMBRE)
 	{
 		InicializarTabla(archivo_PLY);
 		this->color_principal = color_principal_t;

@@ -44,7 +44,7 @@ void GestionarError( const char * msg, const char * donde, const char * nomArchi
          << "programa abortado." << std:: endl
          << std::flush ;
          
-    exit(1) ;
+    //exit(1) ;
 }
 
 void CompruebaErrorOpenGL( const char * nomArchivo, int linea )
@@ -59,7 +59,7 @@ void CompruebaErrorOpenGL( const char * nomArchivo, int linea )
          << "   archivo     : " << nomArchivo << std::endl 
          << "   descripción : " << gluErrorString(codigoError)  << "." << std::endl
          << std::endl << std::flush ;
-      exit(1);
+      //exit(1);
    }
 }
 

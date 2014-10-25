@@ -22,6 +22,7 @@
 
 // includes de OpenGL/glut
 
+#include <GL/glew.h>
 #include <GL/glut.h>  // freeglut standard (incluye cabecera opengl)
 #include <GL/freeglut_ext.h> // extensiones freeglut (glutSolidCylinder)
 
@@ -31,6 +32,8 @@
 
 #define GLUT_MOUSE_WHEEL_UP   3
 #define GLUT_MOUSE_WHEEL_DOWN 4
+
+#define GL_GLEXT_PROTOTYPES
 
 // *********************************************************************
 // **
@@ -315,6 +318,9 @@ void mouseButton(int button, int state, int x, int y) {
    bool redisp = true;
 
    switch(button){
+      case GLUT_MOUSE_WHEEL_UP:
+         frustum_factor_escala *= 1.05;
+         break;
       case GLUT_MOUSE_WHEEL_DOWN:
          frustum_factor_escala /= 1.05;
          break;
@@ -390,6 +396,11 @@ void Inicializa_GLUT( int argc, char * argv[] )
    
    // crea y visualiza una ventana:
    glutCreateWindow("Practicas IG (14-15)");
+
+   // inicializa glew
+   GLenum err = glewInit();
+   if(err != GLEW_OK)
+      std::cout << ":__________(" << std::endl;
    
    // establece función gestora del evento de redibujado:
    glutDisplayFunc( FGE_Redibujado );
