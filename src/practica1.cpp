@@ -6,17 +6,11 @@
 // **
 // *********************************************************************
 
-#include <stdio.h>
-#include <GL/glut.h>
-#include <vector>
-
-#include "error-ogl.hpp"
-#include "tuplas.hpp"   // Tupla3f, Tupla4f, Tupla3i
-#include "practica1.hpp"
-#include "file_ply_stl.hpp"
-
 // ---------------------------------------------------------------------
 // coordenadas de los vértices del cubo:
+
+#include "practica1.hpp"
+#include <stdio.h>
 
 const unsigned num_verts_cubo = 8 ;
 

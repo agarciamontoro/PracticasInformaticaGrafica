@@ -7,6 +7,11 @@
 // **
 // *********************************************************************
 
+// includes de archivos en el directorio de trabajo (de las prácticas)
+
+#include "error-ogl.hpp"
+#include "practica1.hpp"
+
 // includes de C/C++
 
 #include <cctype>   // toupper
@@ -20,10 +25,7 @@
 #include <GL/glut.h>  // freeglut standard (incluye cabecera opengl)
 #include <GL/freeglut_ext.h> // extensiones freeglut (glutSolidCylinder)
 
-// includes de archivos en el directorio de trabajo (de las prácticas)
 
-#include "error-ogl.hpp"
-#include "practica1.hpp"
 
 // defines de variables de botones
 
