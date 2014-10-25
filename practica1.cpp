@@ -20,9 +20,11 @@
 
 const unsigned num_verts_cubo = 8 ;
 
+// Variables para la Malla TVT
 std::vector<struct Tupla3f> vertices;
 std::vector<struct Tupla3i> caras_pares, caras_impares;
 
+// Variables para gestionar el modo de visualización
 enum modo_visualizacion visualizacion_actual = ALAMBRE;
 GLenum render_actual = GL_LINE;
 
@@ -51,6 +53,9 @@ void DibujarCuboPuntos()
    glEnd();
 }
 
+// ---------------------------------------------------------------------
+//  Cambia el modo de visualización del modelo PLY
+
 void CambiarVisualizacion(enum modo_visualizacion modo){
    visualizacion_actual = modo;
    render_actual        = modo == ALAMBRE ? GL_LINE : GL_FILL;
@@ -59,7 +64,7 @@ void CambiarVisualizacion(enum modo_visualizacion modo){
 // ---------------------------------------------------------------------
 //  dibujar caras de malla TVT
 
-void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/)
+void DibujarMallaTVT()
 {
    glColor3f( 0.20, 0.15, 0.40 );
    glPointSize(4);
@@ -92,6 +97,7 @@ void DibujarMallaTVT(/*std::vector<float> & vertices, std::vector<int> & caras*/
 
 void P1_Inicializar( int argc, char *argv[] )
 {
+   // Variables locales para la lectura del archivo PLY
    std::vector<float> vertices_raw;
    std::vector<int> caras_raw;
    char ruta_archivo[256];
@@ -105,12 +111,13 @@ void P1_Inicializar( int argc, char *argv[] )
    // lectura del archivo PLY
    ply::read(ruta_archivo, vertices_raw, caras_raw);
 
+   // Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
    for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
    {
       vertices.push_back(Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]));
    }
 
-
+   // Separamos las cares pares e impares para gestionar de forma eficiente el modo ajedrez
    for (unsigned int i = 0; i < caras_raw.size(); i += 6)
    {
       caras_pares.push_back(Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]));
@@ -123,6 +130,5 @@ void P1_Inicializar( int argc, char *argv[] )
 
 void P1_DibujarObjetos() 
 {
-   //DibujarCuboPuntos() ;
-   DibujarMallaTVT(/*vertices,caras*/);
+   DibujarMallaTVT();
 }
