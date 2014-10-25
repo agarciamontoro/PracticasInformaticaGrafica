@@ -12,13 +12,19 @@
 .SUFFIXES:
 .PHONY: start, exec, all, compile, clean, tar
 
-target_name         := prac
+INC					:= ./inc
+BIN					:= ./bin
+OBJ					:= ./obj
+SRC					:= ./src
+
+
+target_name         := $(BIN)/prac
 opt_dbg_flag        := -g
 exit_first          := -Wfatal-errors
 warn_all            := -Wall
 ##warn_all          :=
-units_ext           := $(wildcard *.cpp *.cc *.c)
-headers             := $(wildcard *.hpp *.hh *.h)
+units_ext           := $(wildcard $(SRC)/*.cpp $(SRC)/*.cc $(SRC)/*.c)
+headers             := $(wildcard $(INC)/*.hpp $(INC)/*.hh $(INC)/*.h)
 ##units_ext           :=  main practica1 error-ogl
 
 gl_libs_base        := -lglut -lGLU 
@@ -37,15 +43,15 @@ gtk_ld_libs         :=
 
 units               := $(basename $(units_ext))
 objs                := $(addsuffix .o, $(notdir $(units)))
-c_flags             := -I $(src_dir) $(opt_dbg_flag) $(exit_first) $(warn_all) $(gtk_c_flags)
+c_flags             := -I $(INC) $(src_dir) $(opt_dbg_flag) $(exit_first) $(warn_all) $(gtk_c_flags)
 ld_libs             := $(gtk_ld_libs) $(gl_libs) $(other_ld_libs)
 
 start:
 	@make --no-print-directory exec
 
 exec: $(target_name)
-#	@echo "ejecutando " $(target_name) " ...."
-	#./$(target_name)
+	@echo "ejecutando " $(target_name) " ...."
+	./$(target_name)
 
 all:
 	make clean
@@ -55,36 +61,36 @@ compile: $(target_name)
 	@echo "compilando fuentes: " $(units_ext)
 	@make --no-print-directory $(target_name)
 
-$(target_name) : $(objs)
+$(target_name) : $(OBJ)/$(objs)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo "Enlazando      :" $(target_name) 
 	@echo "Unidades(ext)  :" $(units_ext) 
 	@echo "Objetos        :" $(objs) 
 	@tput sgr0
-	g++ -o $(target_name) $(objs) $(ld_libs) 
+	g++ -o $(target_name) $(OBJ)/$(objs) $(ld_libs) 
 	@echo ---------------------------------------------------------------
 	
 	
-%.o: %.cpp $(headers)
+$(OBJ)/%.o: $(SRC)/%.cpp $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $<
 
-%.o: %.cc $(headers)
+$(OBJ)/%.o: $(SRC)/%.cc $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $<
 	
-%.o: %.c $(headers)
+$(OBJ)/%.o: $(SRC)/%.c $(headers)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $<
 
 clean:
-	rm -f *.o $(target_name)
+	rm -f $(OBJ)/*.o $(target_name)
 	
 tar:
 	tar czvf archivos_prac_1.tgz *.c* *.h* *.ply makefile
