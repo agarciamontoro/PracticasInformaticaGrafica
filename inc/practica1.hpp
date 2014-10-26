@@ -99,6 +99,7 @@ private:
 		VBO_caras_impares;
 
 	enum modo_visualizacion visualizacion_actual;
+	GLenum render_actual;
 
 	Tupla3f color_principal;
 	Tupla3f color_secundario;
@@ -154,7 +155,7 @@ public:
 		InicializarTabla(archivo_PLY);
 		this->color_principal = color_principal_t;
 		this->color_secundario = color_secundario_t;
-		visualizacion_actual = visualizacion_t;
+		set_visualizacion(visualizacion_t);
 	}
 
 	// ---------------------------------------------------------------------
@@ -162,6 +163,7 @@ public:
 
 	void set_visualizacion(enum modo_visualizacion modo){
 	   this->visualizacion_actual = modo;
+	   render_actual = modo == ALAMBRE ? GL_LINE : GL_FILL;
 	}
 
 	// ---------------------------------------------------------------------
@@ -183,12 +185,9 @@ public:
 
 		// Ajustes iniciales
 		cambiar_color(color_principal);
+		
 		// especificar modo de visualizacion
-		if(visualizacion_actual == ALAMBRE){
-			glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
-		}
-		else
-			glPolygonMode(GL_FRONT_AND_BACK,GL_FILL);
+		glPolygonMode(GL_FRONT_AND_BACK, render_actual);
 
 		//Activar uso de vertex array
 		glEnableClientState( GL_VERTEX_ARRAY );
