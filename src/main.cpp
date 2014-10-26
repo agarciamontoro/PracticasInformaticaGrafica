@@ -409,13 +409,6 @@ void Inicializa_GLUT( int argc, char * argv[] )
    
    // crea y visualiza una ventana:
    glutCreateWindow("Practicas IG (14-15)");
-
-   // inicializa glew
-   GLenum err = glewInit();
-   if(err != GLEW_OK){
-      std::cout << "ERROR: GLEW no se ha inicializado correctamente." << std::endl;
-      exit(1);
-   }
    
    // establece función gestora del evento de redibujado:
    glutDisplayFunc( FGE_Redibujado );
@@ -443,7 +436,20 @@ void Inicializa_OpenGL( )
 {
    // borrar posibles errores anteriores
    CError();
-   
+
+   // leer punteros a funciones 2.0+ con GLEW
+   GLenum codigoError = glewInit();
+   if ( codigoError != GLEW_OK ) // comprobar posibles errores
+   {
+      std::cout << "Imposible inicializar ’GLEW’, mensaje: " << glewGetErrorString(codigoError) << std::endl ;
+      exit(1);
+   }
+
+   // comprobar si OpenGL ver 2.0 + está soportado (usando GLEW)
+   if ( ! GLEW_VERSION_2_0 )   {
+      std::cout << "OpenGL 2.0 no soportado." << std::endl << std::flush;
+      exit(1);
+   }
    // habilitar test de comparación de profundidades para 3D (y 2D)
    // es necesario, no está habilitado por defecto:
    // https://www.opengl.org/wiki/Depth_Buffer
