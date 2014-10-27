@@ -6,47 +6,17 @@
 // **
 // *********************************************************************
 
-// ---------------------------------------------------------------------
-// coordenadas de los vértices del cubo:
-
 #include "practica1.hpp"
+
 #include <stdio.h>
 
-const unsigned num_verts_cubo = 8 ;
-
-// Objeto de la clase Malla_TVT que contendrá las primitivas
+// Objeto global de la clase Malla_TVT que contendrá las primitivas
 Malla_TVT malla;
-
-GLfloat coords_verts_cubo[num_verts_cubo][3] = 
-   {  { -0.5, -0.5, +0.5 } ,
-      { +0.5, -0.5, +0.5 } ,
-      { +0.5, +0.5, +0.5 } ,
-      { -0.5, +0.5, +0.5 } ,
-      { -0.5, -0.5, -0.5 } ,
-      { +0.5, -0.5, -0.5 } ,
-      { +0.5, +0.5, -0.5 } ,
-      { -0.5, +0.5, -0.5 }
-   };
-   
-// ---------------------------------------------------------------------
-//  dibujar vértices del cubo en modo inmediato con begin/end
-
-void DibujarCuboPuntos()
-{
-   glColor3f( 0.10, 0.15, 0.40 );
-   glPointSize(4);
-
-   glBegin(GL_POINTS);
-   for ( unsigned i= 0 ; i < num_verts_cubo ; i++ )
-      glVertex3fv( &( coords_verts_cubo[i][0] ) );
-   glEnd();
-}
-
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
-void CambiarVisualizacion(enum modo_visualizacion modo){
+void P1_CambiarVisualizacion(enum modo_visualizacion modo){
    malla.set_visualizacion(modo);
 }
 

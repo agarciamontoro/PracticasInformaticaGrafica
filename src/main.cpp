@@ -255,13 +255,13 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
          frustum_factor_escala /= 1.05;
          break;
       case 'A' :
-         CambiarVisualizacion(ALAMBRE);
+         P1_CambiarVisualizacion(ALAMBRE);
          break;
       case 'S' :
-         CambiarVisualizacion(SOLIDO);
+         P1_CambiarVisualizacion(SOLIDO);
          break;
       case 'Z' :
-         CambiarVisualizacion(AJEDREZ);
+         P1_CambiarVisualizacion(AJEDREZ);
          break;
       default:
          redisp = false ;

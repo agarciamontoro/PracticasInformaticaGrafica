@@ -21,6 +21,7 @@
 
 
 #ifndef TUPLAS_HPP
+#define TUPLAS_HPP
 
 #include <cmath>
 
