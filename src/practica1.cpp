@@ -46,5 +46,5 @@ void P1_DibujarObjetos()
    malla.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
-   malla.DibujarMallaTVT();
+   malla.DibujarMalla_TVT();
 }

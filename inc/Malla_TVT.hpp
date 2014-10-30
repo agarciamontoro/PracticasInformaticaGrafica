@@ -50,12 +50,12 @@ public:
 
 	// ---------------------------------------------------------------------
 	//  Constructor de copia
-//	Malla_TVT(const Malla_TVT& original);
+	Malla_TVT(const Malla_TVT& original);
 
 
 	// ---------------------------------------------------------------------
 	//  Operador de asignación
-//	const Malla_TVT& operator=(const Malla_TVT &original);
+	const Malla_TVT& operator=(const Malla_TVT &original);
 
 	// ---------------------------------------------------------------------
 	//  Cambia el modo de visualización del modelo PLY
@@ -71,7 +71,7 @@ public:
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT
-	void DibujarMallaTVT();
+	void DibujarMalla_TVT();
 };
 
 #endif

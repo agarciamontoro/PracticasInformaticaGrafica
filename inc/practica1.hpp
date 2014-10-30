@@ -22,7 +22,7 @@
 #include "practica1.hpp"
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
-#include "MallaTVT.hpp"
+#include "Malla_TVT.hpp"
 
 void P1_DibujarObjetos() ; 
 void P1_Inicializar( int argc, char *argv[] ) ;

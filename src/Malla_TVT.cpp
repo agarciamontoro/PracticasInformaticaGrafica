@@ -7,7 +7,7 @@
 #include "error-ogl.hpp"
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
-#include "MallaTVT.hpp"
+#include "Malla_TVT.hpp"
 
 void Malla_TVT::InicializarTabla(char* archivo_PLY){
 
@@ -59,16 +59,41 @@ Malla_TVT::Malla_TVT(char* archivo_PLY,
 	set_visualizacion(visualizacion_t);
 }
 
-/*Malla_TVT::Malla_TVT(const Malla_TVT& original){
-	InicializarTabla(archivo_PLY);
-	this->color_principal = color_principal_t;
-	this->color_secundario = color_secundario_t;
-	set_visualizacion(visualizacion_t);
+Malla_TVT::Malla_TVT(const Malla_TVT& original){
+	if( this != &original ){
+		this->vertices = original.vertices;
+		this->caras_pares = original.caras_pares;
+		this->caras_impares = original.caras_impares;
+
+		this->color_principal = original.color_principal;
+		this->color_secundario = original.color_secundario;
+
+		set_visualizacion(original.visualizacion_actual);
+
+		this->VBO_vertices = VBO(GL_ARRAY_BUFFER, this->vertices);
+		this->VBO_caras_pares = VBO(GL_ARRAY_BUFFER, this->caras_pares);
+		this->VBO_caras_impares = VBO(GL_ARRAY_BUFFER, this->caras_impares);
+	}
 }
 
-const MallaTVT& Malla_TVT::operator=(const MallaTVT &original){
+const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
+	if( this != &original ){
+		this->vertices = original.vertices;
+		this->caras_pares = original.caras_pares;
+		this->caras_impares = original.caras_impares;
 
-}*/
+		this->color_principal = original.color_principal;
+		this->color_secundario = original.color_secundario;
+
+		set_visualizacion(original.visualizacion_actual);
+
+		this->VBO_vertices = VBO(GL_ARRAY_BUFFER, this->vertices);
+		this->VBO_caras_pares = VBO(GL_ARRAY_BUFFER, this->caras_pares);
+		this->VBO_caras_impares = VBO(GL_ARRAY_BUFFER, this->caras_impares);
+	}
+
+	return *this;
+}
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -92,7 +117,7 @@ void Malla_TVT::set_color_secundario(Tupla3f color){
    this->color_secundario = color;
 }
 
-void Malla_TVT::DibujarMallaTVT(){
+void Malla_TVT::DibujarMalla_TVT(){
 	CError();
 
 	// Ajustes iniciales
