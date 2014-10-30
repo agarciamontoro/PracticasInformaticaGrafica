@@ -48,8 +48,6 @@ void Malla_TVT::cambiar_color(Tupla3f color){
 	glColor3f(color.coo[0], color.coo[1], color.coo[2]);
 }
 
-
-
 Malla_TVT::Malla_TVT(char* archivo_PLY,
 		  Tupla3f color_principal_t,
 		  Tupla3f color_secundario_t,
@@ -60,6 +58,17 @@ Malla_TVT::Malla_TVT(char* archivo_PLY,
 	this->color_secundario = color_secundario_t;
 	set_visualizacion(visualizacion_t);
 }
+
+/*Malla_TVT::Malla_TVT(const Malla_TVT& original){
+	InicializarTabla(archivo_PLY);
+	this->color_principal = color_principal_t;
+	this->color_secundario = color_secundario_t;
+	set_visualizacion(visualizacion_t);
+}
+
+const MallaTVT& Malla_TVT::operator=(const MallaTVT &original){
+
+}*/
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY

@@ -13,7 +13,7 @@
 #include "VBO.hpp"
 
 enum modo_visualizacion{
-   ALAMBRE,
+   ALAMBRE, 
    SOLIDO,
    AJEDREZ
 };
@@ -46,6 +46,16 @@ public:
 			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
 			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
 			  enum modo_visualizacion visualizacion_t = ALAMBRE);
+
+
+	// ---------------------------------------------------------------------
+	//  Constructor de copia
+//	Malla_TVT(const Malla_TVT& original);
+
+
+	// ---------------------------------------------------------------------
+	//  Operador de asignación
+//	const Malla_TVT& operator=(const Malla_TVT &original);
 
 	// ---------------------------------------------------------------------
 	//  Cambia el modo de visualización del modelo PLY

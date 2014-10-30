@@ -21,6 +21,9 @@ public:
 	VBO(){}
 	VBO(GLuint tipo_t, std::vector<Tupla3f>& datos_t);
 	VBO(GLuint tipo_t, std::vector<Tupla3i>& datos_t);
+	VBO(const VBO& original);
+
+	const VBO& operator=(const VBO& original);
 
 	GLuint get_tipo();
 	GLuint get_tam();
