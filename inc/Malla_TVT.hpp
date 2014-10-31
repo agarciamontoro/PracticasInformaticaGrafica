@@ -20,8 +20,8 @@ enum modo_visualizacion{
 
 class Malla_TVT{
 private:
-	std::vector<struct Tupla3f> vertices;
-	std::vector<struct Tupla3i> caras_pares,
+	std::vector<Tupla3f> vertices;
+	std::vector<Tupla3i> caras_pares,
 								caras_impares;
 
 	VBO VBO_vertices,

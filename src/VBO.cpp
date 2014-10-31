@@ -45,7 +45,7 @@ const VBO& VBO::operator=(const VBO& original){
 VBO::VBO(GLuint tipo_t, std::vector<Tupla3f>& datos_t){
 	this->tipo = tipo_t;
 	this->tam = sizeof(GLfloat) * 3 * datos_t.size();
-	this->puntero_datos = datos_t[0].coo;
+	this->puntero_datos = datos_t[0].get_ptr;
 
 	this->identificador = Inicializar(tipo, tam, puntero_datos);
 }

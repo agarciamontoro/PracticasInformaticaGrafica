@@ -24,7 +24,81 @@
 #define TUPLAS_HPP
 
 #include <cmath>
+#include <assert.h>
+#include <vector>
 
+#define X 0
+#define Y 0
+#define Z 0
+
+
+template <unsigned int N, class T>
+class Tupla{
+private:
+   unsigned int dim;
+   T coo[N];
+
+public:
+
+   Tupla():
+      dim(N)
+      {}
+   
+   Tupla( const std::vector<T>& coot);
+   Tupla( const T coot[N] );
+
+   Tupla( T x, T y, T z );
+   Tupla( T x, T y, T z, T w );
+
+   T& operator[](unsigned int i) { assert(i<N); return coo[i]; }
+
+   // ---------------------------------------------------------------------
+   //  Operador de asignación
+   const T& operator=(const T &original);
+
+   // ---------------------------------------------------------------------
+   // tupla = tupla+tupla3
+   Tupla<N,T> operator + ( const Tupla<N,T> & t1 );
+
+   // ---------------------------------------------------------------------
+   // tupla = tupla-tupla
+   Tupla<N,T> operator - ( const Tupla<N,T> & t1 );
+
+   // ---------------------------------------------------------------------
+   // tupla3 = float*tupla3
+   Tupla operator * ( float a );
+
+   // ---------------------------------------------------------------------
+   // tupla = tupla/float
+   Tupla<N,T> operator / ( float a );
+
+   // ---------------------------------------------------------------------
+   // float = tupla|tupla (producto escalar)
+   T operator | ( const Tupla<N,T> & t1 );
+
+   // ---------------------------------------------------------------------
+   //  = tupla*tupla (producto vectorial)
+   Tupla<N,T> operator * ( const Tupla<N,T> & v1 );
+
+   // ---------------------------------------------------------------------
+   // float = lenSq(tupla)
+   float lenSq( const Tupla<N,T> & t );
+
+   // ---------------------------------------------------------------------
+   // float = len(tupla)
+   float len( const Tupla<N,T> & t );
+
+   //----------------------------------------------------------------------
+   // tupla3 = normalized(tupla3)
+   Tupla<N,T> normalized( const Tupla<N,T> & t );
+
+};
+
+typedef Tupla<3,float> Tupla3f;
+typedef Tupla<3,int> Tupla3i;
+typedef Tupla<4,float> Tupla4f;
+
+/*
 // ---------------------------------------------------------------------
 // índices de los ejes X,Y Z
                         
@@ -195,6 +269,6 @@ inline Tupla3i::Tupla3i( const float idxt[3] )
 }
 
 
-
+*/
 
 #endif

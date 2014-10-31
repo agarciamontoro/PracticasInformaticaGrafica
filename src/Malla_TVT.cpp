@@ -45,7 +45,7 @@ bool Malla_TVT::LeerPLY(char* archivo_PLY){
 }
 
 void Malla_TVT::cambiar_color(Tupla3f color){
-	glColor3f(color.coo[0], color.coo[1], color.coo[2]);
+	glColor3f(color[0], color[1], color[2]);
 }
 
 Malla_TVT::Malla_TVT(char* archivo_PLY,

@@ -26,6 +26,7 @@ warn_all            := -Wall
 units_ext           := $(wildcard $(SRC)/*.cpp $(SRC)/*.cc $(SRC)/*.c)
 headers             := $(wildcard $(INC)/*.hpp $(INC)/*.hh $(INC)/*.h)
 ##units_ext           :=  main practica1 error-ogl
+comp_version		:= -std=c++11
 
 gl_libs_base        := -lGLEW -lglut -lGLU 
 gl_lib_file         := -lGL
@@ -43,7 +44,7 @@ gtk_ld_libs         :=
 
 units               := $(basename $(units_ext))
 objs                := $(addprefix $(OBJ)/, $(addsuffix .o, $(notdir $(units))))
-c_flags             := -I $(INC) $(src_dir) $(opt_dbg_flag) $(exit_first) $(warn_all) $(gtk_c_flags)
+c_flags             := -I $(INC) $(src_dir) $(opt_dbg_flag) $(exit_first) $(warn_all) $(gtk_c_flags) $(comp_version)
 ld_libs             := $(gtk_ld_libs) $(gl_libs) $(other_ld_libs)
 
 start:
