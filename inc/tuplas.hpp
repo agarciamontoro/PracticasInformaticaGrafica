@@ -27,22 +27,20 @@
 #include <assert.h>
 #include <vector>
 
-#define X 0
-#define Y 0
-#define Z 0
+#define  X  0
+#define  Y  1
+#define  Z  2
+#define  W  3
 
 
 template <unsigned int N, class T>
 class Tupla{
 private:
-   unsigned int dim;
-   T coo[N];
+   std::vector<T> val;
 
 public:
 
-   Tupla():
-      dim(N)
-      {}
+   Tupla(){}
    
    Tupla( const std::vector<T>& coot);
    Tupla( const T coot[N] );
@@ -50,7 +48,7 @@ public:
    Tupla( T x, T y, T z );
    Tupla( T x, T y, T z, T w );
 
-   T& operator[](unsigned int i) { assert(i<N); return coo[i]; }
+   T& operator[](unsigned int i);
 
    // ---------------------------------------------------------------------
    //  Operador de asignación
@@ -65,8 +63,12 @@ public:
    Tupla<N,T> operator - ( const Tupla<N,T> & t1 );
 
    // ---------------------------------------------------------------------
+   // tupla3 = tupla3*float
+   Tupla<N,T> operator * ( float a );
+
+   // ---------------------------------------------------------------------
    // tupla3 = float*tupla3
-   Tupla operator * ( float a );
+   friend Tupla<N,T> operator * ( float a, Tupla<N,T>& t1 ){ return t1*a; }
 
    // ---------------------------------------------------------------------
    // tupla = tupla/float
