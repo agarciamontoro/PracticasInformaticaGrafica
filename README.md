@@ -12,4 +12,5 @@ Hasta ahora, este repositorio contiene:
 * **Práctica 1 - Modelos PLY**: Visualización de modelos almacenados en archivos PLY.
 
 
+=============================
 Doble Grado de Ingeniería Informática y Matemáticas. Universidad de Granada.
