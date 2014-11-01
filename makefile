@@ -63,7 +63,7 @@ compile: $(target_name)
 	@echo "compilando fuentes: " $(units_ext)
 	@make --no-print-directory $(target_name)
 
-$(target_name) : $(objs)
+$(target_name) : $(objs) | $(BIN)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo "Enlazando      :" $(target_name) 
 	@echo "Unidades(ext)  :" $(units_ext) 
@@ -73,23 +73,31 @@ $(target_name) : $(objs)
 	@echo ---------------------------------------------------------------
 	
 	
-$(OBJ)/%.o: $(SRC)/%.cpp $(headers)
+$(OBJ)/%.o: $(SRC)/%.cpp $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
 
-$(OBJ)/%.o: $(SRC)/%.cc $(headers)
+$(OBJ)/%.o: $(SRC)/%.cc $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
 	
-$(OBJ)/%.o: $(SRC)/%.c $(headers)
+$(OBJ)/%.o: $(SRC)/%.c $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
 	@echo Compilando: $(notdir $<) 
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
+
+# Creation of binary directory
+$(BIN):
+	mkdir -p $(BIN)
+
+# Creation of objects directory
+$(OBJ):
+	mkdir -p $(OBJ)
 
 clean:
 	rm -f $(OBJ)/*.o $(target_name)
