@@ -29,7 +29,7 @@ bool Malla_TVT::LeerPLY(char* archivo_PLY){
    // Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
    for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
    {
-      this->vertices.push_back(Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]));
+		this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
    }
 
    // Separamos las cares pares e impares para gestionar de forma eficiente el modo ajedrez

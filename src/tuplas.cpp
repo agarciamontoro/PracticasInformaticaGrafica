@@ -4,14 +4,17 @@
 template <unsigned int N, class T>
 Tupla<N,T>::Tupla( const std::vector<T>& coot){
 	assert(coot.size() == N);
-	val = coot;
+
+	for (int i = 0; i < N; ++i){
+		val[i] = coot[i];
+	}
 }
 
 template <unsigned int N, class T>
 Tupla<N,T>::Tupla( const T coot[N] ){
-	
+
 	for (int i = 0; i < N; ++i){
-		val.push_back(coot[i]);
+		val[i] = coot[i];
 	}
 
 }
@@ -20,34 +23,48 @@ template <unsigned int N, class T>
 Tupla<N,T>::Tupla( T x, T y, T z ){
 	assert(N == 3);
 
-	val.push_back(x);
-	val.push_back(y);
-	val.push_back(z);
+	val[X] = x;
+	val[Y] = y;
+	val[Z] = z;
 }
 
 template <unsigned int N, class T>
 Tupla<N,T>::Tupla( T x, T y, T z, T w ){
 	assert(N == 4);
 
-	val.push_back(x);
-	val.push_back(y);
-	val.push_back(z);
-	val.push_back(w);
+	val[X] = x;
+	val[Y] = y;
+	val[Z] = z;
+	val[W] = w;
 }
 
 template <unsigned int N, class T>
+const T& Tupla<N,T>::operator[](unsigned int i) const{
+	return this->val[i];
+}
+
+template <unsigned int N, class T>
+T& Tupla<N,T>::operator[](unsigned int i){
+	return this->val[i];
+}
+
+/*template <unsigned int N, class T>
 T& Tupla<N,T>::operator[](unsigned int i) {
 	assert(i<N);
 
-	return val[i];
-}
+	return this->val[i];
+}*/
 
 // ---------------------------------------------------------------------
 //  Operador de asignación
 template <unsigned int N, class T>
-const T& Tupla<N,T>::operator=(const T &original){
-	val = original;
-	return *this;
+const Tupla<N,T>& Tupla<N,T>::operator=(const Tupla<N,T> &original){
+
+	for (int i = 0; i < N; ++i){
+		this->val[i] = original[i];
+	}
+
+		return *this;
 }
 
 // ---------------------------------------------------------------------
@@ -95,7 +112,7 @@ Tupla<N,T> Tupla<N,T>::operator * ( float a ){
 // ---------------------------------------------------------------------
 // tupla = tupla/float
 template <unsigned int N, class T>
-Tupla<N,T> Tupla<N,T>::operator / ( float a ){
+Tupla<N,T> Tupla<N,T>::operator / ( float a ) const{
 	std::vector<T> division;
 
 	for (int i = 0; i < N; ++i)
@@ -109,7 +126,7 @@ Tupla<N,T> Tupla<N,T>::operator / ( float a ){
 // ---------------------------------------------------------------------
 // float = tupla|tupla (producto escalar)
 template <unsigned int N, class T>
-T Tupla<N,T>::operator | ( const Tupla<N,T> & t1 ){
+T Tupla<N,T>::operator | ( const Tupla<N,T> & t1 ) const{
 	T prod_escalar = 0;
 
 	for (int i = 0; i < N; ++i)
@@ -126,7 +143,7 @@ template <unsigned int N, class T>
 Tupla<N,T> Tupla<N,T>::operator * ( const Tupla<N,T> & v2 ){
 	assert(N == 3);
 
-	return Tupla3f(
+	return Tupla<N,T>(
 		this->val[Y]*v2[Z] - this->val[Z]*v2[Y] ,
 		this->val[Z]*v2[X] - this->val[X]*v2[Z] ,
 		this->val[X]*v2[Y] - this->val[Y]*v2[X] 
@@ -153,3 +170,16 @@ template <unsigned int N, class T>
 Tupla<N,T> Tupla<N,T>::normalized( const Tupla<N,T> & t ){
 	return t/len(t);
 }
+
+
+//----------------------------------------------------------------------
+//						 	ESPECIALIZACIONES
+//----------------------------------------------------------------------
+// Posibles especializaciones. Tienen que declararse aquí para que el
+// compilador sea capaz de enlazar sus definiciones luego.
+
+template class Tupla<3,int>;
+template class Tupla<3,float>;
+
+template class Tupla<4,int>;
+template class Tupla<4,float>;

@@ -36,7 +36,7 @@
 template <unsigned int N, class T>
 class Tupla{
 private:
-   std::vector<T> val;
+   T val[N];
 
 public:
 
@@ -48,11 +48,12 @@ public:
    Tupla( T x, T y, T z );
    Tupla( T x, T y, T z, T w );
 
+   const T& operator[](unsigned int i) const;
    T& operator[](unsigned int i);
 
    // ---------------------------------------------------------------------
    //  Operador de asignación
-   const T& operator=(const T &original);
+   const Tupla<N,T>& operator=(const Tupla<N,T> &original);
 
    // ---------------------------------------------------------------------
    // tupla = tupla+tupla3
@@ -68,15 +69,15 @@ public:
 
    // ---------------------------------------------------------------------
    // tupla3 = float*tupla3
-   friend Tupla<N,T> operator * ( float a, Tupla<N,T>& t1 ){ return t1*a; }
+   friend Tupla<N,T> operator * ( float a, const Tupla<N,T> & v2 ){ return v2*a; }
 
    // ---------------------------------------------------------------------
    // tupla = tupla/float
-   Tupla<N,T> operator / ( float a );
+   Tupla<N,T> operator / ( float a ) const;
 
    // ---------------------------------------------------------------------
    // float = tupla|tupla (producto escalar)
-   T operator | ( const Tupla<N,T> & t1 );
+   T operator | ( const Tupla<N,T> & t1 ) const;
 
    // ---------------------------------------------------------------------
    //  = tupla*tupla (producto vectorial)
@@ -94,7 +95,12 @@ public:
    // tupla3 = normalized(tupla3)
    Tupla<N,T> normalized( const Tupla<N,T> & t );
 
+   T* get_ptr(){
+      return &(val[0]);
+   }
+
 };
+
 
 typedef Tupla<3,float> Tupla3f;
 typedef Tupla<3,int> Tupla3i;
