@@ -28,15 +28,8 @@ void PX_Inicializar( int argc, char *argv[] ){
 }
 
 void PX_CambiarVisualizacion(enum modo_visualizacion modo){
-	switch(PRACTICA_ACTUAL){
-		case P1:
-			P1_CambiarVisualizacion(modo);
-			break;
-
-		case P2:
-			P2_CambiarVisualizacion(modo);
-			break;
-	}
+	P1_CambiarVisualizacion(modo);
+	P2_CambiarVisualizacion(modo);
 }
 
 void PX_CambiarPracticaActual(enum practicas prac){

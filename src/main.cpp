@@ -265,6 +265,9 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case 'Z' :
          PX_CambiarVisualizacion(AJEDREZ);
          break;
+      case 'P' :
+         PX_CambiarVisualizacion(PUNTO);
+         break;
       default:
          redisp = false ;
          break ;

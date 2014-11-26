@@ -100,7 +100,21 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 
 void Malla_TVT::set_visualizacion(enum modo_visualizacion modo){
    this->visualizacion_actual = modo;
-   render_actual = modo == ALAMBRE ? GL_LINE : GL_FILL;
+   
+   switch(modo){
+   	case ALAMBRE:
+   		render_actual = GL_LINE;
+   		break;
+   		
+   	case PUNTO:
+   		render_actual = GL_POINT;
+   		break;
+   		
+   	case SOLIDO:
+   	case AJEDREZ:
+   		render_actual = GL_FILL;
+   		break;
+   	}
 }
 
 // ---------------------------------------------------------------------

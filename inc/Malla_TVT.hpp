@@ -15,7 +15,8 @@
 enum modo_visualizacion{
    ALAMBRE, 
    SOLIDO,
-   AJEDREZ
+   AJEDREZ,
+   PUNTO
 };
 
 class Malla_TVT{
