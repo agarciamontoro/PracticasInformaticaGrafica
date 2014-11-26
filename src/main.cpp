@@ -10,6 +10,7 @@
 // includes de archivos en el directorio de trabajo (de las prácticas)
 
 #include "error-ogl.hpp"
+#include "gestion_practicas.hpp"
 #include "practica1.hpp"
 #include "practica2.hpp"
 
@@ -35,13 +36,6 @@
 #define GLUT_MOUSE_WHEEL_DOWN 4
 
 #define GL_GLEXT_PROTOTYPES
-
-enum practicas{
-   P1,
-   P2
-};
-
-enum practicas PRACTICA_ACTUAL = P1;
 
 // *********************************************************************
 // **
@@ -194,15 +188,7 @@ void LimpiarVentana()
 
 void DibujarObjetos()
 {
-   switch(PRACTICA_ACTUAL){
-      case P1:
-         P1_DibujarObjetos() ; // definido en 'practica1.hpp'
-         break;
-
-      case P2:
-         P2_DibujarObjetos() ; // definido en 'practica2.hpp'
-         break;
-      }
+   PX_DibujarObjetos(); //Definido en gestion_practicas.cpp
 }
 
 
@@ -271,13 +257,13 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
          frustum_factor_escala /= 1.05;
          break;
       case 'A' :
-         P1_CambiarVisualizacion(ALAMBRE);
+         PX_CambiarVisualizacion(ALAMBRE);
          break;
       case 'S' :
-         P1_CambiarVisualizacion(SOLIDO);
+         PX_CambiarVisualizacion(SOLIDO);
          break;
       case 'Z' :
-         P1_CambiarVisualizacion(AJEDREZ);
+         PX_CambiarVisualizacion(AJEDREZ);
          break;
       default:
          redisp = false ;
@@ -327,10 +313,10 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
          frustum_factor_escala /= 1.05;
          break;
       case GLUT_KEY_F1:
-         PRACTICA_ACTUAL = P1;
+         PX_CambiarPracticaActual(P1);
          break;
       case GLUT_KEY_F2:
-         PRACTICA_ACTUAL = P2;
+         PX_CambiarPracticaActual(P2);
          break;
       default:
          redisp = false ;
@@ -522,8 +508,8 @@ void Inicializar( int argc, char *argv[] )
    // opengl: define proyección y atributos iniciales
    Inicializa_OpenGL() ;
    
-   // inicializar práctica 1: carga el ply
-   P1_Inicializar( argc, argv ) ;
+   // inicializar todas las prácticas
+   PX_Inicializar( argc, argv ) ;
 }
 
 // *********************************************************************
