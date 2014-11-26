@@ -3,12 +3,12 @@
 // ** Informática Gráfica, curso 2014-15
 // ** 
 // **
-// ** Práctica 1  (declaraciones públicas)
+// ** Práctica 2  (declaraciones públicas)
 // **
 // *********************************************************************
 
-#ifndef IG_PRACTICA1_HPP
-#define IG_PRACTICA1_HPP
+#ifndef IG_PRACTICA2_HPP
+#define IG_PRACTICA2_HPP
 
 #include <iostream>
 #include <vector>
@@ -23,8 +23,8 @@
 #include "VBO.hpp"
 #include "Malla_TVT.hpp"
 
-void P1_DibujarObjetos() ; 
-void P1_Inicializar( int argc, char *argv[] ) ;
-void P1_CambiarVisualizacion(enum modo_visualizacion modo);
+void P2_DibujarObjetos() ; 
+void P2_Inicializar( int argc, char *argv[] ) ;
+void P2_CambiarVisualizacion(enum modo_visualizacion modo);
 
 #endif

@@ -2,11 +2,11 @@
 // **
 // ** Informática Gráfica, curso 2014-15
 // ** 
-// ** Práctica 1  (implementación)
+// ** Práctica 2  (implementación)
 // **
 // *********************************************************************
 
-#include "practica1.hpp"
+#include "practica2.hpp"
 
 #include <stdio.h>
 
@@ -16,7 +16,7 @@ static Malla_TVT malla;
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
-void P1_CambiarVisualizacion(enum modo_visualizacion modo){
+void P2_CambiarVisualizacion(enum modo_visualizacion modo){
    malla.set_visualizacion(modo);
 }
 
@@ -25,7 +25,7 @@ void P1_CambiarVisualizacion(enum modo_visualizacion modo){
 // Se llama una vez al inicio, cuando ya se ha creado la ventana e 
 // incializado OpenGL. El PLY se debe cargar aquí.
 
-void P1_Inicializar( int argc, char *argv[] )
+void P2_Inicializar( int argc, char *argv[] )
 {
    char ruta_archivo[256];
 
@@ -41,7 +41,7 @@ void P1_Inicializar( int argc, char *argv[] )
 // ---------------------------------------------------------------------
 // Función a implementar en la práctica 1  para dibujar los objetos
 
-void P1_DibujarObjetos() 
+void P2_DibujarObjetos() 
 {
    malla.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));

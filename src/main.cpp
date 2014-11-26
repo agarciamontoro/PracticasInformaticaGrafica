@@ -11,6 +11,7 @@
 
 #include "error-ogl.hpp"
 #include "practica1.hpp"
+#include "practica2.hpp"
 
 // includes de C/C++
 
@@ -34,6 +35,13 @@
 #define GLUT_MOUSE_WHEEL_DOWN 4
 
 #define GL_GLEXT_PROTOTYPES
+
+enum practicas{
+   P1,
+   P2
+};
+
+enum practicas PRACTICA_ACTUAL = P1;
 
 // *********************************************************************
 // **
@@ -186,7 +194,15 @@ void LimpiarVentana()
 
 void DibujarObjetos()
 {
-   P1_DibujarObjetos() ; // definido en 'practica1.hpp'
+   switch(PRACTICA_ACTUAL){
+      case P1:
+         P1_DibujarObjetos() ; // definido en 'practica1.hpp'
+         break;
+
+      case P2:
+         P2_DibujarObjetos() ; // definido en 'practica2.hpp'
+         break;
+      }
 }
 
 
@@ -309,6 +325,12 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
          break;
       case GLUT_KEY_PAGE_DOWN:
          frustum_factor_escala /= 1.05;
+         break;
+      case GLUT_KEY_F1:
+         PRACTICA_ACTUAL = P1;
+         break;
+      case GLUT_KEY_F2:
+         PRACTICA_ACTUAL = P2;
          break;
       default:
          redisp = false ;
