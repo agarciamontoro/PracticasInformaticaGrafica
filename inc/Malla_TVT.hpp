@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <assert.h>
+#include <cmath> //Uso de M_PI
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -17,6 +18,11 @@ enum modo_visualizacion{
    SOLIDO,
    AJEDREZ,
    PUNTO
+};
+
+enum modo_lectura{
+   TODO,
+   VERT
 };
 
 class Malla_TVT{
@@ -35,8 +41,8 @@ private:
 	Tupla3f color_principal;
 	Tupla3f color_secundario;
 
-	void InicializarTabla(char* archivo_PLY);
-	bool LeerPLY(char* archivo_PLY);
+	void InicializarTabla(char* archivo_PLY, enum modo_lectura lec);
+	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
 
 public:
@@ -44,6 +50,7 @@ public:
 	Malla_TVT(){};
 
 	Malla_TVT(char* archivo_PLY,
+			  enum modo_lectura lec = TODO,
 			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
 			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
 			  enum modo_visualizacion visualizacion_t = ALAMBRE);
@@ -69,6 +76,10 @@ public:
 	// ---------------------------------------------------------------------
 	//  Cambia el color principal de renderización
 	void set_color_secundario(Tupla3f color);
+
+	// ---------------------------------------------------------------------
+	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
+	void GenerarSolidoRevolucion(int caras);
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT

@@ -28,14 +28,22 @@ void P2_CambiarVisualizacion(enum modo_visualizacion modo){
 void P2_Inicializar( int argc, char *argv[] )
 {
    char ruta_archivo[256];
+   int num_caras;
 
-   // si no se ha proporcionado un archivo PLY se carga el archivo beethoven.ply por defecto
+   // si no se ha proporcionado un archivo PLY se carga el archivo perfil_peon.ply por defecto
    if(argc < 2)
-      sprintf(ruta_archivo, "./PLY/big_dodge.ply");
+      sprintf(ruta_archivo, "./PLY/perfil_peon.ply");
    else
-      sprintf(ruta_archivo, "%s", argv[1]);
+      sprintf(ruta_archivo, "%s", argv[2]);
 
-   malla = Malla_TVT(ruta_archivo);
+   // si no se ha proporcionado un numero de caras, se asignan 50 por defecto
+   if(argc < 3)
+      num_caras = atoi(argv[3]);
+   else
+      num_caras = 50;
+
+   malla = Malla_TVT(ruta_archivo, VERT);
+   malla.GenerarSolidoRevolucion(num_caras);
 }
 
 // ---------------------------------------------------------------------

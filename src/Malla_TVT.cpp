@@ -7,24 +7,29 @@
 #include "error-ogl.hpp"
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
+#include "Matriz.hpp"
 #include "Malla_TVT.hpp"
 
-void Malla_TVT::InicializarTabla(char* archivo_PLY){
+void Malla_TVT::InicializarTabla(char* archivo_PLY, enum modo_lectura lec){
 
-	if( LeerPLY(archivo_PLY) ){
+	if( LeerPLY(archivo_PLY, lec) ){
 		VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
 		VBO_caras_pares		= VBO(GL_ARRAY_BUFFER, caras_pares);
 		VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
 	}
 }
 
-bool Malla_TVT::LeerPLY(char* archivo_PLY){
+bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
    // Variables locales para la lectura del archivo PLY
    std::vector<float> vertices_raw;
    std::vector<int> caras_raw;
 
    // lectura del archivo PLY
-   ply::read(archivo_PLY, vertices_raw, caras_raw);
+   if(lec == TODO){
+   	ply::read(archivo_PLY, vertices_raw, caras_raw);
+   }
+   else
+   	ply::read_vertices(archivo_PLY, vertices_raw);
 
    // Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
    for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
@@ -32,12 +37,14 @@ bool Malla_TVT::LeerPLY(char* archivo_PLY){
 		this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
    }
 
-   // Separamos las cares pares e impares para gestionar de forma eficiente el modo ajedrez
-   for (unsigned int i = 0; i < caras_raw.size(); i += 6)
-   {
-      this->caras_pares.push_back(Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]));
-      this->caras_impares.push_back(Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]));
-   }
+   if(lec == TODO){
+	   // Separamos las cares pares e impares para gestionar de forma eficiente el modo ajedrez
+	   for (unsigned int i = 0; i < caras_raw.size(); i += 6)
+	   {
+	      this->caras_pares.push_back(Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]));
+	      this->caras_impares.push_back(Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]));
+	   }
+	}
 
    // TODO: Implementar una gestión de errores al leer/procesar los datos.
    // En caso de encontrarlos, devolver false.
@@ -49,11 +56,12 @@ void Malla_TVT::cambiar_color(Tupla3f color){
 }
 
 Malla_TVT::Malla_TVT(char* archivo_PLY,
+		  enum modo_lectura lec,
 		  Tupla3f color_principal_t,
 		  Tupla3f color_secundario_t,
 		  enum modo_visualizacion visualizacion_t)
 {
-	InicializarTabla(archivo_PLY);
+	InicializarTabla(archivo_PLY, lec);
 	this->color_principal = color_principal_t;
 	this->color_secundario = color_secundario_t;
 	set_visualizacion(visualizacion_t);
@@ -128,7 +136,38 @@ void Malla_TVT::set_color_principal(Tupla3f color){
 //  Cambia el color principal de renderización
 
 void Malla_TVT::set_color_secundario(Tupla3f color){
-   this->color_secundario = color;
+	this->color_secundario = color;
+}
+
+void Malla_TVT::GenerarSolidoRevolucion(int caras){
+	assert(this->vertices.size() > 0);
+	assert(caras_pares.size() == 0 && caras_impares.size() == 0);
+
+	//Ángulo de rotación entre perfiles
+	float angulo = 2*M_PI / caras;
+	//Matriz de rotacion
+	Matriz3x3f matriz_rotacion;
+
+	//Vector de perfiles, donde el elemento i será el resultado de rotar
+	//el perfil i-1 un ángulo angulo; es decir, el resultado de rotar
+	//el perfil 0 un ángulo i*angulo.
+	std::vector< std::vector<Tupla3f> > perfiles;
+
+	perfiles.push_back(this->vertices);
+
+	//Se generan todos los perfiles
+	for (int i = 1; i < caras; ++i)
+	{
+		std::vector<Tupla3f> perfil_actual;
+
+		//Se generan todos los vértices del perfil i
+		for (int j = 0; j < this->vertices.size(); ++j)
+		{
+			//perfil_actual.push_back( matriz_rotacion * perfiles[i-1][j] );
+		}
+
+		perfiles.push_back(perfil_actual);
+	}
 }
 
 void Malla_TVT::DibujarMalla_TVT(){
