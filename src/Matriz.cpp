@@ -151,34 +151,6 @@ Matriz<1,COLS,T> operator * ( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T
    return vector_mat * m1;   
 }
 
-// ---------------------------------------------------------------------
-//  Convierte matriz fila o columna en una tupla de COLS columnas o ROWS filas, respectivamente
-/*template<unsigned int N, unsigned int ROWS, unsigned int COLS, class T>
-Tupla<N,T> toTupla(){
-   assert(COLS == 1 || ROWS == 1);
-
-   if(COLS == 1){
-      Tupla<ROWS,T> tupla;
-      
-      for (int i = 0; i < ROWS; ++i){
-         tupla[i] = this->matriz[i][0];
-      }
-
-      return tupla;
-   }
-   else{
-      Tupla<COLS,T> tupla;
-
-      for (int j = 0; j < COLS; ++j)
-      {
-         tupla[j] = this->matriz[0][j];
-      }
-
-      return tupla;
-   }
-}*/
-
-
 //----------------------------------------------------------------------
 //                   ESPECIALIZACIONES
 //----------------------------------------------------------------------

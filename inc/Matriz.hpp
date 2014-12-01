@@ -87,6 +87,15 @@ public:
    friend Matriz<1,COLS,T> operator * <>( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T> & m1 );
 };
 
+typedef Matriz<1,3,float> Matriz1x3f;
+typedef Matriz<3,1,float> Matriz3x1f;
+typedef Matriz<3,3,float> Matriz3x3f;
+typedef Matriz<4,4,float> Matriz4x4f;
+
+////////////////////////////
+// Funciones relacionadas //
+////////////////////////////
+
 //TODO: Ver cómo definir esto en el cpp
 template<unsigned int COLS, class T>
 Tupla<COLS,T> toTupla( const Matriz<1,COLS,T>& m1){
@@ -111,10 +120,5 @@ Tupla<ROWS,T> toTupla( const Matriz<ROWS,1,T>& m1){
 
    return tupla;
 }
-
-typedef Matriz<1,3,float> Matriz1x3f;
-typedef Matriz<3,1,float> Matriz3x1f;
-typedef Matriz<3,3,float> Matriz3x3f;
-typedef Matriz<4,4,float> Matriz4x4f;
 
 #endif
