@@ -6,6 +6,18 @@
 #include "Matriz.hpp"
 
 template <unsigned int ROWS, unsigned int COLS, class T>
+Matriz<ROWS,COLS,T>::Matriz( const T datos[ROWS][COLS]){
+   for (int i = 0; i < ROWS; ++i)
+   {
+      for (int j = 0; j < COLS; ++j)
+      {
+         this->matriz[i][j] = datos[i][j];
+      }
+   }
+}
+
+
+template <unsigned int ROWS, unsigned int COLS, class T>
 Matriz<ROWS,COLS,T>::Matriz( const std::vector< std::vector<T> >& datos){
    assert(datos.size() == ROWS);
 

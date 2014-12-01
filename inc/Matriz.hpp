@@ -29,6 +29,7 @@ public:
 
    Matriz(){}
    
+   Matriz( const T datos[ROWS][COLS]);
    Matriz( const std::vector< std::vector<T> >& datos);
 
    const T* operator[](unsigned int i) const;
