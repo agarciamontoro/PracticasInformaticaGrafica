@@ -6,6 +6,20 @@
 #include <cmath> //Uso de M_PI
 #include "tuplas.hpp"
 
+///////////////////////////
+// Declaraciones previas //
+///////////////////////////
+
+template <unsigned int ROWS, unsigned int COLS, class T>
+class Matriz;
+
+template <unsigned int ROWS, unsigned int COLS, class T>
+Matriz<1,COLS,T> operator * ( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T> & m1 );
+
+//////////////////
+// Clase Matriz //
+//////////////////
+
 template <unsigned int ROWS, unsigned int COLS, class T>
 class Matriz{
 private:
@@ -45,37 +59,61 @@ public:
    Matriz<ROWS,COLS,T> operator / ( float a ) const;
 
    // ---------------------------------------------------------------------
-   //  = matriz*matriz (producto matricial)
-   //template<unsigned int N>
-   //Matriz<ROWS,N,T> operator * ( const Matriz<COLS,N,T> & m1 );
-   //Matriz<ROWS,COLS,T> operator * ( const Matriz<ROWS,COLS,T> & m1 );
-   template<int N1, int N2, int M>
-   friend Matriz<N1, N2, T> operator*(const Matriz<N1, M, T> &lhs, const Matriz<M, N2, T> &rhs);
+   //  = matriz*matriz (producto matricial) //TODO: Ver cómo definir esto en el cpp
+   template<unsigned int N>
+   Matriz<ROWS,N,T> operator * ( const Matriz<COLS,N,T> & m1 ){
+      Matriz<ROWS,N,T> producto;
 
-   // ---------------------------------------------------------------------
-   //  = matriz*vector (producto matriz vector)
-   Matriz<ROWS,COLS,T> operator * ( const std::vector<T> & v1 );
+      for (int i = 0; i < ROWS; ++i)
+      {
+         for (int k = 0; k < COLS; ++k)
+         {
+            for (int j = 0; j < N; ++j)
+            {
+               producto[i][j] += this->matriz[i][k] * m1[k][j];
+            }
+         }
+      }
 
-   // ---------------------------------------------------------------------
-   //  = vector*matriz (producto vector matriz)
-   friend Matriz<1,COLS,T> operator * ( const std::vector<T> & v1, const Matriz<ROWS,COLS,T> & m1 ){
-      Matriz<1,3,float> matriz;
-      return matriz;
+      return producto;
    }
 
    // ---------------------------------------------------------------------
    //  = matriz*tupla (producto matriz tupla)
-   Matriz<ROWS,COLS,T> operator * ( const Tupla<COLS,T> & t1 );
+   Matriz<ROWS,1,T> operator * ( const Tupla<COLS,T> & t1 );
 
    // ---------------------------------------------------------------------
    //  = tupla*matriz (producto tupla matriz)
-   friend Matriz<1,COLS,T> operator * ( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T> & m1 ){
-      Matriz<1,3,float> matriz;
-      return matriz;
-   }
+   friend Matriz<1,COLS,T> operator * <>( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T> & m1 );
 };
 
+//TODO: Ver cómo definir esto en el cpp
+template<unsigned int COLS, class T>
+Tupla<COLS,T> toTupla( const Matriz<1,COLS,T>& m1){
+   Tupla<COLS,T> tupla;
 
+   for (int j = 0; j < COLS; ++j)
+   {
+      tupla[j] = m1[0][j];
+   }
+
+   return tupla;
+}
+
+//TODO: Ver cómo definir esto en el cpp
+template<unsigned int ROWS, class T>
+Tupla<ROWS,T> toTupla( const Matriz<ROWS,1,T>& m1){
+   Tupla<ROWS,T> tupla;
+      
+   for (int i = 0; i < ROWS; ++i){
+      tupla[i] = m1[i][0];
+   }
+
+   return tupla;
+}
+
+typedef Matriz<1,3,float> Matriz1x3f;
+typedef Matriz<3,1,float> Matriz3x1f;
 typedef Matriz<3,3,float> Matriz3x3f;
 typedef Matriz<4,4,float> Matriz4x4f;
 

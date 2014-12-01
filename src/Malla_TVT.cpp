@@ -3,12 +3,13 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
+#include "Malla_TVT.hpp"
+
 #include "tuplas.hpp"
 #include "error-ogl.hpp"
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
 #include "Matriz.hpp"
-#include "Malla_TVT.hpp"
 
 void Malla_TVT::InicializarTabla(char* archivo_PLY, enum modo_lectura lec){
 
@@ -148,25 +149,25 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	//Matriz de rotacion
 	Matriz3x3f matriz_rotacion;
 
-	//Vector de perfiles, donde el elemento i será el resultado de rotar
-	//el perfil i-1 un ángulo angulo; es decir, el resultado de rotar
-	//el perfil 0 un ángulo i*angulo.
-	std::vector< std::vector<Tupla3f> > perfiles;
+	std::vector<Tupla3f> perfil_anterior, perfil_actual;
+	perfil_anterior = this->vertices;
 
-	perfiles.push_back(this->vertices);
+	unsigned int num_vert = perfil_anterior.size();
+	Tupla3f vert_rotado;
 
 	//Se generan todos los perfiles
-	for (int i = 1; i < caras; ++i)
-	{
-		std::vector<Tupla3f> perfil_actual;
+	for (int i = 1; i < caras; ++i){
 
 		//Se generan todos los vértices del perfil i
-		for (int j = 0; j < this->vertices.size(); ++j)
-		{
-			//perfil_actual.push_back( matriz_rotacion * perfiles[i-1][j] );
+		for (unsigned int j = 0; j < num_vert; ++j){
+			Matriz3x1f res = matriz_rotacion * perfil_anterior[j];
+			vert_rotado = toTupla(res);
+
+			perfil_actual.push_back( vert_rotado );
+			this->vertices.push_back( vert_rotado );
 		}
 
-		perfiles.push_back(perfil_actual);
+		perfil_anterior = perfil_actual;
 	}
 }
 

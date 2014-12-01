@@ -1,4 +1,5 @@
 #include "tuplas.hpp"
+
 #include <vector>
 
 template <unsigned int N, class T>
@@ -18,6 +19,7 @@ Tupla<N,T>::Tupla( const T coot[N] ){
 	}
 
 }
+
 
 template <unsigned int N, class T>
 Tupla<N,T>::Tupla( T x, T y, T z ){
@@ -177,6 +179,9 @@ Tupla<N,T> Tupla<N,T>::normalized( const Tupla<N,T> & t ){
 //----------------------------------------------------------------------
 // Posibles especializaciones. Tienen que declararse aquí para que el
 // compilador sea capaz de enlazar sus definiciones luego.
+
+template class Tupla<1,int>;
+template class Tupla<1,float>;
 
 template class Tupla<3,int>;
 template class Tupla<3,float>;
