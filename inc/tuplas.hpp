@@ -81,7 +81,7 @@ public:
 
    // ---------------------------------------------------------------------
    // float = tupla|tupla (producto escalar)
-   T operator | ( const Tupla<N,T> & t1 ) const;
+   float operator | ( const Tupla<N,T> & t1 ) const;
 
    // ---------------------------------------------------------------------
    //  = tupla*tupla (producto vectorial)

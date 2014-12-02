@@ -268,6 +268,12 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case 'P' :
          PX_CambiarVisualizacion(PUNTO);
          break;
+      case 'V' :
+         P2_Conmutar_NormalesVertices();
+         break;
+      case 'C' :
+         P2_Conmutar_NormalesCaras();
+         break;
       default:
          redisp = false ;
          break ;

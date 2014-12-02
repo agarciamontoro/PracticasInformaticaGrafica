@@ -43,6 +43,10 @@ private:
 		VBO_normales_caras_impares;
 
 	enum modo_visualizacion visualizacion_actual;
+
+	int visualizar_normales_vert = 0;
+	int visualizar_normales_caras = 0;
+
 	GLenum render_actual;
 
 	Tupla3f color_principal;
@@ -65,7 +69,7 @@ public:
 			  enum modo_lectura lec = TODO,
 			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
 			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
-			  enum modo_visualizacion visualizacion_t = ALAMBRE);
+			  enum modo_visualizacion visualizacion_t = AJEDREZ);
 
 
 	// ---------------------------------------------------------------------
@@ -102,9 +106,12 @@ public:
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT
 	void DibujarMalla_TVT();
+
+	void Conmutar_NormalesVertices();
+	void Conmutar_NormalesCaras();
 };
 
 //Funciones auxiliares de dibujo
-void DibujarLinea(Tupla3f ori, Tupla3f fin, Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 2.5);
+void DibujarLinea(Tupla3f ori, Tupla3f fin, Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 1.0);
 
 #endif

@@ -23,5 +23,7 @@ void PX_DibujarObjetos() ;
 void PX_Inicializar( int argc, char *argv[] ) ;
 void PX_CambiarVisualizacion(enum modo_visualizacion modo);
 void PX_CambiarPracticaActual(enum practicas prac);
+void PX_Conmutar_NormalesVertices();
+void PX_Conmutar_NormalesCaras();
 
 #endif

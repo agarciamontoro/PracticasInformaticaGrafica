@@ -32,7 +32,7 @@ void P2_Inicializar( int argc, char *argv[] )
 
    // si no se ha proporcionado un archivo PLY se carga el archivo perfil_peon.ply por defecto
    if(argc < 2)
-      sprintf(ruta_archivo, "./PLY/perfil_peon.ply");
+      sprintf(ruta_archivo, "./PLY/perfil_inception.ply");
    else
       sprintf(ruta_archivo, "%s", argv[2]);
 
@@ -55,4 +55,12 @@ void P2_DibujarObjetos()
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
    malla.DibujarMalla_TVT();
+}
+
+void P2_Conmutar_NormalesCaras(){
+   malla.Conmutar_NormalesCaras();
+}
+
+void P2_Conmutar_NormalesVertices(){
+   malla.Conmutar_NormalesVertices();
 }

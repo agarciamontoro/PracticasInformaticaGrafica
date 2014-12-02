@@ -8,7 +8,7 @@
 
 #include "gestion_practicas.hpp"
 
-static enum practicas PRACTICA_ACTUAL = P1;
+static enum practicas PRACTICA_ACTUAL = P2;
 
 void PX_DibujarObjetos(){
 	switch(PRACTICA_ACTUAL){

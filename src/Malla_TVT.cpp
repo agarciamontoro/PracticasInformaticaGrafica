@@ -13,6 +13,8 @@
 #include "VBO.hpp"
 #include "Matriz.hpp"
 
+#define DIM 1.5
+
 void Malla_TVT::GenerarVBO_vertices(){
 	this->VBO_vertices					= VBO(GL_ARRAY_BUFFER, vertices);
 }
@@ -110,15 +112,16 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 		this->vertices = original.vertices;
 		this->caras_pares = original.caras_pares;
 		this->caras_impares = original.caras_impares;
+		this->normales_caras_pares = original.normales_caras_pares;
+		this->normales_caras_impares = original.normales_caras_impares;
+		this->normales_vertices = original.normales_vertices;
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;
 
 		set_visualizacion(original.visualizacion_actual);
 
-		this->VBO_vertices = VBO(GL_ARRAY_BUFFER, this->vertices);
-		this->VBO_caras_pares = VBO(GL_ARRAY_BUFFER, this->caras_pares);
-		this->VBO_caras_impares = VBO(GL_ARRAY_BUFFER, this->caras_impares);
+		GenerarVBO_TODO();
 	}
 
 	return *this;
@@ -164,6 +167,9 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	assert(this->vertices.size() > 0);
 	assert(caras_pares.size() == 0 && caras_impares.size() == 0);
 
+	///////////////////////////
+	// Variables necesarias //
+	///////////////////////////
 
 	//Ángulo de rotación entre perfiles
 	float angulo = 2*M_PI / caras;
@@ -178,6 +184,9 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	};
 	Matriz3x3f matriz_rotacion(mat);
 
+	///////////////////////
+	// Preprocesamiento //
+	///////////////////////
 
 	//Procesamos el perfil para que el primer y último vértice no se repitan
 	//durante la rotación y para asegurarnos de que tienen coordenada X = 0
@@ -287,11 +296,11 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	//  Generación de tapas //
 	///////////////////////////
 
-	////////////////////
-	// Tapa inferior //
-	////////////////////
+		////////////////////
+		// Tapa inferior //
+		////////////////////
 	
-	vertices.push_back(primer_vertice);	
+	this->vertices.push_back(primer_vertice);	
 
 	int indice_centro_tapa_inferior = vertices.size()-1;
 
@@ -318,23 +327,23 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 	this->caras_impares.push_back(cara_impar);
 
-	////////////////////
-	// Tapa superior //
-	////////////////////
+		////////////////////
+		// Tapa superior //
+		////////////////////
 
-	vertices.push_back(ultimo_vertice);	
+	this->vertices.push_back(ultimo_vertice);	
 
 	int indice_centro_tapa_superior = vertices.size()-1;
 
 	for (int i = 0; i < caras-2; i += 2)
 	{
-		cara_par 	= Tupla3i(	num_vert * (i) + (num_vert - 1),
+		cara_par 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+								indice_centro_tapa_superior,
+								num_vert * (i) + (num_vert - 1)
+							);
+		cara_impar 	= Tupla3i(	num_vert * (i+2) + (num_vert - 1),
 								indice_centro_tapa_superior,
 								num_vert * (i+1) + (num_vert - 1)
-							);
-		cara_impar 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
-								indice_centro_tapa_superior,
-								num_vert * (i+2) + (num_vert - 1)
 							);
 
 		this->caras_pares.push_back(cara_par);
@@ -342,13 +351,13 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	}
 
 	// Última cara de la tapa superior
-	cara_par 	= Tupla3i(	num_vert * (caras-2) + (num_vert - 1),
+	cara_par 	= Tupla3i(	num_vert * (caras-1) + (num_vert - 1),
 							indice_centro_tapa_superior,
-							num_vert * (caras-1) + (num_vert - 1)
+							num_vert * (caras-2) + (num_vert - 1)
 							);
-	cara_impar = Tupla3i(	num_vert * (caras-1)  + (num_vert - 1),
+	cara_impar = Tupla3i(	num_vert - 1,
 							indice_centro_tapa_superior,
-							num_vert - 1
+							num_vert * (caras-1)  + (num_vert - 1)
 						);
 
 	this->caras_pares.push_back(cara_par);
@@ -368,24 +377,27 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 }
 
 void Malla_TVT::CalcularNormalesCaras(){
-	this->normales_caras_pares.clear();
+	this->normales_caras_pares.resize(0);
+
+	Tupla3f A, B, C, AB, BC, normal;
 
 	for (unsigned int i = 0; i < caras_pares.size(); ++i)
 	{
-		Tupla3f A = this->vertices[ caras_pares[i][0] ];
-		Tupla3f B = this->vertices[ caras_pares[i][1] ];
-		Tupla3f C = this->vertices[ caras_pares[i][2] ];
+		A = this->vertices[ caras_pares[i][0] ];
+		B = this->vertices[ caras_pares[i][1] ];
+		C = this->vertices[ caras_pares[i][2] ];
 
-		Tupla3f AB = B - A;
-		Tupla3f BC = C - B;
+		AB = B - A;
+		BC = C - B;
 
-		Tupla3f normal = AB * BC; //Producto vectorial
-		normal = normal.normalized();
+		normal = AB * BC; //Producto vectorial
 
-		this->normales_caras_pares.push_back( normal );
+		this->normales_caras_pares.push_back( normal.normalized() );
 	}
 
-	this->normales_caras_impares.clear();
+
+
+	this->normales_caras_impares.resize(0);
 
 	for (unsigned int i = 0; i < caras_impares.size(); ++i)
 	{
@@ -397,9 +409,8 @@ void Malla_TVT::CalcularNormalesCaras(){
 		Tupla3f BC = C - B;
 
 		Tupla3f normal = AB * BC; //Producto vectorial
-		normal = normal.normalized();
 
-		this->normales_caras_impares.push_back( normal );
+		this->normales_caras_impares.push_back( normal.normalized() );
 	}
 }
 
@@ -446,11 +457,19 @@ void Malla_TVT::CalcularNormales(){
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
 
-	// Ajustes iniciales
+	////////////////////////
+	// Ajustes iniciales //
+	////////////////////////
+	
+	//Cambio de color general
 	cambiar_color(color_principal);
 	
 	// especificar modo de visualizacion
 	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
+
+	//////////////////////
+	// Enviar vértices //
+	//////////////////////
 
 	//Activar uso de vertex array
 	glEnableClientState( GL_VERTEX_ARRAY );
@@ -459,6 +478,10 @@ void Malla_TVT::DibujarMalla_TVT(){
 	glBindBuffer( GL_ARRAY_BUFFER, VBO_vertices.get_id() ); // act. VBO
 	glVertexPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
 	glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
+
+	///////////////////////
+	// Visualizar caras //
+	///////////////////////
 
 	// visualizar con glDrawElements las caras pares (puntero a tabla == NULL)
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, VBO_caras_pares.get_id() );
@@ -475,11 +498,74 @@ void Malla_TVT::DibujarMalla_TVT(){
 	glDrawElements( GL_TRIANGLES, 3*caras_impares.size(), GL_UNSIGNED_INT, NULL ) ;
 	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
 
+	//////////////////////
+	// Ajustes finales //
+	//////////////////////
+
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );
 
+	/////////////////////////
+	// Dibujos auxiliares //
+	/////////////////////////
+
+	///////////////////////////////
+	// Dibujo normales vertices //
+	///////////////////////////////
+
+	if(visualizar_normales_vert){
+		for (unsigned int i = 0; i < this->normales_vertices.size(); ++i)
+		{
+			DibujarLinea(this->vertices[i], this->vertices[i] + this->normales_vertices[i+1]*DIM, Tupla3f(0.0,1.0,1.0), 0.5);
+		}
+	}
+
+	////////////////////////////
+	// Dibujo normales caras //
+	////////////////////////////
+	Tupla3f A, B, C, centro;
+
+	if(visualizar_normales_caras){
+		for (unsigned int i = 0; i < this->normales_caras_pares.size(); ++i)
+		{
+			A = this->vertices[ caras_pares[i][0] ];
+			B = this->vertices[ caras_pares[i][1] ];
+			C = this->vertices[ caras_pares[i][2] ];
+
+			centro[0] = (A[0] + B[0] + C[0]) / 3;
+			centro[1] = (A[1] + B[1] + C[1]) / 3;
+			centro[2] = (A[2] + B[2] + C[2]) / 3;
+
+			DibujarLinea(centro, centro + this->normales_caras_pares[i]*DIM, Tupla3f(0.0,1.0,0.0), 0.5);
+		}
+
+		for (unsigned int i = 0; i < this->normales_caras_impares.size(); ++i)
+		{
+			A = this->vertices[ this->caras_impares[i][0] ];
+			B = this->vertices[ this->caras_impares[i][1] ];
+			C = this->vertices[ this->caras_impares[i][2] ];
+
+			centro[0] = (A[0] + B[0] + C[0]) / 3;
+			centro[1] = (A[1] + B[1] + C[1]) / 3;
+			centro[2] = (A[2] + B[2] + C[2]) / 3;
+
+			DibujarLinea(centro, centro + this->normales_caras_impares[i]*DIM, Tupla3f(0.0,1.0,0.0), 0.5);
+		}
+	}
+
 	CError();
 }
+
+void Malla_TVT::Conmutar_NormalesVertices(){
+	visualizar_normales_vert += 1;
+	visualizar_normales_vert %= 2;
+}
+
+void Malla_TVT::Conmutar_NormalesCaras(){
+	visualizar_normales_caras += 1;
+	visualizar_normales_caras %= 2;
+}
+
 
 void DibujarLinea(Tupla3f ori, Tupla3f fin, Tupla3f color, float ancho){
 	CError();

@@ -26,5 +26,7 @@
 void P2_DibujarObjetos() ; 
 void P2_Inicializar( int argc, char *argv[] ) ;
 void P2_CambiarVisualizacion(enum modo_visualizacion modo);
+void P2_Conmutar_NormalesCaras();
+void P2_Conmutar_NormalesVertices();
 
 #endif

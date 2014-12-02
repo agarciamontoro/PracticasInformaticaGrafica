@@ -141,8 +141,8 @@ Tupla<N,T> Tupla<N,T>::operator / ( float a ) const{
 // ---------------------------------------------------------------------
 // float = tupla|tupla (producto escalar)
 template <unsigned int N, class T>
-T Tupla<N,T>::operator | ( const Tupla<N,T> & t1 ) const{
-	T prod_escalar = 0;
+float Tupla<N,T>::operator | ( const Tupla<N,T> & t1 ) const{
+	float prod_escalar = 0.0;
 
 	for (int i = 0; i < N; ++i)
 	{
@@ -176,14 +176,14 @@ float Tupla<N,T>::lenSq(){
 // float = len(tupla)
 template <unsigned int N, class T>
 float Tupla<N,T>::len(){
-   return float(sqrt( double(this->lenSq()) )) ;
+   return float(sqrt( double( this->lenSq() ) )) ;
 }
 
 //----------------------------------------------------------------------
 // tupla3 = normalized(tupla3)
 template <unsigned int N, class T>
 Tupla<N,T> Tupla<N,T>::normalized(){
-	return (*this)/this->len();
+	return (*this)/(this->len());
 }
 
 
