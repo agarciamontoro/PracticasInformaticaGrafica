@@ -11,13 +11,19 @@
 #include "VBO.hpp"
 #include "Matriz.hpp"
 
-void Malla_TVT::InicializarTabla(char* archivo_PLY, enum modo_lectura lec){
+void Malla_TVT::GenerarVBO_TODO(){
 
-	if( LeerPLY(archivo_PLY, lec) ){
-		VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
-		VBO_caras_pares		= VBO(GL_ARRAY_BUFFER, caras_pares);
-		VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
-	}
+	GenerarVBO_vertices();
+	GenerarVBO_caras();
+}
+
+void Malla_TVT::GenerarVBO_vertices(){
+	this->VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
+}
+
+void Malla_TVT::GenerarVBO_caras(){
+	this->VBO_caras_pares	= VBO(GL_ARRAY_BUFFER, caras_pares);
+	this->VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -62,7 +68,8 @@ Malla_TVT::Malla_TVT(char* archivo_PLY,
 		  Tupla3f color_secundario_t,
 		  enum modo_visualizacion visualizacion_t)
 {
-	InicializarTabla(archivo_PLY, lec);
+	LeerPLY(archivo_PLY, lec);
+	GenerarVBO_TODO();
 	this->color_principal = color_principal_t;
 	this->color_secundario = color_secundario_t;
 	set_visualizacion(visualizacion_t);
@@ -146,8 +153,16 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 	//Ángulo de rotación entre perfiles
 	float angulo = 2*M_PI / caras;
+	float c = cosf(angulo);
+	float s = sinf(angulo);
+	
 	//Matriz de rotacion
-	Matriz3x3f matriz_rotacion;
+	float mat[3][3] = {
+		{c,0,s},
+		{0,1,0},
+		{-s,0,c}
+	};
+	Matriz3x3f matriz_rotacion(mat);
 
 	std::vector<Tupla3f> perfil_anterior, perfil_actual;
 	perfil_anterior = this->vertices;
@@ -160,8 +175,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 		//Se generan todos los vértices del perfil i
 		for (unsigned int j = 0; j < num_vert; ++j){
-			Matriz3x1f res = matriz_rotacion * perfil_anterior[j];
-			vert_rotado = toTupla(res);
+			vert_rotado = toTupla(matriz_rotacion * perfil_anterior[j]);
 
 			perfil_actual.push_back( vert_rotado );
 			this->vertices.push_back( vert_rotado );

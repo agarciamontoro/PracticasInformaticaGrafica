@@ -40,7 +40,7 @@ void P2_Inicializar( int argc, char *argv[] )
    if(argc < 3)
       num_caras = atoi(argv[3]);
    else
-      num_caras = 50;
+      num_caras = 500;
 
    malla = Malla_TVT(ruta_archivo, VERT);
    malla.GenerarSolidoRevolucion(num_caras);

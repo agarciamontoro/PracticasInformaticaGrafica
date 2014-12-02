@@ -41,7 +41,10 @@ private:
 	Tupla3f color_principal;
 	Tupla3f color_secundario;
 
-	void InicializarTabla(char* archivo_PLY, enum modo_lectura lec);
+	void GenerarVBO_TODO();
+	void GenerarVBO_vertices();
+	void GenerarVBO_caras();
+
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
 
