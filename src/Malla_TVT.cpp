@@ -480,3 +480,21 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	CError();
 }
+
+void DibujarLinea(Tupla3f ori, Tupla3f fin, Tupla3f color, float ancho){
+	CError();
+
+	// Ajustes iniciales
+	glColor3f(color[0], color[1], color[2]);
+	glLineWidth(ancho);
+
+	// especificar modo de visualizacion
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+	glBegin(GL_LINES);
+		glVertex3fv( ori.get_ptr() );
+		glVertex3fv( fin.get_ptr() );
+	glEnd();
+
+	CError();
+}

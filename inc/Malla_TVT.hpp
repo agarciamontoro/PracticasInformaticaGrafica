@@ -104,4 +104,7 @@ public:
 	void DibujarMalla_TVT();
 };
 
+//Funciones auxiliares de dibujo
+void DibujarLinea(Tupla3f ori, Tupla3f fin, Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 2.5);
+
 #endif
