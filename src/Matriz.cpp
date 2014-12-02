@@ -33,14 +33,14 @@ Matriz<ROWS,COLS,T>::Matriz( const std::vector< std::vector<T> >& datos){
 
 template <unsigned int ROWS, unsigned int COLS, class T>
 const T* Matriz<ROWS,COLS,T>::operator[](unsigned int i) const{
-   assert(i > 0 && i < ROWS);
+   assert(i >= 0 && i < ROWS);
 
    return this->matriz[i];
 }
 
 template <unsigned int ROWS, unsigned int COLS, class T>
 T* Matriz<ROWS,COLS,T>::operator[](unsigned int i){
-   assert(i > 0 && i < ROWS);
+   assert(i >= 0 && i < ROWS);
 
    return this->matriz[i];
 }

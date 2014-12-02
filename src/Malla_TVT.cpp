@@ -183,6 +183,8 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 		perfil_anterior = perfil_actual;
 	}
+
+	GenerarVBO_vertices();
 }
 
 void Malla_TVT::DibujarMalla_TVT(){
