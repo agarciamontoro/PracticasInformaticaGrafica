@@ -516,7 +516,7 @@ void Malla_TVT::DibujarMalla_TVT(){
 	if(visualizar_normales_vert){
 		for (unsigned int i = 0; i < this->normales_vertices.size(); ++i)
 		{
-			DibujarLinea(this->vertices[i], this->vertices[i] + this->normales_vertices[i+1]*DIM, Tupla3f(0.0,1.0,1.0), 0.5);
+			DibujarLinea(this->vertices[i], this->vertices[i] + this->normales_vertices[i]*DIM, Tupla3f(0.0,1.0,1.0), 0.5);
 		}
 	}
 
