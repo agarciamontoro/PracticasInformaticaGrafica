@@ -60,6 +60,10 @@ public:
    Tupla<N,T> operator + ( const Tupla<N,T> & t1 );
 
    // ---------------------------------------------------------------------
+   // tupla = tupla+tupla3
+   Tupla<N,T>& operator += ( const Tupla<N,T> & t1 );
+
+   // ---------------------------------------------------------------------
    // tupla = tupla-tupla
    Tupla<N,T> operator - ( const Tupla<N,T> & t1 );
 
@@ -85,15 +89,15 @@ public:
 
    // ---------------------------------------------------------------------
    // float = lenSq(tupla)
-   float lenSq( const Tupla<N,T> & t );
+   float lenSq();
 
    // ---------------------------------------------------------------------
    // float = len(tupla)
-   float len( const Tupla<N,T> & t );
+   float len();
 
    //----------------------------------------------------------------------
    // tupla3 = normalized(tupla3)
-   Tupla<N,T> normalized( const Tupla<N,T> & t );
+   Tupla<N,T> normalized();
 
    T* get_ptr(){
       return &(val[0]);

@@ -84,6 +84,19 @@ Tupla<N,T> Tupla<N,T>::operator + ( const Tupla<N,T> & t1 ){
 }
 
 // ---------------------------------------------------------------------
+// tupla += tupla
+template <unsigned int N, class T>
+Tupla<N,T>& Tupla<N,T>::operator += ( const Tupla<N,T> & t1 ){
+
+	for (int i = 0; i < N; ++i)
+	{
+		this->val[i] += t1[i];
+	}
+
+	return *this;
+}
+
+// ---------------------------------------------------------------------
 // tupla = tupla-tupla
 template <unsigned int N, class T>
 Tupla<N,T> Tupla<N,T>::operator - ( const Tupla<N,T> & t1 ){
@@ -155,22 +168,22 @@ Tupla<N,T> Tupla<N,T>::operator * ( const Tupla<N,T> & v2 ){
 // ---------------------------------------------------------------------
 // float = lenSq(tupla)
 template <unsigned int N, class T>
-float Tupla<N,T>::lenSq( const Tupla<N,T> & t ){
-	return t|t;
+float Tupla<N,T>::lenSq(){
+	return (*this)|(*this);
 }
 
 // ---------------------------------------------------------------------
 // float = len(tupla)
 template <unsigned int N, class T>
-float Tupla<N,T>::len( const Tupla<N,T> & t ){
-   return float(sqrt( double(lenSq(t)) )) ;
+float Tupla<N,T>::len(){
+   return float(sqrt( double(this->lenSq()) )) ;
 }
 
 //----------------------------------------------------------------------
 // tupla3 = normalized(tupla3)
 template <unsigned int N, class T>
-Tupla<N,T> Tupla<N,T>::normalized( const Tupla<N,T> & t ){
-	return t/len(t);
+Tupla<N,T> Tupla<N,T>::normalized(){
+	return (*this)/this->len();
 }
 
 

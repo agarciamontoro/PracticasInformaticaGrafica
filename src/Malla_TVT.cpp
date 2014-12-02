@@ -166,36 +166,271 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	};
 	Matriz3x3f matriz_rotacion(mat);
 
-	std::vector<Tupla3f> perfil_anterior, perfil_actual;
-	perfil_anterior = this->vertices;
 
-	unsigned int num_vert = perfil_anterior.size();
-	Tupla3f vert_rotado;
+	//Procesamos el perfil para que el primer y último vértice no se repitan
+	//durante la rotación y para asegurarnos de que tienen coordenada X = 0
 
-	//Se generan todos los perfiles
-	for (int i = 1; i < caras; ++i){
+	std::vector<Tupla3f>::iterator it_primero, it_ultimo;
+	int pos_primero, pos_ultimo;
+	Tupla3f primer_vertice, ultimo_vertice;
 
-		//Se generan todos los vértices del perfil i
-		for (unsigned int j = 0; j < num_vert; ++j){
-			vert_rotado = toTupla(matriz_rotacion * perfil_anterior[j]);
-			std::cout << perfil_anterior[j][0] << ", " << perfil_anterior[j][1] << ", " << perfil_anterior[j][2] << std::endl;
+	//Iteradores para las posiciones primera y última
+	it_primero = this->vertices.begin();
+	pos_primero = 0;
 
-			perfil_actual.push_back( vert_rotado );
-			this->vertices.push_back( vert_rotado );
-		}
+	it_ultimo = this->vertices.end();
+	pos_ultimo = this->vertices.size()-1;
 
-		std::cout << "---------------" << std::endl;
+	//Vértices que deben ser tratados por separado
+	primer_vertice = this->vertices[pos_primero];
+	ultimo_vertice = this->vertices[pos_ultimo];
 
-		perfil_anterior = perfil_actual;
-		perfil_actual.clear();
+	//Si el primer(resp. último) vértice tiene coordenada X = 0, 
+	//se borra del vector original. Si no, se actualiza la primer_vertice
+	//(resp. ultimo_vertice) poniendo a cero la componente X.
+	if(this->vertices[pos_primero][0] == 0.0){
+		this->vertices.erase(it_primero);
+	}
+	else{
+		primer_vertice[0] = 0.0;
 	}
 
-	GenerarVBO_vertices();
+	if(this->vertices[pos_ultimo][0] == 0.0){
+		this->vertices.erase(it_ultimo);
+	}
+	else{
+		ultimo_vertice[0] = 0.0;
+	}
+
+
+	//////////////////////////////////////
+	//  Generación de vértices y caras //
+	//////////////////////////////////////
+	
+	//Variables para el bucle
+	std::vector<Tupla3f> perfil_anterior, perfil_actual;
+	unsigned int num_vert = this->vertices.size();
+	Tupla3f vert_rotado;
+	Tupla3i cara_par, cara_impar;
+	
+	//Primera iteración del siguiente bucle antes del mismo
+	perfil_anterior = this->vertices;
+
+	//Bucle de generación de todos los perfiles
+	for (int i = 1; i < caras; ++i){
+
+		//Primera iteración del siguiente bucle antes del mismo
+		vert_rotado = toTupla(matriz_rotacion * perfil_anterior[0]);
+		perfil_actual.push_back( vert_rotado );
+		this->vertices.push_back( vert_rotado );
+
+		//Bucle de generación de todos los vértices del perfil i
+		for (unsigned int j = 1; j < num_vert; ++j){
+			//Generación de perfiles
+			vert_rotado = toTupla(matriz_rotacion * perfil_anterior[j]);
+
+			//Generación de caras
+			cara_par 	= Tupla3i(	num_vert * (i-1) + j,
+									num_vert * (i-1) + (j-1),
+									num_vert * (i) + (j-1)
+								);
+			cara_impar 	= Tupla3i(	num_vert * (i-1) + j,
+									num_vert * (i) + (j-1),
+									num_vert * (i) + j
+								);
+
+			//Actualizamos el nuevo perfil para la siguiente iteración
+			perfil_actual.push_back( vert_rotado );
+			
+			//Asignación a la tupla actual de todo lo calculado
+			this->vertices.push_back( vert_rotado );
+			this->caras_pares.push_back(cara_par);
+			this->caras_impares.push_back(cara_impar);
+		} //Fin de generación de vértices para el perfil i
+
+		//Actualización de las variables del bucle
+		perfil_anterior = perfil_actual;
+		perfil_actual.clear();
+
+	} //Fin de generación de perfiles
+
+	//Generación de la última cara
+	for (unsigned int j = 1; j < num_vert; ++j){
+		//Generación de caras
+		cara_par 	= Tupla3i(	num_vert * (caras-1) + j,
+								num_vert * (caras-1) + (j-1),
+								num_vert * (0) + (j-1)
+							);
+		cara_impar 	= Tupla3i(	num_vert * (caras-1) + j,
+								num_vert * (0) + (j-1),
+								num_vert * (0) + j
+							);
+
+		this->caras_pares.push_back(cara_par);
+		this->caras_impares.push_back(cara_impar);
+
+	} //Fin de generación de la última cara
+
+	///////////////////////////
+	//  Generación de tapas //
+	///////////////////////////
+
+	////////////////////
+	// Tapa inferior //
+	////////////////////
+	
+	vertices.push_back(primer_vertice);	
+
+	int indice_centro_tapa_inferior = vertices.size()-1;
+
+	for (int i = 0; i < caras-1; i += 2)
+	{
+		cara_par 	= Tupla3i(	num_vert * (i),
+								indice_centro_tapa_inferior,
+								num_vert * (i+1)
+							);
+		cara_impar 	= Tupla3i(	num_vert * (i+1),
+								indice_centro_tapa_inferior,
+								num_vert * (i+2)
+							);
+
+		this->caras_pares.push_back(cara_par);
+		this->caras_impares.push_back(cara_impar);
+	}
+
+	// Última cara de la tapa inferior	 
+	cara_impar = Tupla3i(	num_vert * (caras-1),
+							indice_centro_tapa_inferior,
+							0
+						);
+
+	this->caras_impares.push_back(cara_impar);
+
+	////////////////////
+	// Tapa superior //
+	////////////////////
+
+	vertices.push_back(ultimo_vertice);	
+
+	int indice_centro_tapa_superior = vertices.size()-1;
+
+	for (int i = 0; i < caras-2; i += 2)
+	{
+		cara_par 	= Tupla3i(	num_vert * (i) + (num_vert - 1),
+								indice_centro_tapa_superior,
+								num_vert * (i+1) + (num_vert - 1)
+							);
+		cara_impar 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+								indice_centro_tapa_superior,
+								num_vert * (i+2) + (num_vert - 1)
+							);
+
+		this->caras_pares.push_back(cara_par);
+		this->caras_impares.push_back(cara_impar);
+	}
+
+	// Última cara de la tapa superior
+	cara_par 	= Tupla3i(	num_vert * (caras-2) + (num_vert - 1),
+							indice_centro_tapa_superior,
+							num_vert * (caras-1) + (num_vert - 1)
+							);
+	cara_impar = Tupla3i(	num_vert * (caras-1)  + (num_vert - 1),
+							indice_centro_tapa_superior,
+							num_vert - 1
+						);
+
+	this->caras_pares.push_back(cara_par);
+	this->caras_impares.push_back(cara_impar);
+
+	////////////////////////
+	// Normales de caras //
+	////////////////////////
+
+	//////////////////////////
+	//  Generación de VBOs //
+	//////////////////////////
+
+	GenerarVBO_TODO();
+}
+
+void Malla_TVT::CalcularNormalesCaras(){
+	this->normales_caras_pares.clear();
+
+	for (unsigned int i = 0; i < caras_pares.size(); ++i)
+	{
+		Tupla3f A = this->vertices[ caras_pares[i][0] ];
+		Tupla3f B = this->vertices[ caras_pares[i][1] ];
+		Tupla3f C = this->vertices[ caras_pares[i][2] ];
+
+		Tupla3f AB = B - A;
+		Tupla3f BC = C - B;
+
+		Tupla3f normal = AB * BC; //Producto vectorial
+		normal = normal.normalized();
+
+		this->normales_caras_pares.push_back( normal );
+	}
+
+	this->normales_caras_impares.clear();
+
+	for (unsigned int i = 0; i < caras_impares.size(); ++i)
+	{
+		Tupla3f A = this->vertices[ caras_impares[i][0] ];
+		Tupla3f B = this->vertices[ caras_impares[i][1] ];
+		Tupla3f C = this->vertices[ caras_impares[i][2] ];
+
+		Tupla3f AB = B - A;
+		Tupla3f BC = C - B;
+
+		Tupla3f normal = AB * BC; //Producto vectorial
+		normal = normal.normalized();
+
+		this->normales_caras_impares.push_back( normal );
+	}
+}
+
+void Malla_TVT::CalcularNormalesVertices(){
+	//Ponemos a cero todos los valores del vector de normales de vértices con un
+	//pequeño artificio: lo hacemos de tamaño 0 para que, al agrandarlo hasta el 
+	//número de vertices con resize, podamos incluir un valor con el que se inicializen todos
+	//Ver documentación de resize: "If val is specified, the NEW elements are
+	//initialized as copies of val".
+	this->normales_vertices.resize(0);
+	this->normales_vertices.resize(this->vertices.size(), Tupla3f(0.0, 0.0, 0.0) );
+
+	for (unsigned int i = 0; i < caras_pares.size(); ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			int indice = this->caras_pares[i][j];
+
+			this->normales_vertices[indice] += this->normales_caras_pares[i];
+		}
+	}
+
+	for (unsigned int i = 0; i < caras_impares.size(); ++i)
+	{
+		for (int j = 0; j < 3; ++j)
+		{
+			int indice = this->caras_impares[i][j];
+
+			this->normales_vertices[indice] += this->normales_caras_impares[i];
+		}
+	}
+
+	for (int i = 0; i < this->normales_vertices.size(); ++i)
+	{
+		this->normales_vertices[i] = this->normales_vertices[i].normalized();
+	}
+}
+
+void Malla_TVT::CalcularNormales(){
+	
 }
 
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
-/*
+
 	// Ajustes iniciales
 	cambiar_color(color_principal);
 	
@@ -227,20 +462,6 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );
-*/
-
-
-	// Ajustes iniciales
-	cambiar_color(color_principal);
-
-	// especificar modo de visualizacion
-	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
-
-	glBegin( GL_TRIANGLES ) ;
-		for( unsigned int i = 0 ; i < vertices.size() ; i++ ){
-			glVertex3fv( &(vertices[i][0]) ) ;
-		}
-	glEnd() ;
 
 	CError();
 }

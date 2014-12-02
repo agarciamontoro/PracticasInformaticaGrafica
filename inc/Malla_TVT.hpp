@@ -27,13 +27,20 @@ enum modo_lectura{
 
 class Malla_TVT{
 private:
-	std::vector<Tupla3f> vertices;
-	std::vector<Tupla3i> caras_pares,
-								caras_impares;
+	std::vector<Tupla3f>	vertices,
+							normales_vertices,
+							normales_caras_pares,
+							normales_caras_impares;
+
+	std::vector<Tupla3i>	caras_pares,
+							caras_impares;
 
 	VBO VBO_vertices,
 		VBO_caras_pares,
-		VBO_caras_impares;
+		VBO_caras_impares,
+		VBO_normales_vertices,
+		VBO_normales_caras_pares,
+		VBO_normales_caras_impares;
 
 	enum modo_visualizacion visualizacion_actual;
 	GLenum render_actual;
@@ -44,6 +51,8 @@ private:
 	void GenerarVBO_TODO();
 	void GenerarVBO_vertices();
 	void GenerarVBO_caras();
+	void GenerarVBO_normales_vertices();
+	void GenerarVBO_normales_caras();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
@@ -83,6 +92,12 @@ public:
 	// ---------------------------------------------------------------------
 	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
 	void GenerarSolidoRevolucion(int caras);
+
+	// ---------------------------------------------------------------------
+	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
+	void CalcularNormalesVertices();
+	void CalcularNormalesCaras();
+	void CalcularNormales();
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT
