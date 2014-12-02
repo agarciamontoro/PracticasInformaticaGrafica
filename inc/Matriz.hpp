@@ -29,6 +29,7 @@ public:
 
    Matriz(){}
    
+   Matriz( T val_inicial );
    Matriz( const T datos[ROWS][COLS]);
    Matriz( const std::vector< std::vector<T> >& datos);
 
@@ -63,7 +64,7 @@ public:
    //  = matriz*matriz (producto matricial) //TODO: Ver cómo definir esto en el cpp
    template<unsigned int N>
    Matriz<ROWS,N,T> operator * ( const Matriz<COLS,N,T> & m1 ){
-      Matriz<ROWS,N,T> producto;
+      Matriz<ROWS,N,T> producto(0.0);
 
       for (int i = 0; i < ROWS; ++i)
       {
