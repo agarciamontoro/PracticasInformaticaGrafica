@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GL/glut.h>
 
+#include <iostream>
+
 #include "Malla_TVT.hpp"
 
 #include "tuplas.hpp"
@@ -11,12 +13,6 @@
 #include "VBO.hpp"
 #include "Matriz.hpp"
 
-void Malla_TVT::GenerarVBO_TODO(){
-
-	GenerarVBO_vertices();
-	GenerarVBO_caras();
-}
-
 void Malla_TVT::GenerarVBO_vertices(){
 	this->VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
 }
@@ -24,6 +20,11 @@ void Malla_TVT::GenerarVBO_vertices(){
 void Malla_TVT::GenerarVBO_caras(){
 	this->VBO_caras_pares	= VBO(GL_ARRAY_BUFFER, caras_pares);
 	this->VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
+}
+
+void Malla_TVT::GenerarVBO_TODO(){
+	GenerarVBO_vertices();
+	GenerarVBO_caras();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -151,6 +152,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	assert(this->vertices.size() > 0);
 	assert(caras_pares.size() == 0 && caras_impares.size() == 0);
 
+
 	//Ángulo de rotación entre perfiles
 	float angulo = 2*M_PI / caras;
 	float c = cosf(angulo);
@@ -176,12 +178,16 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 		//Se generan todos los vértices del perfil i
 		for (unsigned int j = 0; j < num_vert; ++j){
 			vert_rotado = toTupla(matriz_rotacion * perfil_anterior[j]);
+			std::cout << perfil_anterior[j][0] << ", " << perfil_anterior[j][1] << ", " << perfil_anterior[j][2] << std::endl;
 
 			perfil_actual.push_back( vert_rotado );
 			this->vertices.push_back( vert_rotado );
 		}
 
+		std::cout << "---------------" << std::endl;
+
 		perfil_anterior = perfil_actual;
+		perfil_actual.clear();
 	}
 
 	GenerarVBO_vertices();
@@ -189,7 +195,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
-
+/*
 	// Ajustes iniciales
 	cambiar_color(color_principal);
 	
@@ -221,5 +227,20 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );
+*/
+
+
+	// Ajustes iniciales
+	cambiar_color(color_principal);
+
+	// especificar modo de visualizacion
+	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
+
+	glBegin( GL_TRIANGLES ) ;
+		for( unsigned int i = 0 ; i < vertices.size() ; i++ ){
+			glVertex3fv( &(vertices[i][0]) ) ;
+		}
+	glEnd() ;
+
 	CError();
 }
