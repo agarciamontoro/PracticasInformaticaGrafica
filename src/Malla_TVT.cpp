@@ -14,17 +14,29 @@
 #include "Matriz.hpp"
 
 void Malla_TVT::GenerarVBO_vertices(){
-	this->VBO_vertices		= VBO(GL_ARRAY_BUFFER, vertices);
+	this->VBO_vertices					= VBO(GL_ARRAY_BUFFER, vertices);
 }
 
 void Malla_TVT::GenerarVBO_caras(){
-	this->VBO_caras_pares	= VBO(GL_ARRAY_BUFFER, caras_pares);
-	this->VBO_caras_impares	= VBO(GL_ARRAY_BUFFER, caras_impares);
+	this->VBO_caras_pares				= VBO(GL_ARRAY_BUFFER, caras_pares);
+	this->VBO_caras_impares				= VBO(GL_ARRAY_BUFFER, caras_impares);
+}
+
+
+void Malla_TVT::GenerarVBO_normales_vertices(){
+	this->VBO_normales_vertices			= VBO(GL_ARRAY_BUFFER, normales_vertices);
+}
+
+void Malla_TVT::GenerarVBO_normales_caras(){
+	this->VBO_normales_caras_pares		= VBO(GL_ARRAY_BUFFER, normales_caras_pares);
+	this->VBO_normales_caras_impares	= VBO(GL_ARRAY_BUFFER, normales_caras_impares);
 }
 
 void Malla_TVT::GenerarVBO_TODO(){
 	GenerarVBO_vertices();
 	GenerarVBO_caras();
+	GenerarVBO_normales_vertices();
+	GenerarVBO_normales_caras();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -342,9 +354,11 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	this->caras_pares.push_back(cara_par);
 	this->caras_impares.push_back(cara_impar);
 
-	////////////////////////
-	// Normales de caras //
-	////////////////////////
+	//////////////////////////
+	// Cálculo de normales //
+	//////////////////////////
+
+	CalcularNormales();
 
 	//////////////////////////
 	//  Generación de VBOs //
@@ -418,14 +432,15 @@ void Malla_TVT::CalcularNormalesVertices(){
 		}
 	}
 
-	for (int i = 0; i < this->normales_vertices.size(); ++i)
+	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i)
 	{
 		this->normales_vertices[i] = this->normales_vertices[i].normalized();
 	}
 }
 
 void Malla_TVT::CalcularNormales(){
-	
+	CalcularNormalesCaras();
+	CalcularNormalesVertices();
 }
 
 void Malla_TVT::DibujarMalla_TVT(){
