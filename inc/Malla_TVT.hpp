@@ -14,7 +14,7 @@
 #include "VBO.hpp"
 
 enum modo_visualizacion{
-   ALAMBRE, 
+   ALAMBRE,
    SOLIDO,
    AJEDREZ,
    PUNTO
@@ -63,19 +63,25 @@ private:
 
 public:
 
-	Malla_TVT(){};
-
-	Malla_TVT(char* archivo_PLY,
+        // ---------------------------------------------------------------------
+        //  Constructor por defecto
+        Malla_TVT(){};
+        
+        // ---------------------------------------------------------------------
+        //  Constructor completo
+        Malla_TVT(char* archivo_PLY,
 			  enum modo_lectura lec = TODO,
 			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
 			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
 			  enum modo_visualizacion visualizacion_t = AJEDREZ);
 
+        // ---------------------------------------------------------------------
+        //  Constructor a partir de vectores
+        Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras);
 
 	// ---------------------------------------------------------------------
 	//  Constructor de copia
 	Malla_TVT(const Malla_TVT& original);
-
 
 	// ---------------------------------------------------------------------
 	//  Operador de asignación

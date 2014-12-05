@@ -90,6 +90,17 @@ Malla_TVT::Malla_TVT(char* archivo_PLY,
 	set_visualizacion(visualizacion_t);
 }
 
+Malla_TVT::Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras){
+	this->vertices = vertices;
+
+	for(unsigned int i = 0; i < caras.size(); i += 2){
+		this->caras_pares.push_back(caras[i]);
+		this->caras_impares.push_back(caras[i+1]);
+	}
+
+	GenerarVBO_TODO();
+}
+
 Malla_TVT::Malla_TVT(const Malla_TVT& original){
 	if( this != &original ){
 		this->vertices = original.vertices;
@@ -132,16 +143,16 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 
 void Malla_TVT::set_visualizacion(enum modo_visualizacion modo){
    this->visualizacion_actual = modo;
-   
+
    switch(modo){
    	case ALAMBRE:
    		render_actual = GL_LINE;
    		break;
-   		
+
    	case PUNTO:
    		render_actual = GL_POINT;
    		break;
-   		
+
    	case SOLIDO:
    	case AJEDREZ:
    		render_actual = GL_FILL;
@@ -175,7 +186,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	float angulo = 2*M_PI / caras;
 	float c = cosf(angulo);
 	float s = sinf(angulo);
-	
+
 	//Matriz de rotacion
 	float mat[3][3] = {
 		{c,0,s},
@@ -206,7 +217,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	primer_vertice = this->vertices[pos_primero];
 	ultimo_vertice = this->vertices[pos_ultimo];
 
-	//Si el primer(resp. último) vértice tiene coordenada X = 0, 
+	//Si el primer(resp. último) vértice tiene coordenada X = 0,
 	//se borra del vector original. Si no, se actualiza la primer_vertice
 	//(resp. ultimo_vertice) poniendo a cero la componente X.
 	if(this->vertices[pos_primero][0] == 0.0){
@@ -227,13 +238,13 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	//////////////////////////////////////
 	//  Generación de vértices y caras //
 	//////////////////////////////////////
-	
+
 	//Variables para el bucle
 	std::vector<Tupla3f> perfil_anterior, perfil_actual;
 	unsigned int num_vert = this->vertices.size();
 	Tupla3f vert_rotado;
 	Tupla3i cara_par, cara_impar;
-	
+
 	//Primera iteración del siguiente bucle antes del mismo
 	perfil_anterior = this->vertices;
 
@@ -262,7 +273,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 
 			//Actualizamos el nuevo perfil para la siguiente iteración
 			perfil_actual.push_back( vert_rotado );
-			
+
 			//Asignación a la tupla actual de todo lo calculado
 			this->vertices.push_back( vert_rotado );
 			this->caras_pares.push_back(cara_par);
@@ -299,8 +310,8 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 		////////////////////
 		// Tapa inferior //
 		////////////////////
-	
-	this->vertices.push_back(primer_vertice);	
+
+	this->vertices.push_back(primer_vertice);
 
 	int indice_centro_tapa_inferior = vertices.size()-1;
 
@@ -319,7 +330,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 		this->caras_impares.push_back(cara_impar);
 	}
 
-	// Última cara de la tapa inferior	 
+	// Última cara de la tapa inferior
 	cara_impar = Tupla3i(	num_vert * (caras-1),
 							indice_centro_tapa_inferior,
 							0
@@ -331,7 +342,7 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 		// Tapa superior //
 		////////////////////
 
-	this->vertices.push_back(ultimo_vertice);	
+	this->vertices.push_back(ultimo_vertice);
 
 	int indice_centro_tapa_superior = vertices.size()-1;
 
@@ -416,7 +427,7 @@ void Malla_TVT::CalcularNormalesCaras(){
 
 void Malla_TVT::CalcularNormalesVertices(){
 	//Ponemos a cero todos los valores del vector de normales de vértices con un
-	//pequeño artificio: lo hacemos de tamaño 0 para que, al agrandarlo hasta el 
+	//pequeño artificio: lo hacemos de tamaño 0 para que, al agrandarlo hasta el
 	//número de vertices con resize, podamos incluir un valor con el que se inicializen todos
 	//Ver documentación de resize: "If val is specified, the NEW elements are
 	//initialized as copies of val".
@@ -460,10 +471,10 @@ void Malla_TVT::DibujarMalla_TVT(){
 	////////////////////////
 	// Ajustes iniciales //
 	////////////////////////
-	
+
 	//Cambio de color general
 	cambiar_color(color_principal);
-	
+
 	// especificar modo de visualizacion
 	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
 
