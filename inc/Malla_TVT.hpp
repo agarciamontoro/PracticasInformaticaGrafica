@@ -61,12 +61,14 @@ private:
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
 
+      void DibujarNormales_Vertices(Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 0.5);
+      void DibujarNormales_Caras(Tupla3f color = Tupla3f(0.0, 1.0, 0.0), float ancho = 0.5);
 public:
 
         // ---------------------------------------------------------------------
         //  Constructor por defecto
         Malla_TVT(){};
-        
+
         // ---------------------------------------------------------------------
         //  Constructor completo
         Malla_TVT(char* archivo_PLY,

@@ -13,7 +13,7 @@
 #include "VBO.hpp"
 #include "Matriz.hpp"
 
-#define DIM 1.5
+#define DIM_NORMALES 1.5
 
 void Malla_TVT::GenerarVBO_vertices(){
 	this->VBO_vertices					= VBO(GL_ARRAY_BUFFER, vertices);
@@ -407,7 +407,6 @@ void Malla_TVT::CalcularNormalesCaras(){
 	}
 
 
-
 	this->normales_caras_impares.resize(0);
 
 	for (unsigned int i = 0; i < caras_impares.size(); ++i)
@@ -525,46 +524,62 @@ void Malla_TVT::DibujarMalla_TVT(){
 	///////////////////////////////
 
 	if(visualizar_normales_vert){
-		for (unsigned int i = 0; i < this->normales_vertices.size(); ++i)
-		{
-			DibujarLinea(this->vertices[i], this->vertices[i] + this->normales_vertices[i+1]*DIM, Tupla3f(0.0,1.0,1.0), 0.5);
-		}
+		DibujarNormales_Vertices( color_principal + Tupla3f(0.5, 0.5, 0.5), 0.5 );
 	}
 
 	////////////////////////////
 	// Dibujo normales caras //
 	////////////////////////////
-	Tupla3f A, B, C, centro;
 
 	if(visualizar_normales_caras){
-		for (unsigned int i = 0; i < this->normales_caras_pares.size(); ++i)
-		{
-			A = this->vertices[ caras_pares[i][0] ];
-			B = this->vertices[ caras_pares[i][1] ];
-			C = this->vertices[ caras_pares[i][2] ];
-
-			centro[0] = (A[0] + B[0] + C[0]) / 3;
-			centro[1] = (A[1] + B[1] + C[1]) / 3;
-			centro[2] = (A[2] + B[2] + C[2]) / 3;
-
-			DibujarLinea(centro, centro + this->normales_caras_pares[i]*DIM, Tupla3f(0.0,1.0,0.0), 0.5);
-		}
-
-		for (unsigned int i = 0; i < this->normales_caras_impares.size(); ++i)
-		{
-			A = this->vertices[ this->caras_impares[i][0] ];
-			B = this->vertices[ this->caras_impares[i][1] ];
-			C = this->vertices[ this->caras_impares[i][2] ];
-
-			centro[0] = (A[0] + B[0] + C[0]) / 3;
-			centro[1] = (A[1] + B[1] + C[1]) / 3;
-			centro[2] = (A[2] + B[2] + C[2]) / 3;
-
-			DibujarLinea(centro, centro + this->normales_caras_impares[i]*DIM, Tupla3f(0.0,1.0,0.0), 0.5);
-		}
+		DibujarNormales_Caras( color_secundario + Tupla3f(0.5, 0.5, 0.5), 0.5 );
 	}
 
 	CError();
+}
+
+void Malla_TVT::DibujarNormales_Vertices(Tupla3f color, float ancho){
+	Tupla3f origen, extremo;
+
+	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i){
+		origen = this->vertices[i];
+		extremo = origen + ( this->normales_vertices[i] * DIM_NORMALES );
+
+		DibujarLinea(origen, extremo, color, ancho);
+	}
+}
+
+void Malla_TVT::DibujarNormales_Caras(Tupla3f color, float ancho){
+	Tupla3f A, B, C;
+	Tupla3f origen, extremo;
+
+	for (unsigned int i = 0; i < this->normales_caras_pares.size(); ++i){
+		A = this->vertices[ caras_pares[i][0] ];
+		B = this->vertices[ caras_pares[i][1] ];
+		C = this->vertices[ caras_pares[i][2] ];
+
+		origen[0] = (A[0] + B[0] + C[0]) / 3;
+		origen[1] = (A[1] + B[1] + C[1]) / 3;
+		origen[2] = (A[2] + B[2] + C[2]) / 3;
+
+		extremo =  origen + ( this->normales_caras_pares[i] * DIM_NORMALES );
+
+		DibujarLinea(origen, extremo, color, ancho);
+	}
+
+	for (unsigned int i = 0; i < this->normales_caras_impares.size(); ++i){
+		A = this->vertices[ this->caras_impares[i][0] ];
+		B = this->vertices[ this->caras_impares[i][1] ];
+		C = this->vertices[ this->caras_impares[i][2] ];
+
+		origen[0] = (A[0] + B[0] + C[0]) / 3;
+		origen[1] = (A[1] + B[1] + C[1]) / 3;
+		origen[2] = (A[2] + B[2] + C[2]) / 3;
+
+		extremo = origen + ( this->normales_caras_impares[i] * DIM_NORMALES );
+
+		DibujarLinea(origen, extremo, color, ancho);
+	}
 }
 
 void Malla_TVT::Conmutar_NormalesVertices(){
