@@ -21,7 +21,7 @@ void P2_CambiarVisualizacion(enum modo_visualizacion modo){
 }
 
 // ---------------------------------------------------------------------
-// Función para implementar en la práctica 1 para inicialización.
+// Función para implementar en la práctica 2 para inicialización.
 // Se llama una vez al inicio, cuando ya se ha creado la ventana e
 // incializado OpenGL. El PLY se debe cargar aquí.
 
@@ -47,7 +47,7 @@ void P2_Inicializar( int argc, char *argv[] )
 }
 
 // ---------------------------------------------------------------------
-// Función a implementar en la práctica 1  para dibujar los objetos
+// Función a implementar en la práctica 2  para dibujar los objetos
 
 void P2_DibujarObjetos()
 {
