@@ -29,19 +29,15 @@ class Malla_TVT{
 private:
 	std::vector<Tupla3f>	vertices,
 							normales_vertices,
-							normales_caras_pares,
-							normales_caras_impares,
+							normales_caras,
                                           colores_vertices;
 
-	std::vector<Tupla3i>	caras_pares,
-							caras_impares;
+	std::vector<Tupla3i>	caras;
 
 	VBO VBO_vertices,
-		VBO_caras_pares,
-		VBO_caras_impares,
+		VBO_caras,
 		VBO_normales_vertices,
-		VBO_normales_caras_pares,
-		VBO_normales_caras_impares,
+		VBO_normales_caras,
             VBO_colores_vertices;
 
 	enum modo_visualizacion visualizacion_actual;
@@ -107,7 +103,7 @@ public:
 
 	// ---------------------------------------------------------------------
 	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
-	void GenerarSolidoRevolucion(int caras);
+	Malla_TVT GenerarSolidoRevolucion(int num_caras);
 
 	// ---------------------------------------------------------------------
 	//  Calcula las normales a los vértices, las caras y a ambos
