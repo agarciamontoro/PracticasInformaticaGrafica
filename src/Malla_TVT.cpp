@@ -16,23 +16,23 @@
 #define DIM_NORMALES 1.5
 
 void Malla_TVT::GenerarVBO_vertices(){
-	this->VBO_vertices					= VBO_Vertices( vertices );
+	this->VBO_vertices			=	VBO_Vertices( vertices );
 }
 
 void Malla_TVT::GenerarVBO_caras(){
-	this->VBO_caras				= VBO_Caras( caras );
+	this->VBO_caras				=	VBO_Caras( caras );
 }
 
 void Malla_TVT::GenerarVBO_normales_vertices(){
-	this->VBO_normales_vertices			= VBO_Normales( normales_vertices );
+	this->VBO_normales_vertices	=	VBO_Normales( normales_vertices );
 }
 
 void Malla_TVT::GenerarVBO_normales_caras(){
-	this->VBO_normales_caras		= VBO_Normales( normales_caras );
+	this->VBO_normales_caras	=	VBO_Normales( normales_caras );
 }
 
 void Malla_TVT::GenerarVBO_colores_vertices(){
-	this->VBO_colores_vertices			= VBO_Colores( colores_vertices );
+	this->VBO_colores_vertices	=	VBO_Colores( colores_vertices );
 }
 
 void Malla_TVT::GenerarVBO_TODO(){
@@ -44,52 +44,49 @@ void Malla_TVT::GenerarVBO_TODO(){
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
-   // Variables locales para la lectura del archivo PLY
-   std::vector<float> vertices_raw;
-   std::vector<int> caras_raw;
+	// Variables locales para la lectura del archivo PLY
+	std::vector<float> vertices_raw;
+	std::vector<int> caras_raw;
 
-   std::vector<Tupla3i>::iterator principio;
+	std::vector<Tupla3i>::iterator principio;
 
-   // lectura del archivo PLY
-   if(lec == TODO){
-   	ply::read(archivo_PLY, vertices_raw, caras_raw);
-   }
-   else
-   	ply::read_vertices(archivo_PLY, vertices_raw);
-
-   // Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
-   for (unsigned int i = 0; i < vertices_raw.size(); i += 3)
-   {
-		this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
-   }
-
-   if(lec == TODO){
-	   // Separamos las cares pares e impares de manera que las pares estén al principio y las impares al final,
-	   //para gestionar de forma eficiente el modo ajedrez
-	   for (unsigned int i = 0; i < caras_raw.size(); i += 6)
-	   {
-
-	      this->caras.push_back( Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]) );
-
-		principio = this->caras.begin();
-		this->caras.insert( principio, Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]) );
-	   }
+	// lectura del archivo PLY
+	if(lec == TODO){
+		ply::read(archivo_PLY, vertices_raw, caras_raw);
 	}
+	else
+		ply::read_vertices(archivo_PLY, vertices_raw);
 
-   // TODO: Implementar una gestión de errores al leer/procesar los datos.
-   // En caso de encontrarlos, devolver false.
-   return true;
+		// Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
+		for (unsigned int i = 0; i < vertices_raw.size(); i += 3){
+			this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
+		}
+
+		if(lec == TODO){
+			// Separamos las cares pares e impares de manera que las pares estén al principio y las impares al final,
+			//para gestionar de forma eficiente el modo ajedrez
+			for (unsigned int i = 0; i < caras_raw.size(); i += 6){
+				this->caras.push_back( Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]) );
+
+				principio = this->caras.begin();
+				this->caras.insert( principio, Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]) );
+			}
+		}
+
+		// TODO: Implementar una gestión de errores al leer/procesar los datos.
+		// En caso de encontrarlos, devolver false.
+		return true;
 }
 
 void Malla_TVT::cambiar_color(Tupla3f color){
 	glColor3f(color[0], color[1], color[2]);
 }
 
-Malla_TVT::Malla_TVT(char* archivo_PLY,
-		  enum modo_lectura lec,
-		  Tupla3f color_principal_t,
-		  Tupla3f color_secundario_t,
-		  enum modo_visualizacion visualizacion_t)
+Malla_TVT::Malla_TVT( char* archivo_PLY,
+					  enum modo_lectura lec,
+					  Tupla3f color_principal_t,
+					  Tupla3f color_secundario_t,
+					  enum modo_visualizacion visualizacion_t)
 {
 	LeerPLY(archivo_PLY, lec);
 	CalcularNormales();
@@ -177,7 +174,7 @@ void Malla_TVT::set_visualizacion(enum modo_visualizacion modo){
 //  Cambia el color principal de renderización
 
 void Malla_TVT::set_color_principal(Tupla3f color){
-   this->color_principal = color;
+	this->color_principal = color;
 }
 
 // ---------------------------------------------------------------------
@@ -327,19 +324,17 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 	for (int i = 0; i < num_caras-1; ++i)
 	{
-		cara 	= Tupla3i(	num_vert * (i),
-								indice_centro_tapa_inferior,
-								num_vert * (i+1)
-							);
+		cara = Tupla3i(	num_vert * (i),
+						indice_centro_tapa_inferior,
+						num_vert * (i+1) );
 
 		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa inferior
 	cara = Tupla3i(	num_vert * (num_caras-1),
-							indice_centro_tapa_inferior,
-							0
-						);
+					indice_centro_tapa_inferior,
+					0 );
 
 	caras_rev.push_back( cara );
 
@@ -353,19 +348,17 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 	for (int i = 0; i < num_caras-1; ++i)
 	{
-		cara 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
-								indice_centro_tapa_superior,
-								num_vert * (i) + (num_vert - 1)
-							);
+		cara = Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+						indice_centro_tapa_superior,
+						num_vert * (i) + (num_vert - 1) );
 
 		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa superior
 	cara = Tupla3i(	num_vert - 1,
-							indice_centro_tapa_superior,
-							num_vert * (num_caras-1)  + (num_vert - 1)
-						);
+					indice_centro_tapa_superior,
+					num_vert * (num_caras-1)  + (num_vert - 1) );
 
 	caras_rev.push_back( cara );
 
@@ -400,7 +393,7 @@ void Malla_TVT::CalcularNormalesCaras(){
 
 		normal = AB * BC; //Producto vectorial
 
-		this->normales_caras[i] =  normal.normalized();
+		this->normales_caras[i] = normal.normalized();
 	}
 }
 
@@ -413,18 +406,16 @@ void Malla_TVT::CalcularNormalesVertices(){
 	this->normales_vertices.resize(0);
 	this->normales_vertices.resize(this->vertices.size(), Tupla3f(0.0, 0.0, 0.0) );
 
-	for (unsigned int i = 0; i < this->normales_caras.size(); ++i)
-	{
-		for (int j = 0; j < 3; ++j)
-		{
+	for (unsigned int i = 0; i < this->normales_caras.size(); ++i){
+
+		for (int j = 0; j < 3; ++j){
 			int indice = this->caras[i][j];
 
 			this->normales_vertices[indice] += this->normales_caras[i];
 		}
 	}
 
-	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i)
-	{
+	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i){
 		this->normales_vertices[i] = this->normales_vertices[i].normalized();
 	}
 }
