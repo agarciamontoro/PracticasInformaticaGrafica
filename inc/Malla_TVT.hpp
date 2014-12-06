@@ -30,7 +30,8 @@ private:
 	std::vector<Tupla3f>	vertices,
 							normales_vertices,
 							normales_caras_pares,
-							normales_caras_impares;
+							normales_caras_impares,
+                                          colores_vertices;
 
 	std::vector<Tupla3i>	caras_pares,
 							caras_impares;
@@ -40,7 +41,8 @@ private:
 		VBO_caras_impares,
 		VBO_normales_vertices,
 		VBO_normales_caras_pares,
-		VBO_normales_caras_impares;
+		VBO_normales_caras_impares,
+            VBO_colores_vertices;
 
 	enum modo_visualizacion visualizacion_actual;
 
@@ -56,7 +58,8 @@ private:
 	void GenerarVBO_vertices();
 	void GenerarVBO_caras();
 	void GenerarVBO_normales_vertices();
-	void GenerarVBO_normales_caras();
+      void GenerarVBO_normales_caras();
+      void GenerarVBO_colores_vertices();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
@@ -106,10 +109,13 @@ public:
 	void GenerarSolidoRevolucion(int caras);
 
 	// ---------------------------------------------------------------------
-	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
+	//  Calcula las normales a los vértices, las caras y a ambos
 	void CalcularNormalesVertices();
 	void CalcularNormalesCaras();
 	void CalcularNormales();
+
+      // Asigna colores a los vértices mediante un array de colores
+      void AsignarColores( std::vector<Tupla3f> colores );
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT

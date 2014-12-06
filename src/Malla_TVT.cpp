@@ -34,11 +34,16 @@ void Malla_TVT::GenerarVBO_normales_caras(){
 	this->VBO_normales_caras_impares	= VBO(GL_ARRAY_BUFFER, normales_caras_impares);
 }
 
+void Malla_TVT::GenerarVBO_colores_vertices(){
+	this->VBO_colores_vertices			= VBO(GL_ARRAY_BUFFER, colores_vertices);
+}
+
 void Malla_TVT::GenerarVBO_TODO(){
 	GenerarVBO_vertices();
 	GenerarVBO_caras();
 	GenerarVBO_normales_vertices();
 	GenerarVBO_normales_caras();
+	GenerarVBO_colores_vertices();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -381,6 +386,19 @@ void Malla_TVT::GenerarSolidoRevolucion(int caras){
 	CalcularNormales();
 
 	//////////////////////////
+	// Asignar colores a los vértices //
+	//////////////////////////
+
+	//Construimos el vector de colores con respecto al de normales de vértices
+	std::vector<Tupla3f> colores_vertices;
+
+	for(size_t i = 0; i < this->vertices.size(); i++){
+		colores_vertices.push_back( this->vertices[i].abs() );
+	}
+
+	AsignarColores( colores_vertices );
+
+	//////////////////////////
 	//  Generación de VBOs //
 	//////////////////////////
 
@@ -464,6 +482,11 @@ void Malla_TVT::CalcularNormales(){
 	CalcularNormalesVertices();
 }
 
+void Malla_TVT::AsignarColores( std::vector<Tupla3f> colores ){
+	this->colores_vertices = colores;
+	GenerarVBO_colores_vertices();
+}
+
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
 
@@ -477,6 +500,16 @@ void Malla_TVT::DibujarMalla_TVT(){
 	// especificar modo de visualizacion
 	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
 
+	if( ! this->colores_vertices.empty() ){
+		glShadeModel(GL_SMOOTH);
+
+		glBindBuffer( GL_ARRAY_BUFFER, VBO_colores_vertices.get_id() ); // act. VBO
+		glColorPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
+		glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
+
+		glEnableClientState( GL_COLOR_ARRAY );
+	}
+
 	//////////////////////
 	// Enviar vértices //
 	//////////////////////
@@ -488,6 +521,8 @@ void Malla_TVT::DibujarMalla_TVT(){
 	glBindBuffer( GL_ARRAY_BUFFER, VBO_vertices.get_id() ); // act. VBO
 	glVertexPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
 	glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
+
+
 
 	///////////////////////
 	// Visualizar caras //
@@ -511,6 +546,10 @@ void Malla_TVT::DibujarMalla_TVT(){
 	//////////////////////
 	// Ajustes finales //
 	//////////////////////
+
+	if( ! this->colores_vertices.empty() ){
+		glDisableClientState( GL_COLOR_ARRAY );
+	}
 
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );

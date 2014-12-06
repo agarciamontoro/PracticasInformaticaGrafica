@@ -36,9 +36,9 @@ void P2_Inicializar( int argc, char *argv[] )
    else
       sprintf(ruta_archivo, "%s", argv[2]);
 
-   // si no se ha proporcionado un numero de caras, se asignan 10 por defecto
+   // si no se ha proporcionado un numero de caras, se asignan 100 por defecto
    if(argc < 3)
-      num_caras = 10;
+      num_caras = 100;
    else
       num_caras = atoi(argv[3]);
 
