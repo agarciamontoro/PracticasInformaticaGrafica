@@ -41,7 +41,7 @@ public:
 	VBO_Normales(){}
 	VBO_Normales( std::vector<Tupla3f>& datos_t ):
 		VBO( datos_t ){}
-	void Activar();
+	bool Activar();
 };
 
 class VBO_Colores: public VBO{
@@ -49,7 +49,7 @@ public:
 	VBO_Colores(){}
 	VBO_Colores( std::vector<Tupla3f>& datos_t ):
 		VBO( datos_t ){}
-	void Activar();
+	bool Activar();
 };
 
 class VBO_Vertices: public VBO{

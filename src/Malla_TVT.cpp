@@ -463,17 +463,21 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	// especificar modo de visualizacion
 	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
-
 	glShadeModel(GL_SMOOTH);
 
 	//////////////////////
 	// Enviar atributos //
 	//////////////////////
 
-	VBO_normales_vertices.Activar();
+	bool normales_activadas, colores_activados;
+
+	normales_activadas = VBO_normales_vertices.Activar();
 
 	if( visualizacion_actual != AJEDREZ ){
-		VBO_colores_vertices.Activar();
+		colores_activados = VBO_colores_vertices.Activar();
+	}
+	else{
+		colores_activados = false;
 	}
 
 	//////////////////////
@@ -492,16 +496,18 @@ void Malla_TVT::DibujarMalla_TVT(){
 	// Ajustes finales //
 	//////////////////////
 
-	if( ! this->colores_vertices.empty() && visualizacion_actual != AJEDREZ ){
+	// desactivar uso de array de normales
+	if ( normales_activadas ){
+		glDisableClientState( GL_NORMAL_ARRAY );
+	}
+
+	// desactivar uso de array de colores
+	if( colores_activados ){
 		glDisableClientState( GL_COLOR_ARRAY );
 	}
 
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );
-
-	/////////////////////////
-	// Dibujos auxiliares //
-	/////////////////////////
 
 	///////////////////////////////
 	// Dibujo normales vertices //

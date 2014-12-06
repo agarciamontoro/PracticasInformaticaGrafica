@@ -83,20 +83,42 @@ GLuint VBO::get_id(){
 
 //-----------------------------------------------------------------------------------------------------------------------------
 
-void VBO_Normales::Activar(){
-	glBindBuffer( get_tipo_dato(), get_id() );
-	glNormalPointer( GL_FLOAT, 0, 0 );
-	glBindBuffer( get_tipo_dato(), 0 );
+bool VBO_Normales::Activar(){
+	bool activado;
 
-	glEnableClientState( GL_NORMAL_ARRAY );
+	if( get_tam() != 0){
+		glBindBuffer( get_tipo_dato(), get_id() );
+		glNormalPointer( GL_FLOAT, 0, 0 );
+		glBindBuffer( get_tipo_dato(), 0 );
+
+		glEnableClientState( GL_NORMAL_ARRAY );
+
+		activado = true;
+	}
+	else{
+		activado = false;
+	}
+
+	return activado;
 };
 
-void VBO_Colores::Activar(){
-	glBindBuffer( get_tipo_dato(), get_id() );
-	glColorPointer( 3, GL_FLOAT, 0, 0 );
-	glBindBuffer( get_tipo_dato(), 0 );
+bool VBO_Colores::Activar(){
+	bool activado;
 
-	glEnableClientState( GL_COLOR_ARRAY );
+	if( get_tam() != 0){
+		glBindBuffer( get_tipo_dato(), get_id() );
+		glColorPointer( 3, GL_FLOAT, 0, 0 );
+		glBindBuffer( get_tipo_dato(), 0 );
+
+		glEnableClientState( GL_COLOR_ARRAY );
+
+		activado = true;
+	}
+	else{
+		activado = false;
+	}
+
+	return activado;
 };
 
 void VBO_Vertices::Activar(){
