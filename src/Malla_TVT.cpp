@@ -16,23 +16,23 @@
 #define DIM_NORMALES 1.5
 
 void Malla_TVT::GenerarVBO_vertices(){
-	this->VBO_vertices					= VBO(GL_ARRAY_BUFFER, vertices);
+	this->VBO_vertices					= VBO_Vertices( vertices );
 }
 
 void Malla_TVT::GenerarVBO_caras(){
-	this->VBO_caras				= VBO(GL_ARRAY_BUFFER, caras);
+	this->VBO_caras				= VBO_Caras( caras );
 }
 
 void Malla_TVT::GenerarVBO_normales_vertices(){
-	this->VBO_normales_vertices			= VBO(GL_ARRAY_BUFFER, normales_vertices);
+	this->VBO_normales_vertices			= VBO_Normales( normales_vertices );
 }
 
 void Malla_TVT::GenerarVBO_normales_caras(){
-	this->VBO_normales_caras		= VBO(GL_ARRAY_BUFFER, normales_caras);
+	this->VBO_normales_caras		= VBO_Normales( normales_caras );
 }
 
 void Malla_TVT::GenerarVBO_colores_vertices(){
-	this->VBO_colores_vertices			= VBO(GL_ARRAY_BUFFER, colores_vertices);
+	this->VBO_colores_vertices			= VBO_Colores( colores_vertices );
 }
 
 void Malla_TVT::GenerarVBO_TODO(){
@@ -127,8 +127,8 @@ Malla_TVT::Malla_TVT(const Malla_TVT& original){
 
 		set_visualizacion(original.visualizacion_actual);
 
-		this->VBO_vertices = VBO(GL_ARRAY_BUFFER, this->vertices);
-		this->VBO_caras = VBO(GL_ARRAY_BUFFER, this->caras);
+		this->VBO_vertices = VBO_Vertices( this->vertices );
+		this->VBO_caras = VBO_Caras( this->caras );
 	}
 }
 

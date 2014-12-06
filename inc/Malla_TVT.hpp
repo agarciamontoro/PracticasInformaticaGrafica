@@ -34,11 +34,11 @@ private:
 
 	std::vector<Tupla3i>	caras;
 
-	VBO VBO_vertices,
-		VBO_caras,
-		VBO_normales_vertices,
-		VBO_normales_caras,
-            VBO_colores_vertices;
+	VBO_Vertices     VBO_vertices;
+      VBO_Caras   VBO_caras;
+	VBO_Normales     VBO_normales_vertices,
+                              VBO_normales_caras;
+      VBO_Colores             VBO_colores_vertices;
 
 	enum modo_visualizacion visualizacion_actual;
 
