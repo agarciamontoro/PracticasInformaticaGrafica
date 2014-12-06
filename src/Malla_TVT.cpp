@@ -210,29 +210,32 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	// Preprocesamiento //
 	///////////////////////
 
+	//Inicializamos los vértices con los que ya tenemos
+	vert_rev = this->vertices;
+
 	//Procesamos el perfil para que el primer y último vértice no se repitan
 	//durante la rotación y para asegurarnos de que tienen coordenada X = 0
 
-	int pos_primero, pos_ultimo;
-	Tupla3f primer_vertice, ultimo_vertice;
-
-	//Iteradores para las posiciones primera y última
-	pos_primero = 0;
-	pos_ultimo = this->vertices.size()-1;
-
 	//Vértices que deben ser tratados por separado
-	primer_vertice = this->vertices[pos_primero];
-	ultimo_vertice = this->vertices[pos_ultimo];
+	Tupla3f primer_vertice, ultimo_vertice;
+	primer_vertice = vert_rev.front();
+	ultimo_vertice = vert_rev.back();
 
 	//Si el primer(resp. último) vértice tiene coordenada X = 0,
-	//se borra del vector original. Si no, se actualiza la primer_vertice
+	//se borra del vector original. Si no, se actualiza primer_vertice
 	//(resp. ultimo_vertice) poniendo a cero la componente X.
-	if(this->vertices[pos_primero][0] != 0.0){
+	if( primer_vertice[0] != 0.0 ){
 		primer_vertice[0] = 0.0;
 	}
+	else{
+		vert_rev.erase( vert_rev.begin() );
+	}
 
-	if(this->vertices[pos_ultimo][0] != 0.0){
+	if( ultimo_vertice[0] != 0.0){
 		ultimo_vertice[0] = 0.0;
+	}
+	else{
+		vert_rev.pop_back();
 	}
 
 
@@ -240,11 +243,8 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	//  Generación de vértices y caras //
 	//////////////////////////////////////
 
-	//Inicializamos los vértices con los que ya tenemos
-	vert_rev = this->vertices;
-	unsigned int num_vert = vert_rev.size();
-
 	//Variables para el bucle
+	unsigned int num_vert = vert_rev.size();
 	std::vector<Tupla3f> perfil_anterior, perfil_actual;
 	Tupla3f vert_rotado;
 	Tupla3i cara_par, cara_impar;
@@ -313,6 +313,8 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	//  Generación de tapas //
 	///////////////////////////
 
+	Tupla3i cara;
+
 		////////////////////
 		// Tapa inferior //
 		////////////////////
@@ -321,28 +323,23 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 	int indice_centro_tapa_inferior = vert_rev.size()-1;
 
-	for (int i = 0; i < num_caras-1; i += 2)
+	for (int i = 0; i < num_caras-1; ++i)
 	{
-		cara_par 	= Tupla3i(	num_vert * (i),
+		cara 	= Tupla3i(	num_vert * (i),
 								indice_centro_tapa_inferior,
 								num_vert * (i+1)
 							);
-		cara_impar 	= Tupla3i(	num_vert * (i+1),
-								indice_centro_tapa_inferior,
-								num_vert * (i+2)
-							);
 
-		caras_rev.push_back( cara_par );
-		caras_rev.push_back( cara_impar );
+		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa inferior
-	cara_par = Tupla3i(	num_vert * (num_caras-1),
+	cara = Tupla3i(	num_vert * (num_caras-1),
 							indice_centro_tapa_inferior,
 							0
 						);
 
-	caras_rev.push_back( cara_par );
+	caras_rev.push_back( cara );
 
 		////////////////////
 		// Tapa superior //
@@ -350,30 +347,25 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 	vert_rev.push_back(ultimo_vertice);
 
-	int indice_centro_tapa_superior = vertices.size()-1;
+	int indice_centro_tapa_superior = vert_rev.size()-1;
 
-	for (int i = 0; i < num_caras-1; i += 2)
+	for (int i = 0; i < num_caras-1; ++i)
 	{
-		cara_par 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+		cara 	= Tupla3i(	num_vert * (i+1) + (num_vert - 1),
 								indice_centro_tapa_superior,
 								num_vert * (i) + (num_vert - 1)
 							);
-		cara_impar 	= Tupla3i(	num_vert * (i+2) + (num_vert - 1),
-								indice_centro_tapa_superior,
-								num_vert * (i+1) + (num_vert - 1)
-							);
 
-		caras_rev.push_back( cara_par );
-		caras_rev.push_back( cara_impar );
+		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa superior
-	cara_par = Tupla3i(	num_vert - 1,
+	cara = Tupla3i(	num_vert - 1,
 							indice_centro_tapa_superior,
 							num_vert * (num_caras-1)  + (num_vert - 1)
 						);
 
-	caras_rev.push_back( cara_par );
+	caras_rev.push_back( cara );
 
 	//////////////////////////
 	// Generación de la nueva malla //
