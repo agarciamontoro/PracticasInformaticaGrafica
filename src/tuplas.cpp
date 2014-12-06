@@ -186,6 +186,20 @@ Tupla<N,T> Tupla<N,T>::normalized(){
 	return (*this)/(this->len());
 }
 
+//----------------------------------------------------------------------
+// tupla3 = abs(tupla3)
+template <unsigned int N, class T>
+Tupla<N,T> Tupla<N,T>::abs(){
+	Tupla<N,T> res;
+
+	for( unsigned int i = 0; i < N; i++)
+	{
+		res[i] = std::abs( this->val[i] );
+	}
+
+	return res;
+}
+
 
 //----------------------------------------------------------------------
 //						 	ESPECIALIZACIONES
