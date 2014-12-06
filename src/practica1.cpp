@@ -1,7 +1,7 @@
 // *********************************************************************
 // **
 // ** Informática Gráfica, curso 2014-15
-// ** 
+// **
 // ** Práctica 1  (implementación)
 // **
 // *********************************************************************
@@ -22,7 +22,7 @@ void P1_CambiarVisualizacion(enum modo_visualizacion modo){
 
 // ---------------------------------------------------------------------
 // Función para implementar en la práctica 1 para inicialización.
-// Se llama una vez al inicio, cuando ya se ha creado la ventana e 
+// Se llama una vez al inicio, cuando ya se ha creado la ventana e
 // incializado OpenGL. El PLY se debe cargar aquí.
 
 void P1_Inicializar( int argc, char *argv[] )
@@ -41,10 +41,18 @@ void P1_Inicializar( int argc, char *argv[] )
 // ---------------------------------------------------------------------
 // Función a implementar en la práctica 1  para dibujar los objetos
 
-void P1_DibujarObjetos() 
+void P1_DibujarObjetos()
 {
    malla.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
    malla.DibujarMalla_TVT();
+}
+
+void P1_Conmutar_NormalesCaras(){
+      malla.Conmutar_NormalesCaras();
+}
+
+void P1_Conmutar_NormalesVertices(){
+      malla.Conmutar_NormalesVertices();
 }

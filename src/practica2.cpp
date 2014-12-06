@@ -38,12 +38,12 @@ void P2_Inicializar( int argc, char *argv[] )
 
    // si no se ha proporcionado un numero de caras, se asignan 100 por defecto
    if(argc < 3)
-      num_caras = 100;
+      num_caras = 99;
    else
       num_caras = atoi(argv[3]);
 
    malla = Malla_TVT(ruta_archivo, VERT);
-   malla.GenerarSolidoRevolucion(num_caras);
+   malla = malla.GenerarSolidoRevolucion(num_caras);
 }
 
 // ---------------------------------------------------------------------
