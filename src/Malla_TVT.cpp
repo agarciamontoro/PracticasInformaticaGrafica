@@ -137,6 +137,7 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 		this->caras = original.caras;
 		this->normales_caras = original.normales_caras;
 		this->normales_vertices = original.normales_vertices;
+		this->colores_vertices = original.colores_vertices;
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;
@@ -447,7 +448,6 @@ void Malla_TVT::AsignarColores( std::vector<Tupla3f> colores ){
 
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
-
 	////////////////////////
 	// Ajustes iniciales //
 	////////////////////////
