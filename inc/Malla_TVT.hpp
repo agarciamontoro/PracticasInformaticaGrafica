@@ -66,23 +66,24 @@ private:
 
       void DibujarNormales_Vertices(Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 0.5);
       void DibujarNormales_Caras(Tupla3f color = Tupla3f(0.0, 1.0, 0.0), float ancho = 0.5);
+
 public:
 
-        // ---------------------------------------------------------------------
-        //  Constructor por defecto
-        Malla_TVT(){};
+      // ---------------------------------------------------------------------
+      //  Constructor por defecto
+      Malla_TVT(){};
 
-        // ---------------------------------------------------------------------
-        //  Constructor completo
-        Malla_TVT(char* archivo_PLY,
-			  enum modo_lectura lec = TODO,
-			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
-			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
-			  enum modo_visualizacion visualizacion_t = AJEDREZ);
+      // ---------------------------------------------------------------------
+      //  Constructor completo
+      Malla_TVT(char* archivo_PLY,
+      	  enum modo_lectura lec = TODO,
+      	  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
+      	  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
+      	  enum modo_visualizacion visualizacion_t = AJEDREZ);
 
-        // ---------------------------------------------------------------------
-        //  Constructor a partir de vectores
-        Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras);
+      // ---------------------------------------------------------------------
+      //  Constructor a partir de vectores
+      Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras);
 
 	// ---------------------------------------------------------------------
 	//  Constructor de copia

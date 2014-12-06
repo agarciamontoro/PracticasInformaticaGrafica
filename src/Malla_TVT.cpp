@@ -24,7 +24,6 @@ void Malla_TVT::GenerarVBO_caras(){
 	this->VBO_caras_impares				= VBO(GL_ARRAY_BUFFER, caras_impares);
 }
 
-
 void Malla_TVT::GenerarVBO_normales_vertices(){
 	this->VBO_normales_vertices			= VBO(GL_ARRAY_BUFFER, normales_vertices);
 }
@@ -500,8 +499,9 @@ void Malla_TVT::DibujarMalla_TVT(){
 	// especificar modo de visualizacion
 	glPolygonMode(GL_FRONT_AND_BACK, render_actual);
 
+	glShadeModel(GL_SMOOTH);
+
 	if( ! this->colores_vertices.empty() ){
-		glShadeModel(GL_SMOOTH);
 
 		glBindBuffer( GL_ARRAY_BUFFER, VBO_colores_vertices.get_id() ); // act. VBO
 		glColorPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
@@ -514,8 +514,6 @@ void Malla_TVT::DibujarMalla_TVT(){
 	// Enviar vértices //
 	//////////////////////
 
-	//Activar uso de vertex array
-	glEnableClientState( GL_VERTEX_ARRAY );
 
 	// especificar formato de los vértices en su VBO (y offset)
 	glBindBuffer( GL_ARRAY_BUFFER, VBO_vertices.get_id() ); // act. VBO
@@ -523,6 +521,8 @@ void Malla_TVT::DibujarMalla_TVT(){
 	glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
 
 
+	//Activar uso de vertex array
+	glEnableClientState( GL_VERTEX_ARRAY );
 
 	///////////////////////
 	// Visualizar caras //
