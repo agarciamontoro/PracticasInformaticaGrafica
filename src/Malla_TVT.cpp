@@ -93,6 +93,7 @@ Malla_TVT::Malla_TVT(char* archivo_PLY,
 {
 	LeerPLY(archivo_PLY, lec);
 	CalcularNormales();
+	AsignarColoresVert();
 	GenerarVBO_TODO();
 	this->color_principal = color_principal_t;
 	this->color_secundario = color_secundario_t;
@@ -112,7 +113,7 @@ Malla_TVT::Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras){
 	}
 
 	CalcularNormales();
-
+	AsignarColoresVert();
 	GenerarVBO_TODO();
 }
 
