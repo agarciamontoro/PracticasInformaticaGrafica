@@ -47,6 +47,7 @@ void P1_DibujarObjetos()
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
    malla.DibujarMalla_TVT();
+   malla.AsignarColoresVert();
 }
 
 void P1_Conmutar_NormalesCaras(){

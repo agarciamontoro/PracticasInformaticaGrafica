@@ -378,15 +378,7 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	// Asignar colores a los vértices //
 	//////////////////////////
 
-	//Construimos el vector de colores con respecto al de normales de vértices
-	std::vector<Tupla3f> colores_vertices;
-	colores_vertices.resize( solido_revolucion.vertices.size() );
-
-	for(size_t i = 0; i < colores_vertices.size(); i++){
-		colores_vertices[i] =  solido_revolucion.vertices[i].abs();
-	}
-
-	solido_revolucion.AsignarColores( colores_vertices );
+	solido_revolucion.AsignarColoresVert();
 
 	return solido_revolucion;
 }
@@ -442,8 +434,21 @@ void Malla_TVT::CalcularNormales(){
 }
 
 void Malla_TVT::AsignarColores( std::vector<Tupla3f> colores ){
+	assert( colores.size() == this->vertices.size() );
 	this->colores_vertices = colores;
 	GenerarVBO_colores_vertices();
+}
+
+void Malla_TVT::AsignarColoresVert(){
+	//Construimos el vector de colores con respecto al de normales de vértices
+	std::vector<Tupla3f> colores_vertices;
+	colores_vertices.resize( this->vertices.size() );
+
+	for(size_t i = 0; i < colores_vertices.size(); i++){
+		colores_vertices[i] =  this->vertices[i].abs();
+	}
+
+	this->AsignarColores( colores_vertices );
 }
 
 void Malla_TVT::DibujarMalla_TVT(){
@@ -460,7 +465,7 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	glShadeModel(GL_SMOOTH);
 
-	if( ! this->colores_vertices.empty() ){
+	if( ! this->colores_vertices.empty() && visualizacion_actual != AJEDREZ ){
 
 		glBindBuffer( GL_ARRAY_BUFFER, VBO_colores_vertices.get_id() ); // act. VBO
 		glColorPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
@@ -509,7 +514,7 @@ void Malla_TVT::DibujarMalla_TVT(){
 	// Ajustes finales //
 	//////////////////////
 
-	if( ! this->colores_vertices.empty() ){
+	if( ! this->colores_vertices.empty() && visualizacion_actual != AJEDREZ ){
 		glDisableClientState( GL_COLOR_ARRAY );
 	}
 

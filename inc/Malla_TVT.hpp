@@ -113,6 +113,8 @@ public:
 
       // Asigna colores a los vértices mediante un array de colores
       void AsignarColores( std::vector<Tupla3f> colores );
+      //Asigna a cada vértice un color según su normal
+      void AsignarColoresVert();
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT
