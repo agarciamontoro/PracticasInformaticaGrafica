@@ -466,50 +466,27 @@ void Malla_TVT::DibujarMalla_TVT(){
 
 	glShadeModel(GL_SMOOTH);
 
-	if( ! this->colores_vertices.empty() && visualizacion_actual != AJEDREZ ){
+	//////////////////////
+	// Enviar atributos //
+	//////////////////////
 
-		glBindBuffer( GL_ARRAY_BUFFER, VBO_colores_vertices.get_id() ); // act. VBO
-		glColorPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
-		glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
+	VBO_normales_vertices.Activar();
 
-		glEnableClientState( GL_COLOR_ARRAY );
+	if( visualizacion_actual != AJEDREZ ){
+		VBO_colores_vertices.Activar();
 	}
 
 	//////////////////////
 	// Enviar vértices //
 	//////////////////////
 
-
-	// especificar formato de los vértices en su VBO (y offset)
-	glBindBuffer( GL_ARRAY_BUFFER, VBO_vertices.get_id() ); // act. VBO
-	glVertexPointer( 3, GL_FLOAT, 0, 0 ); // formato y offset (0)
-	glBindBuffer( GL_ARRAY_BUFFER, 0 ); // desact VBO.
-
-
-	//Activar uso de vertex array
-	glEnableClientState( GL_VERTEX_ARRAY );
+	VBO_vertices.Activar();
 
 	///////////////////////
 	// Visualizar caras //
 	///////////////////////
 
-	int num_pares = 3*caras.size()/2;
-	int num_impares = 3*caras.size() - num_pares;
-
-	// visualizar con glDrawElements las caras pares (puntero a tabla == NULL)
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, VBO_caras.get_id() );
-	glDrawElements( GL_TRIANGLES, num_pares, GL_UNSIGNED_INT, NULL ) ;
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
-
-	// cambiar el color de las caras si el modo de visualización es ajedrez
-	if(visualizacion_actual == AJEDREZ){
-		cambiar_color(color_secundario);
-	}
-
-	// visualizar con glDrawElements las caras impares (puntero a tabla == NULL)
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, VBO_caras.get_id() );
-	glDrawElements( GL_TRIANGLES, num_impares, GL_UNSIGNED_INT, (const void*) (num_pares*sizeof(GLuint)) ) ;
-	glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0 );
+	VBO_caras.Dibujar(visualizacion_actual, this->color_secundario);
 
 	//////////////////////
 	// Ajustes finales //

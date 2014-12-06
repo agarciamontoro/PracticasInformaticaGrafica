@@ -12,18 +12,7 @@
 #include "error-ogl.hpp"
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
-
-enum modo_visualizacion{
-   ALAMBRE,
-   SOLIDO,
-   AJEDREZ,
-   PUNTO
-};
-
-enum modo_lectura{
-   TODO,
-   VERT
-};
+#include "tipos.hpp"
 
 class Malla_TVT{
 private:

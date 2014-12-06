@@ -22,6 +22,7 @@
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
 #include "Malla_TVT.hpp"
+#include "tipos.hpp"
 
 void P1_DibujarObjetos() ;
 void P1_Inicializar( int argc, char *argv[] ) ;

@@ -6,10 +6,12 @@
 #include <GL/glut.h>
 
 #include "tuplas.hpp"
+#include "tipos.hpp"
 
 class VBO{
 
 private:
+	int num_datos;
 	GLuint tam;
 	GLvoid* puntero_datos;
 	GLuint identificador;
@@ -26,8 +28,9 @@ public:
 
 	const VBO& operator=(const VBO& original);
 
-	GLuint get_tipo_dato();
-	GLuint get_tam_dato();
+	int get_num_datos();
+	GLenum get_tipo_dato();
+	GLsizeiptr get_tam_dato();
 	GLuint get_tam();
 	GLvoid* get_puntero();
 	GLuint get_id();
@@ -63,9 +66,9 @@ public:
 	VBO_Caras(){}
 	VBO_Caras( std::vector<Tupla3i>& datos_t ):
 		VBO( datos_t ){}
-	GLuint get_tipo_dato();
-	GLuint get_tam_dato();
-	void Dibujar(GLenum modo_renderizado);
+	GLenum get_tipo_dato();
+	GLsizeiptr get_tam_dato();
+	void Dibujar(enum modo_visualizacion modo, Tupla3f color_sec);
 };
 
 #endif

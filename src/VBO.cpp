@@ -1,15 +1,14 @@
 #include <GL/glew.h>
 #include <assert.h>
 
+#include <iostream>
+
 #include "VBO.hpp"
 
 GLuint VBO::Inicializar(){
-	GLuint tipo_t, tam_t;
-	GLvoid* puntero_datos_t;
-
-	tipo_t = get_tipo_dato();
-	tam_t = get_tam_dato();
-	puntero_datos_t = get_puntero();
+	GLenum tipo_t = get_tipo_dato();
+	GLuint tam_t = get_tam();
+	GLvoid* puntero_datos_t = get_puntero();
 
 	GLuint id_vbo ; // resultado: identificador de VBO
 
@@ -28,6 +27,7 @@ GLuint VBO::Inicializar(){
 // pero que apunta a los MISMOS datos en memoria que original.
 VBO::VBO(const VBO& original){
 	if( this != &original ){
+		this->num_datos = original.num_datos;
 		this->tam = original.tam;
 		this->puntero_datos = original.puntero_datos;
 
@@ -38,6 +38,7 @@ VBO::VBO(const VBO& original){
 ///Crea un nuevo VBO en la GPU que apunta a los MISMOS datos en memoria que original.
 const VBO& VBO::operator=(const VBO& original){
 	if( this != &original ){
+		this->num_datos = original.num_datos;
 		this->tam = original.tam;
 		this->puntero_datos = original.puntero_datos;
 
@@ -49,18 +50,23 @@ const VBO& VBO::operator=(const VBO& original){
 
 template<class T>
 VBO::VBO( std::vector< Tupla<3,T> >& datos_t ){
-	this->tam = sizeof( get_tam_dato() ) * 3 * datos_t.size();
+	this->num_datos = 3 * datos_t.size();
+	this->tam = get_tam_dato() * 3 * datos_t.size();
 	this->puntero_datos = datos_t[0].get_ptr();
 
 	this->identificador = Inicializar();
 }
 
-GLuint VBO::get_tipo_dato(){
+int VBO::get_num_datos(){
+	return this->num_datos;
+}
+
+GLenum VBO::get_tipo_dato(){
 	return GL_ARRAY_BUFFER;
 }
 
-GLuint VBO::get_tam_dato(){
-	return GL_FLOAT;
+GLsizeiptr VBO::get_tam_dato(){
+	return sizeof(GL_FLOAT);
 }
 
 GLuint VBO::get_tam(){
@@ -79,34 +85,51 @@ GLuint VBO::get_id(){
 
 void VBO_Normales::Activar(){
 	glBindBuffer( get_tipo_dato(), get_id() );
-	glNormalPointer( get_tam_dato(), 0, 0 );
+	glNormalPointer( GL_FLOAT, 0, 0 );
+	glBindBuffer( get_tipo_dato(), 0 );
+
 	glEnableClientState( GL_NORMAL_ARRAY );
 };
 
 void VBO_Colores::Activar(){
 	glBindBuffer( get_tipo_dato(), get_id() );
-	glColorPointer( 3, get_tam_dato(), 0, 0 );
+	glColorPointer( 3, GL_FLOAT, 0, 0 );
+	glBindBuffer( get_tipo_dato(), 0 );
+
 	glEnableClientState( GL_COLOR_ARRAY );
 };
 
 void VBO_Vertices::Activar(){
 	glBindBuffer( get_tipo_dato(), get_id() );
-	glVertexPointer( 3, get_tam_dato(), 0, 0 );
+	glVertexPointer( 3, GL_FLOAT, 0, 0 );
 	glBindBuffer( get_tipo_dato(), 0 );
+
 	glEnableClientState( GL_VERTEX_ARRAY );
 };
 
-GLuint VBO_Caras::get_tipo_dato(){
+GLenum VBO_Caras::get_tipo_dato(){
 	return GL_ELEMENT_ARRAY_BUFFER;
 }
 
-GLuint VBO_Caras::get_tam_dato(){
-	return GL_UNSIGNED_INT;
+GLsizeiptr VBO_Caras::get_tam_dato(){
+	return sizeof(GL_UNSIGNED_INT);
 }
 
-void VBO_Caras::Dibujar(GLenum modo_renderizado){
+void VBO_Caras::Dibujar(enum modo_visualizacion modo, Tupla3f color_sec){
 	glBindBuffer( get_tipo_dato(), get_id() );
-	glDrawElements( GL_TRIANGLES, get_tam(), get_tam_dato(), NULL ) ;
+
+	if( modo == AJEDREZ){
+		int num_pares = get_num_datos() / 2;
+		int num_impares = get_num_datos() - num_pares;
+
+		glDrawElements( GL_TRIANGLES, num_pares, GL_UNSIGNED_INT, NULL ) ;
+		glColor3f(color_sec[0], color_sec[1], color_sec[2]);
+		glDrawElements( GL_TRIANGLES, num_impares, GL_UNSIGNED_INT, (const void*) (num_pares * get_tam_dato()) ) ;
+	}
+	else{
+		glDrawElements( GL_TRIANGLES, get_num_datos(), GL_UNSIGNED_INT, NULL ) ;
+	}
+
 	glBindBuffer( get_tipo_dato(), 0 );
 }
 

@@ -13,6 +13,7 @@
 #include "gestion_practicas.hpp"
 #include "practica1.hpp"
 #include "practica2.hpp"
+#include "tipos.hpp"
 
 // includes de C/C++
 
