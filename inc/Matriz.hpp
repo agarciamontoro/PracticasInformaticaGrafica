@@ -28,7 +28,7 @@ private:
 public:
 
    Matriz(){}
-   
+
    Matriz( T val_inicial );
    Matriz( const T datos[ROWS][COLS]);
    Matriz( const std::vector< std::vector<T> >& datos);
@@ -66,11 +66,11 @@ public:
    Matriz<ROWS,N,T> operator * ( const Matriz<COLS,N,T> & m1 ){
       Matriz<ROWS,N,T> producto(0.0);
 
-      for (int i = 0; i < ROWS; ++i)
+      for ( unsigned int i = 0; i < ROWS; ++i)
       {
-         for (int k = 0; k < COLS; ++k)
+         for ( unsigned int k = 0; k < COLS; ++k)
          {
-            for (int j = 0; j < N; ++j)
+            for ( unsigned int j = 0; j < N; ++j)
             {
                producto[i][j] += this->matriz[i][k] * m1[k][j];
             }
@@ -103,7 +103,7 @@ template<unsigned int COLS, class T>
 Tupla<COLS,T> toTupla( const Matriz<1,COLS,T>& m1){
    Tupla<COLS,T> tupla;
 
-   for (int j = 0; j < COLS; ++j)
+   for ( unsigned int j = 0; j < COLS; ++j)
    {
       tupla[j] = m1[0][j];
    }
@@ -115,8 +115,8 @@ Tupla<COLS,T> toTupla( const Matriz<1,COLS,T>& m1){
 template<unsigned int ROWS, class T>
 Tupla<ROWS,T> toTupla( const Matriz<ROWS,1,T>& m1){
    Tupla<ROWS,T> tupla;
-      
-   for (int i = 0; i < ROWS; ++i){
+
+   for ( unsigned int i = 0; i < ROWS; ++i){
       tupla[i] = m1[i][0];
    }
 

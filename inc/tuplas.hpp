@@ -1,6 +1,6 @@
 // *********************************************************************
 // **
-// ** Gestión de tuplas de coordenadas o colores 
+// ** Gestión de tuplas de coordenadas o colores
 // ** (declaraciones e implementación 'inline')
 // ** Copyright (C) 2014 Carlos Ureña
 // **
@@ -17,7 +17,7 @@
 // ** You should have received a copy of the GNU General Public License
 // ** along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // **
-// 
+//
 
 
 #ifndef TUPLAS_HPP
@@ -41,7 +41,7 @@ private:
 public:
 
    Tupla(){}
-   
+
    Tupla( const std::vector<T>& coot);
    Tupla( const T coot[N] );
 
@@ -99,6 +99,11 @@ public:
    // tupla3 = normalized(tupla3)
    Tupla<N,T> normalized();
 
+
+   //----------------------------------------------------------------------
+   // tupla3 = abs(tupla3)
+   Tupla<N,T> abs();
+
    T* get_ptr(){
       return &(val[0]);
    }
@@ -113,17 +118,17 @@ typedef Tupla<4,float> Tupla4f;
 /*
 // ---------------------------------------------------------------------
 // índices de los ejes X,Y Z
-                        
-const unsigned int 
+
+const unsigned int
    X=0, Y=1, Z=2, W=3 ;      // indices de los ejes
 
 // *********************************************************************
 // tuplas con tres valores de tipo float
- 
+
 struct Tupla3f          // tupla con 3 valores floates que representan coordenas
-{                       
-   float coo[3] ;       
-   
+{
+   float coo[3] ;
+
    inline Tupla3f( const float x, const float y, const float z );
    inline Tupla3f( const float coot[3] );
    Tupla3f() {};
@@ -199,7 +204,7 @@ inline Tupla3f operator * ( const Tupla3f & v1, const Tupla3f & v2 )
    return Tupla3f
          (  v1.coo[Y]*v2.coo[Z] - v1.coo[Z]*v2.coo[Y] ,
             v1.coo[Z]*v2.coo[X] - v1.coo[X]*v2.coo[Z] ,
-            v1.coo[X]*v2.coo[Y] - v1.coo[Y]*v2.coo[X] 
+            v1.coo[X]*v2.coo[Y] - v1.coo[Y]*v2.coo[X]
          );
 }
 
@@ -226,11 +231,11 @@ inline Tupla3f normalized( const Tupla3f & t )
 
 // *********************************************************************
 // tuplas con cuatro valores de tipo float
- 
+
 struct Tupla4f          // tupla con 3 valores floates que representan coordenas
-{                       
-   float coo[4] ;       
-   
+{
+   float coo[4] ;
+
    inline Tupla4f( const float x, const float y, const float z, const float w );
    inline Tupla4f( const float coot[4] );
    Tupla4f() {};

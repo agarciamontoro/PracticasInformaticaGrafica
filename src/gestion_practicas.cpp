@@ -1,7 +1,7 @@
 // *********************************************************************
 // **
 // ** Informática Gráfica, curso 2014-15
-// ** 
+// **
 // ** Gestión prácticas  (implementación)
 // **
 // *********************************************************************
@@ -25,6 +25,8 @@ void PX_DibujarObjetos(){
 void PX_Inicializar( int argc, char *argv[] ){
 	P1_Inicializar(argc, argv);
 	P2_Inicializar(argc, argv);
+
+	PX_CambiarVisualizacion(AJEDREZ);
 }
 
 void PX_CambiarVisualizacion(enum modo_visualizacion modo){
@@ -34,4 +36,14 @@ void PX_CambiarVisualizacion(enum modo_visualizacion modo){
 
 void PX_CambiarPracticaActual(enum practicas prac){
 	PRACTICA_ACTUAL = prac;
+}
+
+void PX_Conmutar_NormalesCaras(){
+	P1_Conmutar_NormalesCaras();
+	P2_Conmutar_NormalesCaras();
+}
+
+void PX_Conmutar_NormalesVertices(){
+	P1_Conmutar_NormalesVertices();
+	P2_Conmutar_NormalesVertices();
 }
