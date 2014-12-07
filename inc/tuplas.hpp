@@ -27,12 +27,6 @@
 #include <assert.h>
 #include <vector>
 
-#define  X  0
-#define  Y  1
-#define  Z  2
-#define  W  3
-
-
 template <unsigned int N, class T>
 class Tupla{
 private:

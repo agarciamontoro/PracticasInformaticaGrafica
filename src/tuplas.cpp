@@ -1,4 +1,5 @@
 #include "tuplas.hpp"
+#include "tipos.hpp"
 
 #include <vector>
 
