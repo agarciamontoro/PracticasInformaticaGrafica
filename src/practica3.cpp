@@ -38,7 +38,7 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // si no se ha proporcionado un numero de caras, se asignan 100 por defecto
    if(argc < 3)
-      num_caras = 99;
+      num_caras = 100;
    else
       num_caras = atoi(argv[3]);
 
