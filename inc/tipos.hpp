@@ -19,4 +19,11 @@ enum practicas{
     P3
 };
 
+enum coord{
+    X = 0,
+    Y = 1,
+    Z = 2,
+    W = 3
+};
+
 #endif
