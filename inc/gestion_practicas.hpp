@@ -13,17 +13,14 @@
 #include "Malla_TVT.hpp"
 #include "practica1.hpp"
 #include "practica2.hpp"
+#include "practica3.hpp"
 #include "tipos.hpp"
-
-enum practicas{
-   P1,
-   P2
-};
 
 void PX_DibujarObjetos() ;
 void PX_Inicializar( int argc, char *argv[] ) ;
 void PX_CambiarVisualizacion(enum modo_visualizacion modo);
 void PX_CambiarPracticaActual(enum practicas prac);
+enum practicas PX_ConsultarPracticaActual();
 void PX_Conmutar_NormalesVertices();
 void PX_Conmutar_NormalesCaras();
 

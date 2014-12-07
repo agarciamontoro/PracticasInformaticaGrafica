@@ -13,6 +13,7 @@
 #include "gestion_practicas.hpp"
 #include "practica1.hpp"
 #include "practica2.hpp"
+#include "practica3.hpp"
 #include "tipos.hpp"
 
 // includes de C/C++
@@ -257,13 +258,13 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case '-' :
          frustum_factor_escala /= 1.05;
          break;
-      case 'A' :
+      case 'L' :
          PX_CambiarVisualizacion(ALAMBRE);
          break;
       case 'S' :
          PX_CambiarVisualizacion(SOLIDO);
          break;
-      case 'Z' :
+      case 'A' :
          PX_CambiarVisualizacion(AJEDREZ);
          break;
       case 'P' :
@@ -276,7 +277,12 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
          PX_Conmutar_NormalesCaras();
          break;
       default:
-         redisp = false ;
+         if( PX_ConsultarPracticaActual() == P3 ){
+             redisp = P3_FGE_TeclaNormal( tecla, x_raton, y_raton );
+         }
+         else{
+             redisp = false;
+         }
          break ;
    }
    using namespace std ;
@@ -328,8 +334,16 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
       case GLUT_KEY_F2:
          PX_CambiarPracticaActual(P2);
          break;
+     case GLUT_KEY_F3:
+         PX_CambiarPracticaActual(P3);
+         break;
       default:
-         redisp = false ;
+         if( PX_ConsultarPracticaActual() == P3 ){
+             redisp = P3_FGE_TeclaEspecial( tecla, x_raton, y_raton );
+         }
+         else{
+             redisp = false;
+         }
          break ;
 	}
    using namespace std ;

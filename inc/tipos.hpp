@@ -13,4 +13,10 @@ enum modo_lectura{
    VERT
 };
 
+enum practicas{
+    P1,
+    P2,
+    P3
+};
+
 #endif
