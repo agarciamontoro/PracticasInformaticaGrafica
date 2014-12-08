@@ -26,4 +26,16 @@ enum coord{
     W = 3
 };
 
+enum solidos_GLUT{
+    ESFERA,
+    CUBO,
+    CONO,
+    TORO,
+    DODECAEDRO,
+    OCTAEDRO,
+    TETRAEDRO,
+    ICOSAEDRO,
+    TETERA
+};
+
 #endif
