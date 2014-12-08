@@ -36,10 +36,10 @@ public:
 
 class Celda_Nodo : public Celda_NGE{
 private:
-    Nodo hijo;
+    Nodo* hijo;
 
 public:
-    Celda_Nodo(Nodo hijo_);
+    Celda_Nodo(Nodo* hijo_);
     virtual void procesar();
 };
 
@@ -47,10 +47,10 @@ public:
 
 class Celda_Transformacion : public Celda_NGE{
 private:
-    Matriz4x4f matriz;
+    Matriz4x4f* matriz;
 
 public:
-    Celda_Transformacion(Matriz4x4f matriz_);
+    Celda_Transformacion(Matriz4x4f* matriz_);
     virtual void procesar();
 };
 
@@ -58,10 +58,10 @@ public:
 
 class Celda_Malla : public Celda_NGE{
 private:
-    Malla_TVT malla;
+    Malla_TVT* malla;
 
 public:
-    Celda_Malla(Malla_TVT malla);
+    Celda_Malla(Malla_TVT* malla);
     virtual void procesar();
 };
 
@@ -72,7 +72,6 @@ private:
     enum solidos_GLUT solido;
 
 public:
-    ~Celda_SolidoGLUT(){}
     Celda_SolidoGLUT(enum solidos_GLUT solido);
     virtual void procesar();
 };

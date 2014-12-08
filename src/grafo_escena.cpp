@@ -2,32 +2,32 @@
 
 //---------------------HIJOS-------------------------//
 
-Celda_Nodo::Celda_Nodo(Nodo hijo_){
+Celda_Nodo::Celda_Nodo(Nodo* hijo_){
     this->hijo = hijo_;
 }
 
 void Celda_Nodo::procesar(){
-    hijo.visualizar();
+    hijo->visualizar();
 }
 
 //---------------------------------------------------//
 
-Celda_Transformacion::Celda_Transformacion(Matriz4x4f matriz_){
+Celda_Transformacion::Celda_Transformacion(Matriz4x4f* matriz_){
     this->matriz = matriz_;
 }
 
 void Celda_Transformacion::procesar(){
-    glMultMatrixf(this->matriz.data());
+    glMultMatrixf(this->matriz->data());
 }
 
 //---------------------------------------------------//
 
-Celda_Malla::Celda_Malla(Malla_TVT malla_){
+Celda_Malla::Celda_Malla(Malla_TVT* malla_){
     this->malla = malla_;
 }
 
 void Celda_Malla::procesar(){
-    malla.DibujarMalla_TVT();
+    malla->DibujarMalla_TVT();
 }
 
 //---------------------------------------------------//
