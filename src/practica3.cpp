@@ -50,18 +50,24 @@ void P3_Inicializar( int argc, char *argv[] )
    inception = Malla_TVT("./PLY/perfil_inception.ply", VERT);
    inception = inception.GenerarSolidoRevolucion(100);
 
-   Celda_Transformacion* trans_peon = new Celda_Transformacion(Matriz_Traslacion(3.0, 3.0, 3.0));
-   Celda_Malla* peon = new Celda_Malla(malla);
-   Celda_Malla* celda_inception = new Celda_Malla(inception);
-   Celda_Transformacion* trans = new Celda_Transformacion(Matriz_Rotacion(M_PI/4, X));
+   malla.set_visualizacion(AJEDREZ);
+   inception.set_visualizacion(AJEDREZ);
 
-   subescena.push_back( trans_peon );
+   Matriz_Traslacion mat_tras(3.0,3.0,3.0);
+   Matriz_Rotacion mat_rot(M_PI/4, X);
+
+   Celda_Transformacion* trans_peon = new Celda_Transformacion(&mat_tras);
+   Celda_Malla* peon = new Celda_Malla(&malla);
+   Celda_Malla* celda_inception = new Celda_Malla(&inception);
+   Celda_Transformacion* trans = new Celda_Transformacion(&mat_rot);
+
+  // subescena.push_back( trans_peon );
    subescena.push_back( peon );
 
-   Celda_Nodo* hijo = new Celda_Nodo(subescena);
-   
+   Celda_Nodo* hijo = new Celda_Nodo(&subescena);
+
    escena.push_back( hijo );
-   escena.push_back( trans );
+//   escena.push_back( trans );
    escena.push_back( celda_inception );
 
 }
