@@ -148,10 +148,15 @@ public:
 class Matriz_Traslacion : public Matriz4x4f{
 private:
     Tupla3f direccion;
+    void Inicializar( Tupla3f direccion );
 
 public:
-    Matriz_Traslacion( Tupla3f direccion );
-    Matriz_Traslacion( float dir_x, float dir_y, float dir_z );
+    Matriz_Traslacion( Tupla3f direccion ){
+        Inicializar( direccion );
+    }
+    Matriz_Traslacion( float dir_x, float dir_y, float dir_z ){
+        Inicializar( Tupla3f(dir_x, dir_y, dir_z) );
+    }
 
     Tupla3f get_direccion();
     void set_direccion( Tupla3f direccion );
@@ -161,10 +166,15 @@ public:
 class Matriz_Escalado : public Matriz4x4f{
 private:
     Tupla3f escala;
+    void Inicializar( Tupla3f escala );
 
 public:
-    Matriz_Escalado( Tupla3f escala );
-    Matriz_Escalado( float esc_x, float esc_y, float esc_z );
+    Matriz_Escalado( Tupla3f escala ){
+        Inicializar( escala );
+    }
+    Matriz_Escalado( float esc_x, float esc_y, float esc_z ){
+        Inicializar( Tupla3f(esc_x, esc_y, esc_z) );
+    }
 
     Tupla3f get_escala();
     void set_escala( Tupla3f escala );
@@ -177,10 +187,15 @@ class Matriz_Cizalla : public Matriz4x4f{
 private:
     float sesgo;
     ParCoord eje;
+    void Inicializar( float sesgo, ParCoord eje );
 
 public:
-    Matriz_Cizalla( float sesgo, ParCoord eje );
-    Matriz_Cizalla( float sesgo, enum coord eje_1, enum coord eje_2);
+    Matriz_Cizalla( float sesgo, ParCoord eje ){
+        Inicializar( sesgo, eje );
+    }
+    Matriz_Cizalla( float sesgo, enum coord eje_1, enum coord eje_2){
+        Inicializar( sesgo, ParCoord(eje_1, eje_2) );
+    }
 
     float get_sesgo();
     void set_sesgo( float sesgo );

@@ -1,6 +1,7 @@
 #include <vector>
 #include <assert.h>
 #include <cmath> //Uso de M_PI
+#include <iostream>
 #include "tuplas.hpp"
 
 #include "Matriz.hpp"
@@ -209,24 +210,24 @@ Matriz_Rotacion::Matriz_Rotacion(float angulo, enum coord eje){
 
     switch( eje ){
         case X:
-            matriz[0][0] = 1; matriz[0][1] = 0; matriz[0][2] = 0;  matriz[0][3] = 0;
-            matriz[1][0] = 0; matriz[1][1] = c; matriz[1][2] = -s; matriz[1][3] = 0;
-            matriz[2][0] = 0; matriz[2][1] = s; matriz[2][2] = c;  matriz[2][3] = 0;
-            matriz[3][0] = 0; matriz[3][1] = 0; matriz[3][2] = 0;  matriz[3][3] = 1;
+            matriz[0][0] = 1; matriz[1][0] = 0; matriz[2][0] = 0;  matriz[3][0] = 0;
+            matriz[0][1] = 0; matriz[1][1] = c; matriz[2][1] = -s; matriz[3][1] = 0;
+            matriz[0][2] = 0; matriz[1][2] = s; matriz[2][2] = c;  matriz[3][2] = 0;
+            matriz[0][3] = 0; matriz[1][3] = 0; matriz[2][3] = 0;  matriz[3][3] = 1;
             break;
 
         case Y:
-            matriz[0][0] = c;  matriz[0][1] = 0; matriz[0][2] = s; matriz[0][3] = 0;
-            matriz[1][0] = 0;  matriz[1][1] = 1; matriz[1][2] = 0; matriz[1][3] = 0;
-            matriz[2][0] = -s; matriz[2][1] = 0; matriz[2][2] = c; matriz[2][3] = 0;
-            matriz[3][0] = 0;  matriz[3][1] = 0; matriz[3][2] = 0; matriz[3][3] = 1;
+            matriz[0][0] = c;  matriz[1][0] = 0; matriz[2][0] = s; matriz[3][0] = 0;
+            matriz[0][1] = 0;  matriz[1][1] = 1; matriz[2][1] = 0; matriz[3][1] = 0;
+            matriz[0][2] = -s; matriz[1][2] = 0; matriz[2][2] = c; matriz[3][2] = 0;
+            matriz[0][3] = 0;  matriz[1][3] = 0; matriz[2][3] = 0; matriz[3][3] = 1;
             break;
 
         case Z:
-            matriz[0][0] = c; matriz[0][1] = -s; matriz[0][2] = 0; matriz[0][3] = 0;
-            matriz[1][0] = s; matriz[1][1] = c;  matriz[1][2] = 0; matriz[1][3] = 0;
-            matriz[2][0] = 0; matriz[2][1] = 0;  matriz[2][2] = 1; matriz[2][3] = 0;
-            matriz[3][0] = 0; matriz[3][1] = 0;  matriz[3][2] = 0; matriz[3][3] = 1;
+            matriz[0][0] = c; matriz[1][0] = -s; matriz[2][0] = 0; matriz[3][0] = 0;
+            matriz[0][1] = s; matriz[1][1] = c;  matriz[2][1] = 0; matriz[3][1] = 0;
+            matriz[0][2] = 0; matriz[1][2] = 0;  matriz[2][2] = 1; matriz[3][2] = 0;
+            matriz[0][3] = 0; matriz[1][3] = 0;  matriz[2][3] = 0; matriz[3][3] = 1;
             break;
 
         default:
@@ -256,18 +257,13 @@ void Matriz_Rotacion::set_eje(enum coord eje){
 
 
 
-Matriz_Traslacion::Matriz_Traslacion( Tupla3f direccion ){
+void Matriz_Traslacion::Inicializar( Tupla3f direccion ){
     this->direccion = direccion;
 
-    matriz[0][0] = 1; matriz[0][1] = 0; matriz[0][2] = 0; matriz[0][3] = direccion[0];
-    matriz[1][0] = 0; matriz[1][1] = 1; matriz[1][2] = 0; matriz[1][3] = direccion[1];
-    matriz[2][0] = 0; matriz[2][1] = 0; matriz[2][2] = 1; matriz[2][3] = direccion[2];
-    matriz[3][0] = 0; matriz[3][1] = 0; matriz[3][2] = 0; matriz[3][3] = 1;
-
-}
-
-Matriz_Traslacion::Matriz_Traslacion( float dir_x, float dir_y, float dir_z ){
-    Matriz_Traslacion( Tupla3f(dir_x, dir_y, dir_z) );
+    matriz[0][0] = 1; matriz[1][0] = 0; matriz[2][0] = 0; matriz[3][0] = direccion[0];
+    matriz[0][1] = 0; matriz[1][1] = 1; matriz[2][1] = 0; matriz[3][1] = direccion[1];
+    matriz[0][2] = 0; matriz[1][2] = 0; matriz[2][2] = 1; matriz[3][2] = direccion[2];
+    matriz[0][3] = 0; matriz[1][3] = 0; matriz[2][3] = 0; matriz[3][3] = 1;
 }
 
 Tupla3f Matriz_Traslacion::get_direccion(){
@@ -288,21 +284,18 @@ void Matriz_Traslacion::set_direccion( float dir_x, float dir_y, float dir_z ){
 
 
 
-Matriz_Escalado::Matriz_Escalado( Tupla3f escala ){
+void Matriz_Escalado::Inicializar( Tupla3f escala ){
     this->escala = escala;
 
     float x,y,z;
 
     x = escala[0]; y = escala[1]; z = escala[2];
 
-    matriz[0][0] = x; matriz[0][1] = 0; matriz[0][2] = 0; matriz[0][3] = 0;
-    matriz[1][0] = 0; matriz[1][1] = y; matriz[1][2] = 0; matriz[1][3] = 0;
-    matriz[2][0] = 0; matriz[2][1] = 0; matriz[2][2] = z; matriz[2][3] = 0;
-    matriz[3][0] = 0; matriz[3][1] = 0; matriz[3][2] = 0; matriz[3][3] = 1;
+    matriz[0][0] = x; matriz[1][0] = 0; matriz[2][0] = 0; matriz[3][0] = 0;
+    matriz[0][1] = 0; matriz[1][1] = y; matriz[2][1] = 0; matriz[3][1] = 0;
+    matriz[0][2] = 0; matriz[1][2] = 0; matriz[2][2] = z; matriz[3][2] = 0;
+    matriz[0][3] = 0; matriz[1][3] = 0; matriz[2][3] = 0; matriz[3][3] = 1;
 
-}
-Matriz_Escalado::Matriz_Escalado( float esc_x, float esc_y, float esc_z ){
-    Matriz_Escalado( Tupla3f(esc_x, esc_y, esc_z) );
 }
 
 Tupla3f Matriz_Escalado::get_escala(){
@@ -324,20 +317,15 @@ void Matriz_Escalado::set_escala( float esc_x, float esc_y, float esc_z ){
 
 
 
-Matriz_Cizalla::Matriz_Cizalla( float sesgo, ParCoord eje ){
+void Matriz_Cizalla::Inicializar( float sesgo, ParCoord eje ){
     this->sesgo = sesgo;
 
-    matriz[0][0] = 1; matriz[0][1] = 0; matriz[0][2] = 0; matriz[0][3] = 0;
-    matriz[1][0] = 0; matriz[1][1] = 1; matriz[1][2] = 0; matriz[1][3] = 0;
-    matriz[2][0] = 0; matriz[2][1] = 0; matriz[2][2] = 1; matriz[2][3] = 0;
-    matriz[3][0] = 0; matriz[3][1] = 0; matriz[3][2] = 0; matriz[3][3] = 1;
+    matriz[0][0] = 1; matriz[1][0] = 0; matriz[2][0] = 0; matriz[3][0] = 0;
+    matriz[0][1] = 0; matriz[1][1] = 1; matriz[2][1] = 0; matriz[3][1] = 0;
+    matriz[0][2] = 0; matriz[1][2] = 0; matriz[2][2] = 1; matriz[3][2] = 0;
+    matriz[0][3] = 0; matriz[1][3] = 0; matriz[2][3] = 0; matriz[3][3] = 1;
 
     matriz[eje.first][eje.second] = sesgo;
-}
-
-Matriz_Cizalla::Matriz_Cizalla( float sesgo, enum coord eje_1, enum coord eje_2){
-    std::pair<enum coord, enum coord> eje = std::pair<enum coord, enum coord>(eje_1, eje_2);
-    Matriz_Cizalla(sesgo, eje);
 }
 
 float Matriz_Cizalla::get_sesgo(){
