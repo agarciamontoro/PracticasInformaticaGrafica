@@ -50,6 +50,25 @@ public:
    const Tupla<N,T>& operator=(const Tupla<N,T> &original);
 
    // ---------------------------------------------------------------------
+   //  Operador lógico de igualdad
+   friend bool operator==(const Tupla<N,T>& t1, const Tupla<N,T>& t2){
+       bool iguales = true;
+
+       for(unsigned int i = 0; i < N && iguales; i++)
+           {
+               iguales = (t1[i] == t2[i]);
+           }
+
+           return iguales;
+       }
+
+   // ---------------------------------------------------------------------
+   //  Operador lógico de deigualdad
+   friend bool operator!=(const Tupla<N,T>& t1, const Tupla<N,T>& t2){
+       return !( t1 == t1 );
+   }
+
+   // ---------------------------------------------------------------------
    // tupla = tupla+tupla3
    Tupla<N,T> operator + ( const Tupla<N,T> & t1 );
 
