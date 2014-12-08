@@ -56,6 +56,11 @@ T* Matriz<ROWS,COLS,T>::operator[](unsigned int i){
    return this->matriz[i];
 }
 
+template<unsigned int ROWS , unsigned int COLS, class T>
+T* Matriz<ROWS,COLS,T>::data(){
+    return matriz[0];
+}
+
 // ---------------------------------------------------------------------
 //  Operador de asignación
 template <unsigned int ROWS, unsigned int COLS, class T>

@@ -37,6 +37,8 @@ public:
    const T* operator[](unsigned int i) const;
    T* operator[](unsigned int i);
 
+   T* data();
+
    // ---------------------------------------------------------------------
    //  Operador de asignación
    const Matriz<ROWS,COLS,T>& operator=(const Matriz<ROWS,COLS,T> &original);
