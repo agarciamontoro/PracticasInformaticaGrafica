@@ -2,6 +2,7 @@
 #define IG_GRAFO_ESCENA_HPP
 
 #include <vector>
+#include <iostream>
 #include "Matriz.hpp"
 #include "Malla_TVT.hpp"
 
@@ -15,7 +16,7 @@ public:
 
 //----------------------NODO-------------------------//
 
-typedef std::vector<Celda_NGE> lista_celdas;
+typedef std::vector<Celda_NGE*> lista_celdas;
 
 class Nodo{
 private:
@@ -24,10 +25,10 @@ private:
 public:
     void visualizar();
 
-    const Celda_NGE& operator[](unsigned int i) const{ return this->escena[i]; };
-    Celda_NGE& operator[](unsigned int i){ return this->escena[i]; };
+    const Celda_NGE* operator[](unsigned int i) const{ return this->escena[i]; };
+    Celda_NGE* operator[](unsigned int i){ return this->escena[i]; };
 
-    void push_back(Celda_NGE celda){ escena.push_back(celda); };
+    void push_back(Celda_NGE* celda){ escena.push_back(celda); };
     void pop_back(){ escena.pop_back(); };
 };
 

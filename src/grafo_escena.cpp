@@ -79,10 +79,13 @@ void Celda_SolidoGLUT::procesar(){
 //---------------------------------------------------//
 
 void Nodo::visualizar(){
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+
     for(size_t i = 0; i < this->escena.size(); i++)
     {
-        glPushMatrix();
-        escena[i].procesar();
-        glPopMatrix();
+        escena[i]->procesar();
     }
+
+    glPopMatrix();
 }

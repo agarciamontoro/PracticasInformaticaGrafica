@@ -7,11 +7,13 @@
 // *********************************************************************
 
 #include "practica3.hpp"
+#include "grafo_escena.hpp"
 
 #include <stdio.h>
 
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
-static Malla_TVT malla;
+static Malla_TVT malla, inception;
+static Nodo escena, subescena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -44,6 +46,24 @@ void P3_Inicializar( int argc, char *argv[] )
 
    malla = Malla_TVT(ruta_archivo, VERT);
    malla = malla.GenerarSolidoRevolucion(num_caras);
+
+   inception = Malla_TVT("./PLY/perfil_inception.ply", VERT);
+   inception = inception.GenerarSolidoRevolucion(100);
+
+   Celda_Transformacion* trans_peon = new Celda_Transformacion(Matriz_Traslacion(3.0, 3.0, 3.0));
+   Celda_Malla* peon = new Celda_Malla(malla);
+   Celda_Malla* celda_inception = new Celda_Malla(inception);
+   Celda_Transformacion* trans = new Celda_Transformacion(Matriz_Rotacion(M_PI/4, X));
+
+   subescena.push_back( trans_peon );
+   subescena.push_back( peon );
+
+   Celda_Nodo* hijo = new Celda_Nodo(subescena);
+   
+   escena.push_back( hijo );
+   escena.push_back( trans );
+   escena.push_back( celda_inception );
+
 }
 
 // ---------------------------------------------------------------------
@@ -54,7 +74,8 @@ void P3_DibujarObjetos()
    malla.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
-   malla.DibujarMalla_TVT();
+   //malla.DibujarMalla_TVT();
+   escena.visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
