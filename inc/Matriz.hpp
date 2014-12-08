@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <cmath> //Uso de M_PI
 #include "tuplas.hpp"
+#include "tipos.hpp"
 
 ///////////////////////////
 // Declaraciones previas //
@@ -22,7 +23,7 @@ Matriz<1,COLS,T> operator * ( const Tupla<COLS,T> & t1, const Matriz<ROWS,COLS,T
 
 template <unsigned int ROWS, unsigned int COLS, class T>
 class Matriz{
-private:
+protected:
    T matriz[ROWS][COLS];
 
 public:
@@ -122,5 +123,69 @@ Tupla<ROWS,T> toTupla( const Matriz<ROWS,1,T>& m1){
 
    return tupla;
 }
+
+////////////////////////////
+//     Clases   hijas     //
+////////////////////////////
+
+class Matriz_Rotacion : public Matriz4x4f{
+private:
+    float angulo;
+    enum coord eje;
+
+public:
+    Matriz_Rotacion(float angulo, enum coord eje);
+
+    float get_angulo();
+    void set_angulo(float angulo);
+
+    enum coord get_eje();
+    void set_eje(enum coord eje);
+};
+
+class Matriz_Traslacion : public Matriz4x4f{
+private:
+    Tupla3f direccion;
+
+public:
+    Matriz_Traslacion( Tupla3f direccion );
+    Matriz_Traslacion( float dir_x, float dir_y, float dir_z );
+
+    Tupla3f get_direccion();
+    void set_direccion( Tupla3f direccion );
+    void set_direccion( float dir_x, float dir_y, float dir_z );
+};
+
+class Matriz_Escalado : public Matriz4x4f{
+private:
+    Tupla3f escala;
+
+public:
+    Matriz_Escalado( Tupla3f escala );
+    Matriz_Escalado( float esc_x, float esc_y, float esc_z );
+
+    Tupla3f get_escala();
+    void set_escala( Tupla3f escala );
+    void set_escala( float esc_x, float esc_y, float esc_z );
+};
+
+typedef std::pair<enum coord, enum coord> ParCoord;
+
+class Matriz_Cizalla : public Matriz4x4f{
+private:
+    float sesgo;
+    ParCoord eje;
+
+public:
+    Matriz_Cizalla( float sesgo, ParCoord eje );
+    Matriz_Cizalla( float sesgo, enum coord eje_1, enum coord eje_2);
+
+    float get_sesgo();
+    void set_sesgo( float sesgo );
+
+    ParCoord get_eje();
+    void set_eje( ParCoord eje );
+    void set_eje( enum coord eje_1, enum coord eje_2 );
+};
 
 #endif
