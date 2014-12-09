@@ -18,6 +18,7 @@ Celda_Transformacion::Celda_Transformacion(Matriz4x4f* matriz_){
 
 void Celda_Transformacion::procesar(){
     glMultMatrixf(this->matriz->data());
+    std::cout << this->matriz->data() << std::endl;
 }
 
 //---------------------------------------------------//
