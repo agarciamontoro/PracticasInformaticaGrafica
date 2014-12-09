@@ -20,6 +20,7 @@ static Nodo escena, subescena;
 
 void P3_CambiarVisualizacion(enum modo_visualizacion modo){
    malla.set_visualizacion(modo);
+   inception.set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -80,16 +81,21 @@ void P3_DibujarObjetos()
    malla.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
+   inception.set_color_principal(Tupla3f(0.5, 0.0, 0.0));
+   inception.set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
+
    //malla.DibujarMalla_TVT();
    escena.visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
    malla.Conmutar_NormalesCaras();
+   inception.Conmutar_NormalesCaras();
 }
 
 void P3_Conmutar_NormalesVertices(){
    malla.Conmutar_NormalesVertices();
+   inception.Conmutar_NormalesVertices();
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
