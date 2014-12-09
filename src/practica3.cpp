@@ -13,9 +13,13 @@
 
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
 static Malla_TVT* malla, *inception;
-Matriz_Traslacion* mat_tras;
+
+Matriz_Traslacion* mat_tra;
 Matriz_Rotacion* mat_rot;
-static Nodo escena, subescena;
+Matriz_Escalado* mat_esc;
+Matriz_Cizalla* mat_ciz;
+
+static Nodo peonza, peon, escena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -32,20 +36,8 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo){
 
 void P3_Inicializar( int argc, char *argv[] )
 {
-   char ruta_archivo[256];
-   int num_caras;
-
-   // si no se ha proporcionado un archivo PLY se carga el archivo perfil_inception->ply por defecto
-   if(argc < 2)
-      sprintf(ruta_archivo, "./PLY/perfil_peon.ply");
-   else
-      sprintf(ruta_archivo, "%s", argv[2]);
-
-   // si no se ha proporcionado un numero de caras, se asignan 100 por defecto
-   if(argc < 3)
-      num_caras = 100;
-   else
-      num_caras = atoi(argv[3]);
+   char ruta_archivo[256] = "./PLY/perfil_peon.ply";
+   int num_caras = 100;
 
    Malla_TVT peon_aux(ruta_archivo, VERT);
    Malla_TVT ince_aux("./PLY/perfil_inception.ply", VERT);
@@ -56,24 +48,52 @@ void P3_Inicializar( int argc, char *argv[] )
    malla->set_visualizacion(AJEDREZ);
    inception->set_visualizacion(AJEDREZ);
 
-   mat_tras = new Matriz_Traslacion(3.0,3.0,3.0);
+   mat_tra = new Matriz_Traslacion(1.5,1.5,1.5);
    mat_rot = new Matriz_Rotacion(M_PI/4, X);
+   mat_esc = new Matriz_Escalado(1.5, 1.5, 1.5);
+   mat_ciz = new Matriz_Cizalla(0.1, X, Y);
 
-   Celda_Transformacion* trans_peon = new Celda_Transformacion(mat_tras);
-   Celda_Malla* peon = new Celda_Malla(malla);
-   Celda_Malla* celda_inception = new Celda_Malla(inception);
-   Celda_Transformacion* trans = new Celda_Transformacion(mat_rot);
+   Celda_Malla* malla_peon, *malla_inception;
+   Celda_Transformacion* tra_peon, *rot_ince, *esc_peon, *ciz_ince;
 
-   subescena.push_back( trans_peon );
-   subescena.push_back( peon );
+   malla_peon = new Celda_Malla(malla);
+   tra_peon = new Celda_Transformacion(mat_tra);
+   esc_peon = new Celda_Transformacion(mat_esc);
 
-   std::cout << "I" << mat_tras->data() << std::endl;
 
-   Celda_Nodo* hijo = new Celda_Nodo(&subescena);
+   malla_inception = new Celda_Malla(inception);
+   rot_ince = new Celda_Transformacion(mat_rot);
+   ciz_ince = new Celda_Transformacion(mat_ciz);
 
-   escena.push_back( hijo );
-   escena.push_back( trans );
-   escena.push_back( celda_inception );
+   peon.push_back( tra_peon );
+   peon.push_back( malla_peon );
+
+   peon.push_back( tra_peon );
+   peon.push_back( esc_peon );
+   peon.push_back( malla_peon );
+
+   peon.push_back( tra_peon );
+   peon.push_back( esc_peon );
+   peon.push_back( malla_peon );
+
+   Celda_Nodo* nodo_peon = new Celda_Nodo( &peon );
+
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   peonza.push_back( tra_peon );
+   
+   peonza.push_back( rot_ince );
+   peonza.push_back( ciz_ince );
+   peonza.push_back( malla_inception );
+
+   Celda_Nodo* nodo_peonza = new Celda_Nodo( &peonza );
+
+   escena.push_back( nodo_peon );
+   escena.push_back( nodo_peonza );
 
 }
 
