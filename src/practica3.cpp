@@ -12,12 +12,21 @@
 #include <stdio.h>
 
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
-static Malla_TVT *cubo, *esfera;
+static Malla_TVT *cubo, *esfera, *cilindro;
 
-static Matriz_Traslacion *mat_tras_esfera[4];
-static Matriz_Escalado *mat_esc_tabla;
+static Matriz_Traslacion    *mat_tras_esfera[4],
+                            *mat_tras_tabla[8],
+                            *mat_tras_cilindro;
 
-static Celda_Nodo *tabla, *esferas_tabla[4], *escena;
+static Matriz_Rotacion      *mat_rot_tabla[8];
+
+static Matriz_Escalado      *mat_esc_tabla,
+                            *mat_esc_cilindro;
+
+static Celda_Nodo           *esferas_tabla[4], *tabla,
+                            *tablas_falda[8], *falda,
+                            *cuello,
+                            *escena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -25,6 +34,7 @@ static Celda_Nodo *tabla, *esferas_tabla[4], *escena;
 void P3_CambiarVisualizacion(enum modo_visualizacion modo){
    cubo->set_visualizacion(modo);
    esfera->set_visualizacion(modo);
+   cilindro->set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -36,15 +46,14 @@ void P3_Inicializar( int argc, char *argv[] )
 {
    char archivo_cubo[] = "./PLY/cube.ply";
    char archivo_esfera[] = "./PLY/sphere.ply";
+   char archivo_cilindro[] = "./PLY/cilinder.ply";
    int num_caras = 100;
 
    //////////////////////////////////////////////////////////////////
-   ///////////////////////                  /////////////////////////
-   ///////////////////////    NODO TABLA    /////////////////////////
-   ///////////////////////                  /////////////////////////
+   ///////////////////////                   ////////////////////////
+   /////////////////////// DEFINICIÓN MALLAS ////////////////////////
+   ///////////////////////                   ////////////////////////
    //////////////////////////////////////////////////////////////////
-
-   ///////////////////////      MALLAS      /////////////////////////
 
    // MALLA CUBO
    cubo = new Malla_TVT(archivo_cubo);
@@ -59,13 +68,28 @@ void P3_Inicializar( int argc, char *argv[] )
 
    Celda_Malla* malla_esfera = new Celda_Malla(esfera);
 
+   // MALLA CILINDRO
+   Malla_TVT cilindro_aux(archivo_cilindro, VERT);
+   cilindro = new Malla_TVT(cilindro_aux.GenerarSolidoRevolucion(num_caras));
+   cilindro->set_visualizacion(AJEDREZ);
+
+   Celda_Malla* malla_cilindro = new Celda_Malla(cilindro);
+
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////    NODO TABLA    /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   const double ALTURA = 3.5;
+
    /////////////////////// NODOS AUXILIARES /////////////////////////
 
    // 4 NODOS ESFERA
    Celda_Transformacion* trans_esfera[4];
 
    for(int i = 0; i < 4; i++){
-       mat_tras_esfera[i] = new Matriz_Traslacion(0.0, i-1.5, 0.0);
+       mat_tras_esfera[i] = new Matriz_Traslacion(0.0, (i*ALTURA/4.0)-(3*ALTURA/8), 0.0);
        trans_esfera[i] = new Celda_Transformacion( mat_tras_esfera[i] );
 
        esferas_tabla[i] = new Celda_Nodo();
@@ -75,7 +99,7 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // NODO TABLA
    //Transformación tabla
-   mat_esc_tabla = new Matriz_Escalado(0.1, 4.0, 1.0);
+   mat_esc_tabla = new Matriz_Escalado(0.1, ALTURA, 1.0);
    Celda_Transformacion* trans_tabla = new Celda_Transformacion(mat_esc_tabla);
 
    //Inicializacion del nodo tabla con las celdas
@@ -86,6 +110,36 @@ void P3_Inicializar( int argc, char *argv[] )
    tabla->push_back( trans_tabla );
    tabla->push_back( malla_cubo );
 
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////    NODO FALDA    /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   // NODO FALDA
+
+   falda = new Celda_Nodo();
+
+   // 8 NODOS TABLA
+   Celda_Transformacion* tras_tabla_falda[8];
+   Celda_Transformacion* rot_tabla_falda[8];
+
+   for(int i = 0; i < 8; i++){
+       mat_tras_tabla[i] = new Matriz_Traslacion(1.255*sin(i*M_PI/4), 0.0, 1.255*cos(i*M_PI/4));
+       tras_tabla_falda[i] = new Celda_Transformacion( mat_tras_tabla[i] );
+
+       mat_rot_tabla[i] = new Matriz_Rotacion(i*M_PI/4+M_PI/2, Y);
+       rot_tabla_falda[i] = new Celda_Transformacion( mat_rot_tabla[i] );
+
+       tablas_falda[i] = new Celda_Nodo();
+       tablas_falda[i]->push_back( tras_tabla_falda[i] );
+       tablas_falda[i]->push_back( rot_tabla_falda[i] );
+       tablas_falda[i]->push_back( tabla );
+
+       falda->push_back( tablas_falda[i] );
+   }
+
+
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                  /////////////////////////
@@ -95,7 +149,8 @@ void P3_Inicializar( int argc, char *argv[] )
 
    //Inicialización del nodo escena con todas las celdas nodo
    escena = new Celda_Nodo();
-   escena->push_back( tabla );
+   escena->push_back( falda );
+   escena->push_back( malla_cilindro );
 
 }
 
@@ -110,17 +165,22 @@ void P3_DibujarObjetos()
    esfera->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    esfera->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
+   cilindro->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
+   cilindro->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
+
    escena->visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
    cubo->Conmutar_NormalesCaras();
    esfera->Conmutar_NormalesCaras();
+   cilindro->Conmutar_NormalesCaras();
 }
 
 void P3_Conmutar_NormalesVertices(){
    cubo->Conmutar_NormalesVertices();
    esfera->Conmutar_NormalesVertices();
+   cilindro->Conmutar_NormalesVertices();
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
