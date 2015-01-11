@@ -75,15 +75,15 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // NODO TABLA
    //Transformación tabla
-   mat_esc_tabla = new Matriz_Escalado(0.1, 4.0, 0.8);
-   Celda_Transformacion* tra_tabla = new Celda_Transformacion(mat_esc_tabla);
+   mat_esc_tabla = new Matriz_Escalado(0.1, 4.0, 1.0);
+   Celda_Transformacion* trans_tabla = new Celda_Transformacion(mat_esc_tabla);
 
    //Inicializacion del nodo tabla con las celdas
    tabla = new Celda_Nodo();
    for(int i = 0; i < 4; i++){
        tabla->push_back( esferas_tabla[i] );
    }
-   tabla->push_back( tra_tabla );
+   tabla->push_back( trans_tabla );
    tabla->push_back( malla_cubo );
 
 
