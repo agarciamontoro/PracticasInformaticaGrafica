@@ -12,21 +12,16 @@
 #include <stdio.h>
 
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
-static Malla_TVT* malla, *inception;
+static Malla_TVT* malla;
 
 Matriz_Traslacion* mat_tra;
-Matriz_Rotacion* mat_rot;
-Matriz_Escalado* mat_esc;
-Matriz_Cizalla* mat_ciz;
-
-static Nodo peonza, peon, escena;
+static Nodo peon, escena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
 void P3_CambiarVisualizacion(enum modo_visualizacion modo){
    malla->set_visualizacion(modo);
-   inception->set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -39,61 +34,27 @@ void P3_Inicializar( int argc, char *argv[] )
    char ruta_archivo[256] = "./PLY/perfil_peon.ply";
    int num_caras = 100;
 
+   //Malla de peón por revolución.
    Malla_TVT peon_aux(ruta_archivo, VERT);
-   Malla_TVT ince_aux("./PLY/perfil_inception.ply", VERT);
-
    malla = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
-   inception = new Malla_TVT(ince_aux.GenerarSolidoRevolucion(num_caras));
-
    malla->set_visualizacion(AJEDREZ);
-   inception->set_visualizacion(AJEDREZ);
 
+   //Matriz de traslación.
    mat_tra = new Matriz_Traslacion(1.5,1.5,1.5);
-   mat_rot = new Matriz_Rotacion(M_PI/4, X);
-   mat_esc = new Matriz_Escalado(1.5, 1.5, 1.5);
-   mat_ciz = new Matriz_Cizalla(0.1, X, Y);
 
-   Celda_Malla* malla_peon, *malla_inception;
-   Celda_Transformacion* tra_peon, *rot_ince, *esc_peon, *ciz_ince;
+   //Creación de las celdas con objetos/transformaciones
+   Celda_Malla* malla_peon = new Celda_Malla(malla);
+   Celda_Transformacion* tra_peon = new Celda_Transformacion(mat_tra);
 
-   malla_peon = new Celda_Malla(malla);
-   tra_peon = new Celda_Transformacion(mat_tra);
-   esc_peon = new Celda_Transformacion(mat_esc);
-
-
-   malla_inception = new Celda_Malla(inception);
-   rot_ince = new Celda_Transformacion(mat_rot);
-   ciz_ince = new Celda_Transformacion(mat_ciz);
-
+   //Inicialización del nodo con las celdas
    peon.push_back( tra_peon );
    peon.push_back( malla_peon );
 
-   peon.push_back( tra_peon );
-   peon.push_back( esc_peon );
-   peon.push_back( malla_peon );
-
-   peon.push_back( tra_peon );
-   peon.push_back( esc_peon );
-   peon.push_back( malla_peon );
-
+   //Creación de la celda nodo
    Celda_Nodo* nodo_peon = new Celda_Nodo( &peon );
 
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   peonza.push_back( tra_peon );
-   
-   peonza.push_back( rot_ince );
-   peonza.push_back( ciz_ince );
-   peonza.push_back( malla_inception );
-
-   Celda_Nodo* nodo_peonza = new Celda_Nodo( &peonza );
-
+   //Inicialización del nodo escena con todas las celdas nodo
    escena.push_back( nodo_peon );
-   escena.push_back( nodo_peonza );
 
 }
 
@@ -105,21 +66,16 @@ void P3_DibujarObjetos()
    malla->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    malla->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
-   inception->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
-   inception->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
-
    //malla->DibujarMalla_TVT();
    escena.visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
    malla->Conmutar_NormalesCaras();
-   inception->Conmutar_NormalesCaras();
 }
 
 void P3_Conmutar_NormalesVertices(){
    malla->Conmutar_NormalesVertices();
-   inception->Conmutar_NormalesVertices();
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
