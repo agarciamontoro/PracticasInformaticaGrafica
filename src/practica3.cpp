@@ -12,16 +12,19 @@
 #include <stdio.h>
 
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
-static Malla_TVT* malla;
+static Malla_TVT *cubo, *esfera;
 
-static Matriz_Traslacion* mat_tra;
-static Celda_Nodo* peon, *escena;
+static Matriz_Traslacion *mat_tras_esfera[4];
+static Matriz_Escalado *mat_esc_tabla;
+
+static Celda_Nodo *tabla, *esferas_tabla[4], *escena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
 void P3_CambiarVisualizacion(enum modo_visualizacion modo){
-   malla->set_visualizacion(modo);
+   cubo->set_visualizacion(modo);
+   esfera->set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -31,32 +34,68 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo){
 
 void P3_Inicializar( int argc, char *argv[] )
 {
-   char ruta_archivo[] = "./PLY/perfil_peon.ply";
+   char archivo_cubo[] = "./PLY/cube.ply";
+   char archivo_esfera[] = "./PLY/sphere.ply";
    int num_caras = 100;
 
-   //Malla de peón por revolución.
-   Malla_TVT peon_aux(ruta_archivo, VERT);
-   malla = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
-   malla->set_visualizacion(AJEDREZ);
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////    NODO TABLA    /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
 
-   //Matriz de traslación.
-   mat_tra = new Matriz_Traslacion(1.5,1.5,1.5);
+   ///////////////////////      MALLAS      /////////////////////////
 
-   //Creación de las celdas con objetos/transformaciones
-   Celda_Malla* malla_peon = new Celda_Malla(malla);
-   Celda_Transformacion* tra_peon = new Celda_Transformacion(mat_tra);
+   // MALLA CUBO
+   cubo = new Malla_TVT(archivo_cubo);
+   cubo->set_visualizacion(AJEDREZ);
 
-   //Inicialización del nodo con las celdas
-   peon = new Celda_Nodo();
-   peon->push_back( tra_peon );
-   peon->push_back( malla_peon );
+   Celda_Malla* malla_cubo = new Celda_Malla(cubo);
 
-   //Creación de la celda nodo
-   //Celda_Nodo* nodo_peon = new Celda_Nodo( &peon );
+   // MALLA ESFERA
+   Malla_TVT esfera_aux(archivo_esfera, VERT);
+   esfera = new Malla_TVT(esfera_aux.GenerarSolidoRevolucion(num_caras));
+   esfera->set_visualizacion(AJEDREZ);
+
+   Celda_Malla* malla_esfera = new Celda_Malla(esfera);
+
+   /////////////////////// NODOS AUXILIARES /////////////////////////
+
+   // 4 NODOS ESFERA
+   Celda_Transformacion* trans_esfera[4];
+
+   for(int i = 0; i < 4; i++){
+       mat_tras_esfera[i] = new Matriz_Traslacion(0.0, i-1.5, 0.0);
+       trans_esfera[i] = new Celda_Transformacion( mat_tras_esfera[i] );
+
+       esferas_tabla[i] = new Celda_Nodo();
+       esferas_tabla[i]->push_back( trans_esfera[i] );
+       esferas_tabla[i]->push_back( malla_esfera );
+   }
+
+   // NODO TABLA
+   //Transformación tabla
+   mat_esc_tabla = new Matriz_Escalado(0.1, 4.0, 0.8);
+   Celda_Transformacion* tra_tabla = new Celda_Transformacion(mat_esc_tabla);
+
+   //Inicializacion del nodo tabla con las celdas
+   tabla = new Celda_Nodo();
+   for(int i = 0; i < 4; i++){
+       tabla->push_back( esferas_tabla[i] );
+   }
+   tabla->push_back( tra_tabla );
+   tabla->push_back( malla_cubo );
+
+
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////    NODO  RAÍZ    /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
 
    //Inicialización del nodo escena con todas las celdas nodo
    escena = new Celda_Nodo();
-   escena->push_back( peon );
+   escena->push_back( tabla );
 
 }
 
@@ -65,19 +104,23 @@ void P3_Inicializar( int argc, char *argv[] )
 
 void P3_DibujarObjetos()
 {
-   malla->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
-   malla->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
+   cubo->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
+   cubo->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
-   //malla->DibujarMalla_TVT();
+   esfera->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
+   esfera->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
+
    escena->visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
-   malla->Conmutar_NormalesCaras();
+   cubo->Conmutar_NormalesCaras();
+   esfera->Conmutar_NormalesCaras();
 }
 
 void P3_Conmutar_NormalesVertices(){
-   malla->Conmutar_NormalesVertices();
+   cubo->Conmutar_NormalesVertices();
+   esfera->Conmutar_NormalesVertices();
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){

@@ -14,24 +14,9 @@ public:
     virtual void procesar(){};
 };
 
-//----------------------NODO-------------------------//
-
 typedef std::vector<Celda_NGE*> lista_celdas;
-/*
-class Nodo{
-private:
-    lista_celdas escena;
 
-public:
-    void visualizar();
 
-    const Celda_NGE* operator[](unsigned int i) const{ return this->escena[i]; };
-    Celda_NGE* operator[](unsigned int i){ return this->escena[i]; };
-
-    void push_back(Celda_NGE* celda){ escena.push_back(celda); };
-    void pop_back(){ escena.pop_back(); };
-};
-*/
 //---------------------HIJOS-------------------------//
 
 class Celda_Nodo : public Celda_NGE{
@@ -40,7 +25,6 @@ private:
 
 public:
     virtual void procesar();
-
     void visualizar();
 
     const Celda_NGE* operator[](unsigned int i) const{ return this->escena[i]; };
