@@ -11,20 +11,24 @@
 
 #include <stdio.h>
 
-// Objeto global de la clase Malla_TVT que contendrá las primitivas
 static Malla_TVT *cubo, *esfera, *cilindro;
 
 static Matriz_Traslacion    *mat_tras_esfera[4],
                             *mat_tras_tabla[8],
-                            *mat_tras_cilindro;
+                            *mat_tras_cuello,
+                            *mat_tras_cabeza_base,
+                            *mat_tras_cabeza;
 
 static Matriz_Rotacion      *mat_rot_tabla[8];
 
 static Matriz_Escalado      *mat_esc_tabla,
-                            *mat_esc_cilindro;
+                            *mat_esc_cuello,
+                            *mat_esc_cabeza_base,
+                            *mat_esc_cabeza;
 
 static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *tablas_falda[8], *falda,
+                            *cabeza_base, *cabeza,
                             *cuello,
                             *escena;
 
@@ -81,7 +85,7 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
 
-   const double ALTURA = 3.5;
+   const double ALTURA_FALDA = 3.5;
 
    /////////////////////// NODOS AUXILIARES /////////////////////////
 
@@ -89,7 +93,7 @@ void P3_Inicializar( int argc, char *argv[] )
    Celda_Transformacion* trans_esfera[4];
 
    for(int i = 0; i < 4; i++){
-       mat_tras_esfera[i] = new Matriz_Traslacion(0.0, (i*ALTURA/4.0)-(3*ALTURA/8), 0.0);
+       mat_tras_esfera[i] = new Matriz_Traslacion(0.0, (i*ALTURA_FALDA/4.0)-(3*ALTURA_FALDA/8), 0.0);
        trans_esfera[i] = new Celda_Transformacion( mat_tras_esfera[i] );
 
        esferas_tabla[i] = new Celda_Nodo();
@@ -99,7 +103,7 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // NODO TABLA
    //Transformación tabla
-   mat_esc_tabla = new Matriz_Escalado(0.1, ALTURA, 1.0);
+   mat_esc_tabla = new Matriz_Escalado(0.1, ALTURA_FALDA, 1.0);
    Celda_Transformacion* trans_tabla = new Celda_Transformacion(mat_esc_tabla);
 
    //Inicializacion del nodo tabla con las celdas
@@ -140,6 +144,47 @@ void P3_Inicializar( int argc, char *argv[] )
    }
 
 
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////   NODO  CUELLO   /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   const double ALTURA_CUELLO = ALTURA_FALDA-1.3;
+
+   //Transformación cuello
+   mat_tras_cuello = new Matriz_Traslacion(0.0, ALTURA_CUELLO, 0.0);
+   Celda_Transformacion* tras_cuello = new Celda_Transformacion(mat_tras_cuello);
+
+   mat_esc_cuello = new Matriz_Escalado(2.75, 1.0, 2.75);
+   Celda_Transformacion* esc_cuello = new Celda_Transformacion(mat_esc_cuello);
+
+   //Inicializacion del nodo tabla con las celdas
+   cuello = new Celda_Nodo();
+   cuello->push_back( tras_cuello );
+   cuello->push_back( esc_cuello );
+   cuello->push_back( malla_cilindro );
+
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   ///////////////////////   NODO  CABEZA   /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   const double ALTURA_CABEZA = ALTURA_CUELLO;
+
+   //Transformación cabeza
+   mat_tras_cabeza = new Matriz_Traslacion(0.0, ALTURA_CABEZA+0.5, 0.0);
+   Celda_Transformacion* tras_cabeza = new Celda_Transformacion(mat_tras_cabeza);
+
+   mat_esc_cabeza = new Matriz_Escalado(2.*2.75, 2*2.75, 2*2.75);
+   Celda_Transformacion* esc_cabeza = new Celda_Transformacion(mat_esc_cabeza);
+
+   //Inicializacion del nodo tabla con las celdas
+   cabeza = new Celda_Nodo();
+   cabeza->push_back( tras_cabeza );
+   cabeza->push_back( esc_cabeza );
+   cabeza->push_back( malla_esfera );
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                  /////////////////////////
@@ -150,7 +195,8 @@ void P3_Inicializar( int argc, char *argv[] )
    //Inicialización del nodo escena con todas las celdas nodo
    escena = new Celda_Nodo();
    escena->push_back( falda );
-   escena->push_back( malla_cilindro );
+   escena->push_back( cuello );
+   escena->push_back( cabeza );
 
 }
 
