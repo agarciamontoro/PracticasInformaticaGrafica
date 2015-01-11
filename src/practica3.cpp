@@ -171,17 +171,38 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
 
-   const double ALTURA_CABEZA = ALTURA_CUELLO;
+   const double ALTURA_CABEZA_BASE = ALTURA_CUELLO + 0.5;
+   const double ALTURA_CABEZA = ALTURA_CABEZA_BASE + 0.5;
+
+   /////////////////////// NODOS AUXILIARES /////////////////////////
+
+   // NODO BASE CABEZA
+
+   //Transformación base cabeza
+   mat_tras_cabeza_base = new Matriz_Traslacion(0.0, ALTURA_CABEZA, 0.0);
+   Celda_Transformacion* tras_cabeza_base = new Celda_Transformacion(mat_tras_cabeza_base);
+
+   mat_esc_cabeza_base = new Matriz_Escalado(2.5, 1.0, 2.5);
+   Celda_Transformacion* esc_cabeza_base = new Celda_Transformacion(mat_esc_cabeza_base);
+
+   //Inicializacion del nodo tabla con las celdas
+   cabeza_base = new Celda_Nodo();
+   cabeza_base->push_back( tras_cabeza_base );
+   cabeza_base->push_back( esc_cabeza_base );
+   cabeza_base->push_back( malla_cilindro );
+
+   // NODO CABEZA
 
    //Transformación cabeza
    mat_tras_cabeza = new Matriz_Traslacion(0.0, ALTURA_CABEZA+0.5, 0.0);
    Celda_Transformacion* tras_cabeza = new Celda_Transformacion(mat_tras_cabeza);
 
-   mat_esc_cabeza = new Matriz_Escalado(2.*2.75, 2*2.75, 2*2.75);
+   mat_esc_cabeza = new Matriz_Escalado(2*2.5, 2*2.5, 2*2.5);
    Celda_Transformacion* esc_cabeza = new Celda_Transformacion(mat_esc_cabeza);
 
    //Inicializacion del nodo tabla con las celdas
    cabeza = new Celda_Nodo();
+   cabeza->push_back( cabeza_base );
    cabeza->push_back( tras_cabeza );
    cabeza->push_back( esc_cabeza );
    cabeza->push_back( malla_esfera );
