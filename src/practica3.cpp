@@ -14,7 +14,7 @@
 // Objeto global de la clase Malla_TVT que contendrá las primitivas
 static Malla_TVT* malla;
 
-Matriz_Traslacion* mat_tra;
+static Matriz_Traslacion* mat_tra;
 static Nodo peon, escena;
 
 // ---------------------------------------------------------------------
