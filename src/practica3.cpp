@@ -15,7 +15,7 @@
 static Malla_TVT* malla;
 
 static Matriz_Traslacion* mat_tra;
-static Nodo peon, escena;
+static Celda_Nodo* peon, *escena;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -31,7 +31,7 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo){
 
 void P3_Inicializar( int argc, char *argv[] )
 {
-   char ruta_archivo[256] = "./PLY/perfil_peon.ply";
+   char ruta_archivo[] = "./PLY/perfil_peon.ply";
    int num_caras = 100;
 
    //Malla de peón por revolución.
@@ -47,14 +47,16 @@ void P3_Inicializar( int argc, char *argv[] )
    Celda_Transformacion* tra_peon = new Celda_Transformacion(mat_tra);
 
    //Inicialización del nodo con las celdas
-   peon.push_back( tra_peon );
-   peon.push_back( malla_peon );
+   peon = new Celda_Nodo();
+   peon->push_back( tra_peon );
+   peon->push_back( malla_peon );
 
    //Creación de la celda nodo
-   Celda_Nodo* nodo_peon = new Celda_Nodo( &peon );
+   //Celda_Nodo* nodo_peon = new Celda_Nodo( &peon );
 
    //Inicialización del nodo escena con todas las celdas nodo
-   escena.push_back( nodo_peon );
+   escena = new Celda_Nodo();
+   escena->push_back( peon );
 
 }
 
@@ -67,7 +69,7 @@ void P3_DibujarObjetos()
    malla->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
    //malla->DibujarMalla_TVT();
-   escena.visualizar();
+   escena->visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){

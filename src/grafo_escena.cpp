@@ -2,12 +2,8 @@
 
 //---------------------HIJOS-------------------------//
 
-Celda_Nodo::Celda_Nodo(Nodo* hijo_){
-    this->hijo = hijo_;
-}
-
 void Celda_Nodo::procesar(){
-    hijo->visualizar();
+    this->visualizar();
 }
 
 //---------------------------------------------------//
@@ -18,7 +14,6 @@ Celda_Transformacion::Celda_Transformacion(Matriz4x4f* matriz_){
 
 void Celda_Transformacion::procesar(){
     glMultMatrixf(this->matriz->data());
-    std::cout << this->matriz->data() << std::endl;
 }
 
 //---------------------------------------------------//
@@ -79,7 +74,7 @@ void Celda_SolidoGLUT::procesar(){
 
 //---------------------------------------------------//
 
-void Nodo::visualizar(){
+void Celda_Nodo::visualizar(){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
 
