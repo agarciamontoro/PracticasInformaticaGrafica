@@ -58,7 +58,7 @@ static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *cabeza_base, *cabeza,
                             *pecho_base, *pecho_arma[2], *pecho_arma_copa, *pecho,
                             *cuello,
-                            *escena;
+                            *dalek;
 
 /////////////////////   GRADOS DE LIBERTAD   ///////////////////////
 
@@ -424,11 +424,11 @@ void P3_Inicializar( int argc, char *argv[] )
    //////////////////////////////////////////////////////////////////
 
    //Inicialización del nodo escena con todas las celdas nodo
-   escena = new Celda_Nodo();
-   escena->push_back( falda );
-   escena->push_back( cuello );
-   escena->push_back( cabeza );
-   escena->push_back( pecho );
+   dalek = new Celda_Nodo();
+   dalek->push_back( falda );
+   dalek->push_back( cuello );
+   dalek->push_back( cabeza );
+   dalek->push_back( pecho );
 
 
 
@@ -461,7 +461,7 @@ void P3_DibujarObjetos()
    copa->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    copa->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
-   escena->visualizar();
+   dalek->visualizar();
 }
 
 void P3_Conmutar_NormalesCaras(){
@@ -478,7 +478,7 @@ void P3_Conmutar_NormalesVertices(){
    copa->Conmutar_NormalesVertices();
 }
 
-void P3_Modificar_Grado_Libertad(enum grados_libertad grado, double cambio){
+void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio){
     float angulo;
 
     switch(grado){

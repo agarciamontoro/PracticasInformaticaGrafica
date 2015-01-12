@@ -30,7 +30,7 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo);
 void P3_Conmutar_NormalesCaras();
 void P3_Conmutar_NormalesVertices();
 
-void P3_Modificar_Grado_Libertad(enum grados_libertad grado, double cambio);
+void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio);
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton );
 bool P3_FGE_TeclaEspecial( int tecla, int x_raton, int y_raton );

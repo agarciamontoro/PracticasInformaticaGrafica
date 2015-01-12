@@ -57,25 +57,25 @@ bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
 	else
 		ply::read_vertices(archivo_PLY, vertices_raw);
 
-		// Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
-		for (unsigned int i = 0; i < vertices_raw.size(); i += 3){
-			this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
+	// Para su mejor gestión, organizamos vértices y caras en vectores de Tuplas
+	for (unsigned int i = 0; i < vertices_raw.size(); i += 3){
+		this->vertices.push_back( Tupla3f(vertices_raw[i+0], vertices_raw[i+1], vertices_raw[i+2]) );
+	}
+
+	if(lec == TODO){
+		// Separamos las cares pares e impares de manera que las pares estén al principio y las impares al final,
+		//para gestionar de forma eficiente el modo ajedrez
+		for (unsigned int i = 0; i < caras_raw.size(); i += 6){
+			this->caras.push_back( Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]) );
+
+			principio = this->caras.begin();
+			this->caras.insert( principio, Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]) );
 		}
+	}
 
-		if(lec == TODO){
-			// Separamos las cares pares e impares de manera que las pares estén al principio y las impares al final,
-			//para gestionar de forma eficiente el modo ajedrez
-			for (unsigned int i = 0; i < caras_raw.size(); i += 6){
-				this->caras.push_back( Tupla3i(caras_raw[i+0], caras_raw[i+1], caras_raw[i+2]) );
-
-				principio = this->caras.begin();
-				this->caras.insert( principio, Tupla3i(caras_raw[i+3], caras_raw[i+4], caras_raw[i+5]) );
-			}
-		}
-
-		// TODO: Implementar una gestión de errores al leer/procesar los datos.
-		// En caso de encontrarlos, devolver false.
-		return true;
+	// TODO: Implementar una gestión de errores al leer/procesar los datos.
+	// En caso de encontrarlos, devolver false.
+	return true;
 }
 
 void Malla_TVT::cambiar_color(Tupla3f color){

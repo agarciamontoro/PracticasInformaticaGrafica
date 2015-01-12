@@ -19,15 +19,15 @@ private:
 	std::vector<Tupla3f>	vertices,
 							normales_vertices,
 							normales_caras,
-                                          colores_vertices;
+                            colores_vertices;
 
 	std::vector<Tupla3i>	caras;
 
-	VBO_Vertices     VBO_vertices;
-      VBO_Caras   VBO_caras;
-	VBO_Normales     VBO_normales_vertices,
-                              VBO_normales_caras;
-      VBO_Colores             VBO_colores_vertices;
+	VBO_Vertices	VBO_vertices;
+    VBO_Caras		VBO_caras;
+	VBO_Normales	VBO_normales_vertices,
+					VBO_normales_caras;
+    VBO_Colores		VBO_colores_vertices;
 
 	enum modo_visualizacion visualizacion_actual;
 
@@ -43,32 +43,32 @@ private:
 	void GenerarVBO_vertices();
 	void GenerarVBO_caras();
 	void GenerarVBO_normales_vertices();
-      void GenerarVBO_normales_caras();
-      void GenerarVBO_colores_vertices();
+    void GenerarVBO_normales_caras();
+    void GenerarVBO_colores_vertices();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
 
-      void DibujarNormales_Vertices(Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 0.5);
-      void DibujarNormales_Caras(Tupla3f color = Tupla3f(0.0, 1.0, 0.0), float ancho = 0.5);
+    void DibujarNormales_Vertices(Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 0.5);
+    void DibujarNormales_Caras(Tupla3f color = Tupla3f(0.0, 1.0, 0.0), float ancho = 0.5);
 
 public:
 
-      // ---------------------------------------------------------------------
-      //  Constructor por defecto
-      Malla_TVT(){};
+	// ---------------------------------------------------------------------
+	//  Constructor por defecto
+	Malla_TVT(){};
 
-      // ---------------------------------------------------------------------
-      //  Constructor completo
-      Malla_TVT(char* archivo_PLY,
-      	  enum modo_lectura lec = TODO,
-      	  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
-      	  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
-      	  enum modo_visualizacion visualizacion_t = AJEDREZ);
+	// ---------------------------------------------------------------------
+	//  Constructor completo
+	Malla_TVT(char* archivo_PLY,
+			  enum modo_lectura lec = TODO,
+			  Tupla3f color_principal_t = Tupla3f(1.0, 0.0, 0.0),
+			  Tupla3f color_secundario_t = Tupla3f(1.0, 0.0, 0.0),
+			  enum modo_visualizacion visualizacion_t = AJEDREZ);
 
-      // ---------------------------------------------------------------------
-      //  Constructor a partir de vectores
-      Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras);
+	// ---------------------------------------------------------------------
+	//  Constructor a partir de vectores
+	Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras);
 
 	// ---------------------------------------------------------------------
 	//  Constructor de copia
@@ -100,10 +100,10 @@ public:
 	void CalcularNormalesCaras();
 	void CalcularNormales();
 
-      // Asigna colores a los vértices mediante un array de colores
-      void AsignarColores( std::vector<Tupla3f> colores );
-      //Asigna a cada vértice un color según su normal
-      void AsignarColoresVert();
+	// Asigna colores a los vértices mediante un array de colores
+	void AsignarColores( std::vector<Tupla3f> colores );
+	//Asigna a cada vértice un color según su normal
+	void AsignarColoresVert();
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT
