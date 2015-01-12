@@ -31,6 +31,7 @@ void P3_Conmutar_NormalesCaras();
 void P3_Conmutar_NormalesVertices();
 
 void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio);
+void P3_Modificar_Velocidad_Animacion(double incremento);
 void P3_Establecer_Valores_Animacion();
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton );

@@ -273,6 +273,7 @@ Tupla3f Matriz_Traslacion::get_direccion(){
 void Matriz_Traslacion::set_direccion( Tupla3f direccion ){
     if( this->direccion != direccion){
         *this = Matriz_Traslacion(direccion);
+        std::cout << "Cambiando direccion" << std::endl;
     }
 }
 

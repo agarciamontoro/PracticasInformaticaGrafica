@@ -517,8 +517,25 @@ void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio){
     }
 }
 
+void P3_Modificar_Velocidad_Animacion(double incremento){
+  velocidad_animacion += incremento;
+}
+
 void P3_Establecer_Valores_Animacion(){
-  
+  float rotacion_actual, rotacion_nueva;
+  Tupla3f traslacion_actual, traslacion_nueva;
+
+  rotacion_actual = animacion_rot->get_angulo();
+  traslacion_actual = animacion_tras->get_direccion();
+
+  rotacion_nueva = rotacion_actual + velocidad_animacion;
+  traslacion_nueva = traslacion_actual + Tupla3f(6*sin(5*velocidad_animacion), 0.0, 6*cos(5*velocidad_animacion));
+
+  animacion_rot->set_angulo( rotacion_nueva );
+  animacion_tras->set_direccion( traslacion_nueva );
+
+  std::cout << traslacion_actual[0] << "\t" << traslacion_actual[1] << "\t" << traslacion_actual[2] << std::endl;
+  std::cout << traslacion_nueva[0] << "\t" << traslacion_nueva[1] << "\t" << traslacion_nueva[2] << std::endl << std::endl;
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
@@ -550,11 +567,11 @@ bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
             break;
 
         case 'B':
-            P3_Modificar_Velocidad_Animacion(+1);
+            P3_Modificar_Velocidad_Animacion(+0.1);
             break;
 
         case 'b':
-            P3_Modificar_Velocidad_Animacion(-1);
+            P3_Modificar_Velocidad_Animacion(-0.1);
             break;
 
 

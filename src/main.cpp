@@ -354,6 +354,11 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
    CError();
 }
 
+void FGE_Animacion(){
+   P3_Establecer_Valores_Animacion();
+   glutPostRedisplay();
+}
+
 void mouseButton(int button, int state, int x, int y) {
    CError();
    bool redisp = true;
@@ -461,7 +466,7 @@ void Inicializa_GLUT( int argc, char * argv[] )
    glutMotionFunc( mouseMove );
 
    // establece función gestora de la animación
-   glutIdleFunc( P3_Establecer_Valores_Animacion );
+   glutIdleFunc( FGE_Animacion );
 }
 
 // ---------------------------------------------------------------------
