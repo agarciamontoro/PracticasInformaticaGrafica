@@ -273,7 +273,7 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case 'V' :
          PX_Conmutar_NormalesVertices();
          break;
-      case 'C' :
+      case 'F' :
          PX_Conmutar_NormalesCaras();
          break;
       default:

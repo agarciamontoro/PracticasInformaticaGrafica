@@ -11,7 +11,11 @@
 
 #include <stdio.h>
 
+///////////////////////      MALLAS      /////////////////////////
+
 static Malla_TVT *cubo, *esfera, *cilindro, *copa;
+
+///////////////    MATRICES DE TRANSFORMACIÓN    /////////////////
 
 static Matriz_Traslacion    *mat_tras_esfera[4],
                             *mat_tras_tabla[8],
@@ -23,15 +27,17 @@ static Matriz_Traslacion    *mat_tras_esfera[4],
                             *mat_tras_cabeza_base,
                             *mat_tras_cabeza_ojo,
                             *mat_tras_cabeza,
-                            *mat_tras_pecho_base,
                             *mat_tras_pecho_arma[2],
-                            *mat_tras_pecho_arma_copa;
+                            *mat_tras_pecho_arma_copa,
+                            *mat_tras_pecho;
 
 static Matriz_Rotacion      *mat_rot_tabla[8],
-                            *mat_rot_cabeza, *grado_libertad_cabeza,
-                            *mat_rot_ojo, *grado_libertad_ojo,
+                            *mat_rot_cabeza,
+                            *mat_rot_ojo,
                             *mat_rot_pecho_arma,
-                            *mat_rot_pecho_arma_copa;
+                            *mat_rot_pecho_arma_copa,
+                            *mat_rot_pecho;
+
 
 static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_cuello,
@@ -45,6 +51,8 @@ static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_pecho_arma[2],
                             *mat_esc_pecho_arma_copa;
 
+///////////////////////       NODOS      /////////////////////////
+
 static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *tablas_falda[8], *falda,
                             *ojo_palo, *ojo_deco[5], *ojo_bola, *ojo,
@@ -52,6 +60,12 @@ static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *pecho_base, *pecho_arma[2], *pecho_arma_copa, *pecho,
                             *cuello,
                             *escena;
+
+/////////////////////   GRADOS DE LIBERTAD   ///////////////////////
+
+static Matriz_Rotacion      *grado_libertad_cabeza,
+                            *grado_libertad_ojo,
+                            *grado_libertad_armas;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -265,7 +279,7 @@ void P3_Inicializar( int argc, char *argv[] )
    mat_tras_ojo = new Matriz_Traslacion(0.0, 0.75, 1.4);
    Celda_Transformacion* tras_ojo = new Celda_Transformacion(mat_tras_ojo);
 
-   mat_rot_ojo = new Matriz_Rotacion(M_PI/2, X);
+   mat_rot_ojo = new Matriz_Rotacion(M_PI/2.0, X);
    Celda_Transformacion* rot_ojo = new Celda_Transformacion(mat_rot_ojo);
 
    ojo = new Celda_Nodo();
@@ -390,11 +404,15 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // NODO PECHO
 
-   mat_tras_pecho_base = new Matriz_Traslacion(0.0, ALTURA_PECHO, 0.5);
-   Celda_Transformacion* tras_pecho_base = new Celda_Transformacion(mat_tras_pecho_base);
+   mat_tras_pecho = new Matriz_Traslacion(0.0, ALTURA_PECHO, 0.5);
+   Celda_Transformacion* tras_pecho = new Celda_Transformacion(mat_tras_pecho);
+
+   mat_rot_pecho = new Matriz_Rotacion(M_PI/2, Y);
+   Celda_Transformacion* rot_pecho = new Celda_Transformacion(mat_rot_pecho);
 
    pecho = new Celda_Nodo();
-   pecho->push_back( tras_pecho_base );
+   pecho->push_back( rot_pecho );
+   pecho->push_back( tras_pecho );
    pecho->push_back(pecho_base);
    pecho->push_back(pecho_arma[0]);
    pecho->push_back(pecho_arma[1]);
@@ -422,7 +440,8 @@ void P3_Inicializar( int argc, char *argv[] )
    //////////////////////////////////////////////////////////////////
 
    grado_libertad_cabeza = mat_rot_cabeza;
-   grado_libertad_ojo = mat_rot_ojo
+   grado_libertad_ojo = mat_rot_ojo;
+   grado_libertad_armas = mat_rot_pecho;
 
 }
 
@@ -460,32 +479,55 @@ void P3_Conmutar_NormalesVertices(){
    copa->Conmutar_NormalesVertices();
 }
 
+void P3_Modificar_Grado_Libertad(enum grados_libertad grado, double cambio){
+    float angulo;
+
+    switch(grado){
+        case CABEZA:
+            grado_libertad_cabeza->set_angulo( grado_libertad_cabeza->get_angulo() + cambio );
+            break;
+
+        case OJO:
+            angulo = grado_libertad_ojo->get_angulo() + cambio;
+            if( angulo < M_PI/1.5 && angulo > M_PI/3.0)
+                grado_libertad_ojo->set_angulo(angulo);
+            break;
+
+        case ARMAS:
+            grado_libertad_armas->set_angulo( grado_libertad_armas->get_angulo() + cambio );
+                break;
+
+        default:
+            break;
+    }
+}
+
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
     bool redisp = true ;
 
-    switch (toupper(tecla)){}
+    switch (tecla){
         case 'Z':
-            Modificar_Grado_Libertad(CABEZA, +0.1);
+            P3_Modificar_Grado_Libertad(CABEZA, +0.1);
             break;
 
         case 'z':
-            Modificar_Grado_Libertad(CABEZA, -0.1);
+            P3_Modificar_Grado_Libertad(CABEZA, -0.1);
             break;
 
         case 'X':
-            Modificar_Grado_Libertad(OJO, +0.1);
+            P3_Modificar_Grado_Libertad(OJO, +0.1);
             break;
 
         case 'x':
-            Modificar_Grado_Libertad(OJO, -0.1);
+            P3_Modificar_Grado_Libertad(OJO, -0.1);
             break;
 
         case 'C':
-            Modificar_Grado_Libertad(ARMA, +0.1);
+            P3_Modificar_Grado_Libertad(ARMAS, +0.1);
             break;
 
         case 'c':
-            Modificar_Grado_Libertad(ARMA, -0.1);
+            P3_Modificar_Grado_Libertad(ARMAS, -0.1);
             break;
 
         default:

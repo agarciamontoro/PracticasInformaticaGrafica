@@ -38,4 +38,10 @@ enum solidos_GLUT{
     TETERA
 };
 
+enum grados_libertad{
+    CABEZA,
+    OJO,
+    ARMAS
+};
+
 #endif
