@@ -455,10 +455,13 @@ void Inicializa_GLUT( int argc, char * argv[] )
    glutSpecialFunc( FGE_PulsarTeclaEspecial );
 
    // establece función gestora del evento de pulsación de botón del ratón:
-   glutMouseFunc(mouseButton);
+   glutMouseFunc( mouseButton );
 
    // establece función gestora del movimiento del ratón:
-   glutMotionFunc(mouseMove);
+   glutMotionFunc( mouseMove );
+
+   // establece función gestora de la animación
+   glutIdleFunc( P3_Establecer_Valores_Animacion );
 }
 
 // ---------------------------------------------------------------------

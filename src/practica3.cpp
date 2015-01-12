@@ -68,6 +68,8 @@ static Matriz_Rotacion      *grado_libertad_cabeza,
 
 /////////////////////  MATRICES   ANIMACIÓN  ///////////////////////
 
+static double velocidad_animacion = 0;
+
 static Matriz_Traslacion  *animacion_tras;
 static Matriz_Rotacion    *animacion_rot;
 
@@ -515,6 +517,10 @@ void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio){
     }
 }
 
+void P3_Establecer_Valores_Animacion(){
+  
+}
+
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
     bool redisp = true ;
 
@@ -542,6 +548,15 @@ bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
         case 'c':
             P3_Modificar_Grado_Libertad(ARMAS, -0.1);
             break;
+
+        case 'B':
+            P3_Modificar_Velocidad_Animacion(+1);
+            break;
+
+        case 'b':
+            P3_Modificar_Velocidad_Animacion(-1);
+            break;
+
 
         default:
             redisp = false;
