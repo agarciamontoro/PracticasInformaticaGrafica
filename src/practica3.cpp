@@ -265,7 +265,7 @@ void P3_Inicializar( int argc, char *argv[] )
 
        ojo_deco[i] = new Celda_Nodo();
        ojo_deco[i]->push_back(tras_ojo_deco[i]);
-       ojo_deco[i]->push_back(esc_ojo_deco[i - 2*(i-2)]); //El 3 tiene la misma escala que el 1 y el 4 la misma que el 0
+       ojo_deco[i]->push_back(esc_ojo_deco[4-i]); //El 3 tiene la misma escala que el 1 y el 4 la misma que el 0
        ojo_deco[i]->push_back(malla_cilindro);
    }
 
@@ -431,7 +431,7 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////    NODO  RAÍZ    /////////////////////////
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
-   
+
    animacion_tras = new Matriz_Traslacion(6*sin(M_PI/4), 0.0, 6*cos(M_PI/4));
    Celda_Transformacion* celda_anim_tras = new Celda_Transformacion(animacion_tras);
 
