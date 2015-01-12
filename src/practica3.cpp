@@ -11,36 +11,45 @@
 
 #include <stdio.h>
 
-static Malla_TVT *cubo, *esfera, *cilindro;
+static Malla_TVT *cubo, *esfera, *cilindro, *copa;
 
 static Matriz_Traslacion    *mat_tras_esfera[4],
                             *mat_tras_tabla[8],
                             *mat_tras_cuello,
-                            *mat_tras_cabeza_base,
-                            *mat_tras_cabeza_ojo,
-                            *mat_tras_cabeza,
                             *mat_tras_ojo_palo,
                             *mat_tras_ojo_deco[5],
                             *mat_tras_ojo_bola,
-                            *mat_tras_ojo;
+                            *mat_tras_ojo,
+                            *mat_tras_cabeza_base,
+                            *mat_tras_cabeza_ojo,
+                            *mat_tras_cabeza,
+                            *mat_tras_pecho_base,
+                            *mat_tras_pecho_arma[2],
+                            *mat_tras_pecho_arma_copa;
 
 static Matriz_Rotacion      *mat_rot_tabla[8],
-                            *mat_rot_cabeza,
-                            *mat_rot_ojo;
+                            *mat_rot_cabeza, *grado_libertad_cabeza,
+                            *mat_rot_ojo, *grado_libertad_ojo,
+                            *mat_rot_pecho_arma,
+                            *mat_rot_pecho_arma_copa;
 
 static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_cuello,
-                            *mat_esc_cabeza_base,
-                            *mat_esc_cabeza,
                             *mat_esc_ojo_palo,
                             *mat_esc_ojo_deco[3],
                             *mat_esc_ojo_bola,
-                            *mat_esc_ojo;
+                            *mat_esc_ojo,
+                            *mat_esc_cabeza_base,
+                            *mat_esc_cabeza,
+                            *mat_esc_pecho_base,
+                            *mat_esc_pecho_arma[2],
+                            *mat_esc_pecho_arma_copa;
 
 static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *tablas_falda[8], *falda,
-                            *cabeza_base, *cabeza,
                             *ojo_palo, *ojo_deco[5], *ojo_bola, *ojo,
+                            *cabeza_base, *cabeza,
+                            *pecho_base, *pecho_arma[2], *pecho_arma_copa, *pecho,
                             *cuello,
                             *escena;
 
@@ -51,6 +60,7 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo){
    cubo->set_visualizacion(modo);
    esfera->set_visualizacion(modo);
    cilindro->set_visualizacion(modo);
+   copa->set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -63,6 +73,7 @@ void P3_Inicializar( int argc, char *argv[] )
    char archivo_cubo[] = "./PLY/cube.ply";
    char archivo_esfera[] = "./PLY/sphere.ply";
    char archivo_cilindro[] = "./PLY/cilinder.ply";
+   char archivo_copa[] = "./PLY/cup.ply";
    int num_caras = 100;
 
    //////////////////////////////////////////////////////////////////
@@ -90,6 +101,13 @@ void P3_Inicializar( int argc, char *argv[] )
    cilindro->set_visualizacion(AJEDREZ);
 
    Celda_Malla* malla_cilindro = new Celda_Malla(cilindro);
+
+   // MALLA copa
+   Malla_TVT copa_aux(archivo_copa, VERT);
+   copa = new Malla_TVT(copa_aux.GenerarSolidoRevolucion(num_caras));
+   copa->set_visualizacion(AJEDREZ);
+
+   Celda_Malla* malla_copa = new Celda_Malla(copa);
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                  /////////////////////////
@@ -312,6 +330,78 @@ void P3_Inicializar( int argc, char *argv[] )
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                  /////////////////////////
+   ///////////////////////    NODO PECHO    /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   const double ALTURA_PECHO = ALTURA_CUELLO - 0.1;
+   const double ANCHURA_PECHO = 2.3;
+
+   /////////////////////// NODOS AUXILIARES /////////////////////////
+
+   // NODO BASE PECHO
+
+   //Transformación base del pecho
+
+   mat_esc_pecho_base = new Matriz_Escalado(ANCHURA_PECHO, 0.75, 1.5);
+   Celda_Transformacion* esc_pecho_base = new Celda_Transformacion(mat_esc_pecho_base);
+
+   pecho_base = new Celda_Nodo();
+   pecho_base->push_back( esc_pecho_base );
+   pecho_base->push_back( malla_cubo );
+
+   // NODOS ARMAS
+
+   Celda_Transformacion *tras_pecho_arma[2], *esc_pecho_arma[2], *rot_pecho_arma;
+
+   for(int i = 0; i < 2; ++i){
+       //Transformación
+       mat_tras_pecho_arma[i] = new Matriz_Traslacion( pow(-1,i)*ANCHURA_PECHO/3, 1.5, 0.0);
+       tras_pecho_arma[i] = new Celda_Transformacion(mat_tras_pecho_arma[i]);
+
+       mat_esc_pecho_arma[i] = new Matriz_Escalado(0.2, 1.5 + 1.5*i, 0.2);
+       esc_pecho_arma[i] = new Celda_Transformacion(mat_esc_pecho_arma[i]);
+
+       mat_rot_pecho_arma = new Matriz_Rotacion(M_PI/2, X);
+       rot_pecho_arma = new Celda_Transformacion(mat_rot_pecho_arma);
+
+       pecho_arma[i] = new Celda_Nodo();
+       pecho_arma[i]->push_back( rot_pecho_arma );
+       pecho_arma[i]->push_back( tras_pecho_arma[i] );
+       pecho_arma[i]->push_back( esc_pecho_arma[i] );
+       pecho_arma[i]->push_back( malla_cilindro );
+   }
+
+   //Transformación
+   mat_tras_pecho_arma_copa = new Matriz_Traslacion( -ANCHURA_PECHO/3, -3.2, 0.0);
+   Celda_Transformacion* tras_pecho_arma_copa = new Celda_Transformacion(mat_tras_pecho_arma_copa);
+
+   mat_esc_pecho_arma_copa = new Matriz_Escalado(1.0, 1.0, 1.0);
+   Celda_Transformacion* esc_pecho_arma_copa = new Celda_Transformacion(mat_esc_pecho_arma_copa);
+
+   mat_rot_pecho_arma_copa = new Matriz_Rotacion(3*M_PI/2, X);
+   Celda_Transformacion* rot_pecho_arma_copa = new Celda_Transformacion(mat_rot_pecho_arma_copa);
+
+   pecho_arma_copa = new Celda_Nodo();
+   pecho_arma_copa->push_back( rot_pecho_arma_copa );
+   pecho_arma_copa->push_back( tras_pecho_arma_copa );
+   pecho_arma_copa->push_back( esc_pecho_arma_copa );
+   pecho_arma_copa->push_back( malla_copa );
+
+   // NODO PECHO
+
+   mat_tras_pecho_base = new Matriz_Traslacion(0.0, ALTURA_PECHO, 0.5);
+   Celda_Transformacion* tras_pecho_base = new Celda_Transformacion(mat_tras_pecho_base);
+
+   pecho = new Celda_Nodo();
+   pecho->push_back( tras_pecho_base );
+   pecho->push_back(pecho_base);
+   pecho->push_back(pecho_arma[0]);
+   pecho->push_back(pecho_arma[1]);
+   pecho->push_back(pecho_arma_copa);
+
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
    ///////////////////////    NODO  RAÍZ    /////////////////////////
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
@@ -321,6 +411,18 @@ void P3_Inicializar( int argc, char *argv[] )
    escena->push_back( falda );
    escena->push_back( cuello );
    escena->push_back( cabeza );
+   escena->push_back( pecho );
+
+
+
+   //////////////////////////////////////////////////////////////////
+   ///////////////////////                  /////////////////////////
+   /////////////////////// GRADOS  LIBERTAD /////////////////////////
+   ///////////////////////                  /////////////////////////
+   //////////////////////////////////////////////////////////////////
+
+   grado_libertad_cabeza = mat_rot_cabeza;
+   grado_libertad_ojo = mat_rot_ojo
 
 }
 
@@ -338,6 +440,9 @@ void P3_DibujarObjetos()
    cilindro->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    cilindro->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
+   copa->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
+   copa->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
+
    escena->visualizar();
 }
 
@@ -345,16 +450,50 @@ void P3_Conmutar_NormalesCaras(){
    cubo->Conmutar_NormalesCaras();
    esfera->Conmutar_NormalesCaras();
    cilindro->Conmutar_NormalesCaras();
+   copa->Conmutar_NormalesCaras();
 }
 
 void P3_Conmutar_NormalesVertices(){
    cubo->Conmutar_NormalesVertices();
    esfera->Conmutar_NormalesVertices();
    cilindro->Conmutar_NormalesVertices();
+   copa->Conmutar_NormalesVertices();
 }
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
-    return false;
+    bool redisp = true ;
+
+    switch (toupper(tecla)){}
+        case 'Z':
+            Modificar_Grado_Libertad(CABEZA, +0.1);
+            break;
+
+        case 'z':
+            Modificar_Grado_Libertad(CABEZA, -0.1);
+            break;
+
+        case 'X':
+            Modificar_Grado_Libertad(OJO, +0.1);
+            break;
+
+        case 'x':
+            Modificar_Grado_Libertad(OJO, -0.1);
+            break;
+
+        case 'C':
+            Modificar_Grado_Libertad(ARMA, +0.1);
+            break;
+
+        case 'c':
+            Modificar_Grado_Libertad(ARMA, -0.1);
+            break;
+
+        default:
+            redisp = false;
+            break;
+    }
+
+    return redisp;
 }
 
 bool P3_FGE_TeclaEspecial( int tecla, int x_raton, int y_raton ){
