@@ -66,6 +66,12 @@ static Matriz_Rotacion      *grado_libertad_cabeza,
                             *grado_libertad_ojo,
                             *grado_libertad_armas;
 
+/////////////////////  MATRICES   ANIMACIÓN  ///////////////////////
+
+static Matriz_Traslacion  *animacion_tras;
+static Matriz_Rotacion    *animacion_rot;
+
+
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
@@ -422,9 +428,17 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////    NODO  RAÍZ    /////////////////////////
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
+   
+   animacion_tras = new Matriz_Traslacion(6*sin(M_PI/4), 0.0, 6*cos(M_PI/4));
+   Celda_Transformacion* celda_anim_tras = new Celda_Transformacion(animacion_tras);
+
+   animacion_rot  = new Matriz_Rotacion(M_PI/4+M_PI/2, Y);
+   Celda_Transformacion* celda_anim_rot  = new Celda_Transformacion(animacion_rot);
 
    //Inicialización del nodo escena con todas las celdas nodo
    dalek = new Celda_Nodo();
+   dalek->push_back( celda_anim_tras );
+   dalek->push_back( celda_anim_rot );
    dalek->push_back( falda );
    dalek->push_back( cuello );
    dalek->push_back( cabeza );
