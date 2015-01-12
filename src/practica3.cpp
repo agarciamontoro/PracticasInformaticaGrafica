@@ -47,8 +47,7 @@ static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_cabeza_base,
                             *mat_esc_cabeza,
                             *mat_esc_pecho_base,
-                            *mat_esc_pecho_arma[2],
-                            *mat_esc_pecho_arma_copa;
+                            *mat_esc_pecho_arma[2];
 
 ///////////////////////       NODOS      /////////////////////////
 
@@ -398,16 +397,12 @@ void P3_Inicializar( int argc, char *argv[] )
    mat_tras_pecho_arma_copa = new Matriz_Traslacion( -ANCHURA_PECHO/3, -3.2, 0.0);
    Celda_Transformacion* tras_pecho_arma_copa = new Celda_Transformacion(mat_tras_pecho_arma_copa);
 
-   mat_esc_pecho_arma_copa = new Matriz_Escalado(1.0, 1.0, 1.0);
-   Celda_Transformacion* esc_pecho_arma_copa = new Celda_Transformacion(mat_esc_pecho_arma_copa);
-
    mat_rot_pecho_arma_copa = new Matriz_Rotacion(3*M_PI/2, X);
    Celda_Transformacion* rot_pecho_arma_copa = new Celda_Transformacion(mat_rot_pecho_arma_copa);
 
    pecho_arma_copa = new Celda_Nodo();
    pecho_arma_copa->push_back( rot_pecho_arma_copa );
    pecho_arma_copa->push_back( tras_pecho_arma_copa );
-   pecho_arma_copa->push_back( esc_pecho_arma_copa );
    pecho_arma_copa->push_back( malla_copa );
 
    // NODO PECHO
