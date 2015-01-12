@@ -17,12 +17,16 @@ static Matriz_Traslacion    *mat_tras_esfera[4],
                             *mat_tras_tabla[8],
                             *mat_tras_cuello,
                             *mat_tras_cabeza_base,
+                            *mat_tras_cabeza_ojo,
                             *mat_tras_cabeza,
                             *mat_tras_ojo_palo,
                             *mat_tras_ojo_deco[5],
-                            *mat_tras_ojo_bola;
+                            *mat_tras_ojo_bola,
+                            *mat_tras_ojo;
 
-static Matriz_Rotacion      *mat_rot_tabla[8];
+static Matriz_Rotacion      *mat_rot_tabla[8],
+                            *mat_rot_cabeza,
+                            *mat_rot_ojo;
 
 static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_cuello,
@@ -30,7 +34,8 @@ static Matriz_Escalado      *mat_esc_tabla,
                             *mat_esc_cabeza,
                             *mat_esc_ojo_palo,
                             *mat_esc_ojo_deco[3],
-                            *mat_esc_ojo_bola;
+                            *mat_esc_ojo_bola,
+                            *mat_esc_ojo;
 
 static Celda_Nodo           *esferas_tabla[4], *tabla,
                             *tablas_falda[8], *falda,
@@ -178,14 +183,14 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
 
-   const double LONG_OJO_PALO = 3.0;
+   const double LONG_OJO_PALO = 2.0;
 
    /////////////////////// NODOS AUXILIARES /////////////////////////
 
    // NODO PALO OJO
 
    //Transformación palo
-   mat_tras_ojo_palo = new Matriz_Traslacion(0.0, LONG_OJO_PALO/6, 0.0);
+   mat_tras_ojo_palo = new Matriz_Traslacion(0.0, LONG_OJO_PALO/4, 0.0);
    Celda_Transformacion* tras_ojo_palo = new Celda_Transformacion(mat_tras_ojo_palo);
 
    mat_esc_ojo_palo = new Matriz_Escalado(0.2, LONG_OJO_PALO, 0.2);
@@ -202,7 +207,7 @@ void P3_Inicializar( int argc, char *argv[] )
    Celda_Transformacion *tras_ojo_deco[5], *esc_ojo_deco[3];
 
    for(int i = 0; i < 3; ++i){
-       mat_tras_ojo_deco[i] = new Matriz_Traslacion(0.0, LONG_OJO_PALO/2 + (0.1*i) + LONG_OJO_PALO/5, 0.0);
+       mat_tras_ojo_deco[i] = new Matriz_Traslacion(0.0, LONG_OJO_PALO/2 + (0.1*i) + LONG_OJO_PALO/8, 0.0);
        tras_ojo_deco[i] = new Celda_Transformacion(mat_tras_ojo_deco[i]);
 
        mat_esc_ojo_deco[i] = new Matriz_Escalado(0.5 + 0.1*i, 0.02, 0.5 + 0.1*i);
@@ -215,7 +220,7 @@ void P3_Inicializar( int argc, char *argv[] )
    }
 
    for(int i = 3; i < 5; ++i){
-       mat_tras_ojo_deco[i] = new Matriz_Traslacion(0.0, LONG_OJO_PALO/2 + (0.1*i) + LONG_OJO_PALO/5, 0.0);
+       mat_tras_ojo_deco[i] = new Matriz_Traslacion(0.0, LONG_OJO_PALO/2 + (0.1*i) + LONG_OJO_PALO/8, 0.0);
        tras_ojo_deco[i] = new Celda_Transformacion(mat_tras_ojo_deco[i]);
 
        ojo_deco[i] = new Celda_Nodo();
@@ -226,15 +231,29 @@ void P3_Inicializar( int argc, char *argv[] )
 
    // NODO OJO
 
-   //Transformación ojo
+   //Transformación bola
 
-   mat_tras_ojo_bola = new Matriz_Traslacion(0.0, LONG_OJO_PALO, 0.0);
+   mat_tras_ojo_bola = new Matriz_Traslacion(0.0, LONG_OJO_PALO+0.3, 0.0);
    Celda_Transformacion* tras_ojo_bola = new Celda_Transformacion(mat_tras_ojo_bola);
 
    mat_esc_ojo_bola = new Matriz_Escalado(1.3, 1.3, 1.3);
    Celda_Transformacion* esc_ojo_bola = new Celda_Transformacion(mat_esc_ojo_bola);
 
+   //Transformacion ojo entero
+
+   mat_esc_ojo = new Matriz_Escalado(0.15, 0.15, 0.15);
+   Celda_Transformacion* esc_ojo = new Celda_Transformacion(mat_esc_ojo);
+
+   mat_tras_ojo = new Matriz_Traslacion(0.0, 0.75, 1.4);
+   Celda_Transformacion* tras_ojo = new Celda_Transformacion(mat_tras_ojo);
+
+   mat_rot_ojo = new Matriz_Rotacion(M_PI/2, X);
+   Celda_Transformacion* rot_ojo = new Celda_Transformacion(mat_rot_ojo);
+
    ojo = new Celda_Nodo();
+   ojo->push_back(esc_ojo);
+   ojo->push_back(tras_ojo);
+   ojo->push_back(rot_ojo);
    ojo->push_back(ojo_palo);
    for(size_t i = 0; i < 5; i++)
    {
@@ -276,15 +295,20 @@ void P3_Inicializar( int argc, char *argv[] )
    mat_tras_cabeza = new Matriz_Traslacion(0.0, ALTURA_CABEZA, 0.0);
    Celda_Transformacion* tras_cabeza = new Celda_Transformacion(mat_tras_cabeza);
 
+   mat_rot_cabeza = new Matriz_Rotacion(M_PI/4, Y);
+   Celda_Transformacion* rot_cabeza = new Celda_Transformacion(mat_rot_cabeza);
+
    mat_esc_cabeza = new Matriz_Escalado(2*2.5, 2*2.5, 2*2.5);
    Celda_Transformacion* esc_cabeza = new Celda_Transformacion(mat_esc_cabeza);
 
    //Inicializacion del nodo tabla con las celdas
    cabeza = new Celda_Nodo();
    cabeza->push_back( cabeza_base );
+   cabeza->push_back( rot_cabeza );
    cabeza->push_back( tras_cabeza );
    cabeza->push_back( esc_cabeza );
    cabeza->push_back( malla_esfera );
+   cabeza->push_back( ojo );
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                  /////////////////////////
@@ -294,10 +318,9 @@ void P3_Inicializar( int argc, char *argv[] )
 
    //Inicialización del nodo escena con todas las celdas nodo
    escena = new Celda_Nodo();
-   //escena->push_back( falda );
-   //escena->push_back( cuello );
-   //escena->push_back( cabeza );
-   escena->push_back( ojo );
+   escena->push_back( falda );
+   escena->push_back( cuello );
+   escena->push_back( cabeza );
 
 }
 
