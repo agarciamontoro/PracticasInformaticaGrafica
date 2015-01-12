@@ -65,10 +65,10 @@ static Matriz_Rotacion      *grado_libertad_cabeza,
                             *grado_libertad_ojo,
                             *grado_libertad_armas;
 
-/////////////////////  MATRICES   ANIMACIÓN  ///////////////////////
+/////////////////////  VARIABLES  ANIMACIÓN  ///////////////////////
 
-static float velocidad_animacion = 0;
-static float angulo_animacion = 0;
+static float velocidad_animacion    = 0;
+static float angulo_animacion       = 0;
 
 static Matriz_Traslacion  *animacion_tras;
 static Matriz_Rotacion    *animacion_rot;
@@ -91,10 +91,11 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo){
 
 void P3_Inicializar( int argc, char *argv[] )
 {
-   char archivo_cubo[] = "./PLY/cube.ply";
-   char archivo_esfera[] = "./PLY/sphere.ply";
-   char archivo_cilindro[] = "./PLY/cilinder.ply";
-   char archivo_copa[] = "./PLY/cup.ply";
+   char archivo_cubo[]      = "./PLY/cube.ply";
+   char archivo_esfera[]    = "./PLY/sphere.ply";
+   char archivo_cilindro[]  = "./PLY/cilinder.ply";
+   char archivo_copa[]      = "./PLY/cup.ply";
+
    int num_caras = 100;
 
    //////////////////////////////////////////////////////////////////
@@ -450,9 +451,9 @@ void P3_Inicializar( int argc, char *argv[] )
    ///////////////////////                  /////////////////////////
    //////////////////////////////////////////////////////////////////
 
-   grado_libertad_cabeza = mat_rot_cabeza;
-   grado_libertad_ojo = mat_rot_ojo;
-   grado_libertad_armas = mat_rot_pecho;
+   grado_libertad_cabeza    = mat_rot_cabeza;
+   grado_libertad_ojo       = mat_rot_ojo;
+   grado_libertad_armas     = mat_rot_pecho;
 
 }
 
