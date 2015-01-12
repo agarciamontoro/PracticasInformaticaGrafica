@@ -27,6 +27,8 @@
 #include <assert.h>
 #include <vector>
 
+#include <iostream>
+
 template <unsigned int N, class T>
 class Tupla{
 private:
@@ -52,15 +54,14 @@ public:
    // ---------------------------------------------------------------------
    //  Operador lógico de igualdad
    friend bool operator==(const Tupla<N,T>& t1, const Tupla<N,T>& t2){
-       bool iguales = true;
+      bool iguales = true;
 
-       for(unsigned int i = 0; i < N && iguales; i++)
-           {
-               iguales = (t1[i] == t2[i]);
-           }
+      for(unsigned int i = 0; i < N && iguales; i++){
+         iguales = (t1[i] == t2[i]);
+      }
 
-           return iguales;
-       }
+      return iguales;
+   }
 
    // ---------------------------------------------------------------------
    //  Operador lógico de deigualdad
