@@ -2,7 +2,7 @@
 ##
 ## Prácticas IG, curso 2014-15
 ## Carlos Ureña, Oct-2014
-## 
+##
 ## archivo 'make' para compilar, enlazar y ejecutar
 ## invocar von 'make'
 ## genera archivo ejecutable 'prac', usando todos los .cpp/.cc/.c presentes
@@ -28,7 +28,7 @@ headers             := $(wildcard $(INC)/*.hpp $(INC)/*.hh $(INC)/*.h)
 ##units_ext           :=  main practica1 error-ogl
 comp_version		:= -std=c++11
 
-gl_libs_base        := -lGLEW -lglut -lGLU 
+gl_libs_base        := -lGLEW -lglut -lGLU -ljpeg
 gl_lib_file         := -lGL
 
 gl_lib_file_nv      := /usr/lib/nvidia-331/libGL.so
@@ -37,9 +37,9 @@ ifeq ($(wildcard $(gl_lib_file_nv)),$(gl_lib_file_nv))
 endif
 
 gl_libs             := $(gl_libs_base) $(gl_lib_file)
-other_ld_libs       := 
-gtk_c_flags         := 
-gtk_ld_libs         := 
+other_ld_libs       :=
+gtk_c_flags         :=
+gtk_ld_libs         :=
 
 
 units               := $(basename $(units_ext))
@@ -65,29 +65,29 @@ compile: $(target_name)
 
 $(target_name) : $(objs) | $(BIN)
 	@echo `tput bold`---------------------------------------------------------------
-	@echo "Enlazando      :" $(target_name) 
-	@echo "Unidades(ext)  :" $(units_ext) 
-	@echo "Objetos        :" $(objs) 
+	@echo "Enlazando      :" $(target_name)
+	@echo "Unidades(ext)  :" $(units_ext)
+	@echo "Objetos        :" $(objs)
 	@tput sgr0
-	g++ -o $(target_name) $(objs) $(ld_libs) 
+	g++ -o $(target_name) $(objs) $(ld_libs)
 	@echo ---------------------------------------------------------------
-	
-	
+
+
 $(OBJ)/%.o: $(SRC)/%.cpp $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
-	@echo Compilando: $(notdir $<) 
+	@echo Compilando: $(notdir $<)
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
 
 $(OBJ)/%.o: $(SRC)/%.cc $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
-	@echo Compilando: $(notdir $<) 
+	@echo Compilando: $(notdir $<)
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
-	
+
 $(OBJ)/%.o: $(SRC)/%.c $(headers) | $(OBJ)
 	@echo `tput bold`---------------------------------------------------------------
-	@echo Compilando: $(notdir $<) 
+	@echo Compilando: $(notdir $<)
 	@tput sgr0
 	@g++ $(c_flags) -c $< -o $@
 
@@ -101,10 +101,6 @@ $(OBJ):
 
 clean:
 	rm -f $(OBJ)/*.o $(target_name)
-	
+
 tar:
 	tar czvf archivos_prac_1.tgz *.c* *.h* *.ply makefile
-
-
-
-
