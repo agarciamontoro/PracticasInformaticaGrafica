@@ -9,20 +9,20 @@ es el aprendizaje de OpenGL.
 El proyecto se estructura en prácticas sucesivas, cada una de las cuales se apoya en la anterior.
 Hasta ahora, este repositorio contiene:
 
-* **Práctica 1 - Modelos PLY**: Visualización de modelos almacenados en archivos PLY.
-* **Práctica 2 - Modelos PLY**: Creación de modelos mediante revolución de perfiles.
-* **Práctica 3 - Modelos PLY**: Creación de modelos jerárquicos con algunos grados de libertad.
- 
+* **Práctica 1 - Visualización de modelos PLY**: Visualización de modelos almacenados en archivos PLY.
+* **Práctica 2 - Modelos poligonales**: Creación de modelos mediante revolución de perfiles.
+* **Práctica 3 - Modelos jerárquicos**: Creación de modelos jerárquicos con algunos grados de libertad.
+
 ## Instalación y uso
 
-Para la compilación del proyecto es necesaria la librería freeglut, que se encuentra disponible en la mayoría de las distribuciones Linux usuales. La compilación y ejecución por defecto se realiza con la siguiente órden:
+Para la compilación del proyecto es necesaria las librerías freeglut y libjpeg (en su versión de desarrollo), que se encuentran disponibles en la mayoría de las distribuciones Linux usuales. La compilación y ejecución por defecto se realiza con la siguiente órden:
 
     make
 
 Una vez compilado, se ejecuta con la siguiente órden:
 
     ./bin/prac <ruta_archivo_PLY> <ruta_perfil_PLY> <num_caras>
-  
+
 Donde *\<ruta_archivo_PLY\>* es la ruta al archivo PLY que cargará la práctica 1 y *\<ruta_perfil_PLY\>* es la ruta al archivo PLY que cargará la práctica 2 para generar el sólido por revolución, con un número de caras igual a *\<num_caras\>*. Si no se especifica ningún parámetro, se cargarán el proyecto por defecto.
 
 ### Teclas disponibles
