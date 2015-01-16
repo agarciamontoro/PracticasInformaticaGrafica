@@ -21,7 +21,7 @@ private:
 							normales_caras,
                             colores_vertices;
 
-	std::vector<Tupla2f>	textura;
+	std::vector<Tupla2f>	coordenadas_textura;
 
 	std::vector<Tupla3i>	caras;
 
@@ -48,6 +48,7 @@ private:
 	void GenerarVBO_normales_vertices();
     void GenerarVBO_normales_caras();
     void GenerarVBO_colores_vertices();
+	void GenerarVBO_coord_textura();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);

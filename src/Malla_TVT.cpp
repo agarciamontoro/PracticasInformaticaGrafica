@@ -16,23 +16,33 @@
 #define DIM_NORMALES 1.5
 
 void Malla_TVT::GenerarVBO_vertices(){
-	this->VBO_vertices			=	VBO_Vertices( vertices );
+	if( !vertices.empty() )
+		this->VBO_vertices			=	VBO_Vertices( vertices );
 }
 
 void Malla_TVT::GenerarVBO_caras(){
-	this->VBO_caras				=	VBO_Caras( caras );
+	if( !caras.empty() )
+		this->VBO_caras				=	VBO_Caras( caras );
 }
 
 void Malla_TVT::GenerarVBO_normales_vertices(){
-	this->VBO_normales_vertices	=	VBO_Normales( normales_vertices );
+	if( !normales_vertices.empty() )
+		this->VBO_normales_vertices	=	VBO_Normales( normales_vertices );
 }
 
 void Malla_TVT::GenerarVBO_normales_caras(){
-	this->VBO_normales_caras	=	VBO_Normales( normales_caras );
+	if( !normales_caras.empty() )
+		this->VBO_normales_caras	=	VBO_Normales( normales_caras );
 }
 
 void Malla_TVT::GenerarVBO_colores_vertices(){
-	this->VBO_colores_vertices	=	VBO_Colores( colores_vertices );
+	if( !colores_vertices.empty() )
+		this->VBO_colores_vertices	=	VBO_Colores( colores_vertices );
+}
+
+void Malla_TVT::GenerarVBO_coord_textura(){
+	if( !coordenadas_textura.empty() )
+		this->VBO_coord_textura		=	VBO_Textura( coordenadas_textura );
 }
 
 void Malla_TVT::GenerarVBO_TODO(){
@@ -41,6 +51,7 @@ void Malla_TVT::GenerarVBO_TODO(){
 	GenerarVBO_normales_vertices();
 	GenerarVBO_normales_caras();
 	GenerarVBO_colores_vertices();
+	GenerarVBO_coord_textura();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -115,18 +126,7 @@ Malla_TVT::Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras){
 }
 
 Malla_TVT::Malla_TVT(const Malla_TVT& original){
-	if( this != &original ){
-		this->vertices = original.vertices;
-		this->caras = original.caras;
-
-		this->color_principal = original.color_principal;
-		this->color_secundario = original.color_secundario;
-
-		set_visualizacion(original.visualizacion_actual);
-
-		this->VBO_vertices = VBO_Vertices( this->vertices );
-		this->VBO_caras = VBO_Caras( this->caras );
-	}
+	*this = original;
 }
 
 const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
@@ -136,6 +136,7 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 		this->normales_caras = original.normales_caras;
 		this->normales_vertices = original.normales_vertices;
 		this->colores_vertices = original.colores_vertices;
+		this->coordenadas_textura = original.coordenadas_textura;
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;

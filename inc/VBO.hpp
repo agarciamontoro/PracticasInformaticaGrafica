@@ -75,7 +75,8 @@ class VBO_Textura: public VBO{
 private:
 public:
 	VBO_Textura(){}
-	VBO_Textura( std::vector<Tupla2f>& datos_t );
+	VBO_Textura( std::vector<Tupla2f>& datos_t ):
+		VBO( datos_t ){}
 	void Activar();
 };
 
