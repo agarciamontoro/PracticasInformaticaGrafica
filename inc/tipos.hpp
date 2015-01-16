@@ -10,6 +10,12 @@ enum modo_visualizacion{
    ILUM_GOUROUD
 };
 
+enum modo_text{
+    DESACTIVADO,
+    OBJETO,
+    CAMARA
+};
+
 enum modo_lectura{
    TODO,
    VERT

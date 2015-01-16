@@ -13,6 +13,7 @@
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
 #include "tipos.hpp"
+#include "textura.hpp"
 
 class Malla_TVT{
 private:
@@ -30,7 +31,8 @@ private:
 	VBO_Normales	VBO_normales_vertices,
 					VBO_normales_caras;
     VBO_Colores		VBO_colores_vertices;
-	VBO_Textura		VBO_coord_textura;
+
+	Textura			textura;
 
 	enum modo_visualizacion visualizacion_actual;
 
@@ -50,7 +52,6 @@ private:
 	void GenerarVBO_normales_vertices();
     void GenerarVBO_normales_caras();
     void GenerarVBO_colores_vertices();
-	void GenerarVBO_coord_textura();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);

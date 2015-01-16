@@ -13,8 +13,6 @@
 #include "VBO.hpp"
 #include "Matriz.hpp"
 
-#define DIM_NORMALES 1.5
-
 void Malla_TVT::GenerarVBO_vertices(){
 	if( !vertices.empty() )
 		this->VBO_vertices			=	VBO_Vertices( vertices );
@@ -40,18 +38,12 @@ void Malla_TVT::GenerarVBO_colores_vertices(){
 		this->VBO_colores_vertices	=	VBO_Colores( colores_vertices );
 }
 
-void Malla_TVT::GenerarVBO_coord_textura(){
-	if( !coordenadas_textura.empty() )
-		this->VBO_coord_textura		=	VBO_Textura( coordenadas_textura );
-}
-
 void Malla_TVT::GenerarVBO_TODO(){
 	GenerarVBO_vertices();
 	GenerarVBO_caras();
 	GenerarVBO_normales_vertices();
 	GenerarVBO_normales_caras();
 	GenerarVBO_colores_vertices();
-	GenerarVBO_coord_textura();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -138,7 +130,7 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 		this->normales_caras = original.normales_caras;
 		this->normales_vertices = original.normales_vertices;
 		this->colores_vertices = original.colores_vertices;
-		this->coordenadas_textura = original.coordenadas_textura;
+		this->textura = original.textura;
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;
@@ -157,22 +149,31 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 //  Cambia el modo de visualización del modelo PLY
 
 void Malla_TVT::set_visualizacion(enum modo_visualizacion modo){
-   this->visualizacion_actual = modo;
+	this->visualizacion_actual = modo;
 
-   switch(modo){
-   	case ALAMBRE:
-   		render_actual = GL_LINE;
-   		break;
+	//Por defecto usamos sombreado suave
+	glShadeModel(GL_SMOOTH);
 
-   	case PUNTO:
-   		render_actual = GL_POINT;
-   		break;
+	switch(modo){
+		case ALAMBRE:
+			render_actual = GL_LINE;
+			break;
 
-   	case SOLIDO:
-   	case AJEDREZ:
-   		render_actual = GL_FILL;
-   		break;
-   	}
+		case PUNTO:
+			render_actual = GL_POINT;
+			break;
+
+		case SOLIDO:
+		case AJEDREZ:
+			render_actual = GL_FILL;
+			break;
+
+		case ILUM_PLANO:
+			glShadeModel(GL_FLAT); //Sombreado plano
+			break;
+		default:
+			break;
+	}
 }
 
 // ---------------------------------------------------------------------
