@@ -106,6 +106,7 @@ Malla_TVT::Malla_TVT( char* archivo_PLY,
 	this->color_principal = color_principal_t;
 	this->color_secundario = color_secundario_t;
 	set_visualizacion(visualizacion_t);
+	ObtenerDimension();
 }
 
 Malla_TVT::Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras){
@@ -123,6 +124,7 @@ Malla_TVT::Malla_TVT(std::vector<Tupla3f> vertices, std::vector<Tupla3i> caras){
 	CalcularNormales();
 	AsignarColoresVert();
 	GenerarVBO_TODO();
+	ObtenerDimension();
 }
 
 Malla_TVT::Malla_TVT(const Malla_TVT& original){
@@ -140,6 +142,8 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;
+
+		this->dimension = original.dimension;
 
 		set_visualizacion(original.visualizacion_actual);
 
@@ -520,12 +524,38 @@ void Malla_TVT::DibujarMalla_TVT(){
 	CError();
 }
 
+void Malla_TVT::ObtenerDimension(){
+	Tupla3f maximo(0.0, 0.0, 0.0);
+	Tupla3f minimo(0.0, 0.0, 0.0);
+
+	Tupla3f dimensiones(0.0, 0.0, 0.0);
+	float dim_max = 0.0;
+
+
+	for(unsigned int i = 0; i < vertices.size(); ++i)
+	{
+		for(int j = 0; j < 3; ++j)
+		{
+			maximo[j] = vertices[i][j] > maximo[j] ? vertices[i][j] : maximo[j];
+			minimo[j] = vertices[i][j] < minimo[j] ? vertices[i][j] : minimo[j];
+		}
+	}
+
+	for(int i = 0; i < 3; ++i)
+	{
+		dimensiones[i] = maximo[i] - minimo[i];
+		dim_max = dimensiones[i] > dim_max ? dimensiones[i] : dim_max;
+	}
+
+	this->dimension = dim_max;
+}
+
 void Malla_TVT::DibujarNormales_Vertices(Tupla3f color, float ancho){
 	Tupla3f origen, extremo;
 
 	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i){
 		origen = this->vertices[i];
-		extremo = origen + ( this->normales_vertices[i] * DIM_NORMALES );
+		extremo = origen + ( this->normales_vertices[i] * 0.2 * this->dimension );
 
 		DibujarLinea(origen, extremo, color, ancho);
 	}
@@ -544,7 +574,7 @@ void Malla_TVT::DibujarNormales_Caras(Tupla3f color, float ancho){
 		origen[1] = (A[1] + B[1] + C[1]) / 3;
 		origen[2] = (A[2] + B[2] + C[2]) / 3;
 
-		extremo =  origen + ( this->normales_caras[i] * DIM_NORMALES );
+		extremo =  origen + ( this->normales_caras[i] * 0.2 * this->dimension );
 
 		DibujarLinea(origen, extremo, color, ancho);
 	}

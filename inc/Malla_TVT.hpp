@@ -34,6 +34,8 @@ private:
 
 	enum modo_visualizacion visualizacion_actual;
 
+	float dimension;
+
 	int visualizar_normales_vert = 0;
 	int visualizar_normales_caras = 0;
 
@@ -52,6 +54,8 @@ private:
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
+
+	void ObtenerDimension();
 
     void DibujarNormales_Vertices(Tupla3f color = Tupla3f(1.0, 0.0, 0.0), float ancho = 0.5);
     void DibujarNormales_Caras(Tupla3f color = Tupla3f(0.0, 1.0, 0.0), float ancho = 0.5);
