@@ -104,6 +104,10 @@ public:
 	Malla_TVT GenerarSolidoRevolucion(int num_caras);
 
 	// ---------------------------------------------------------------------
+	//  Genera un sólido de revolución una vez cargado el perfil en "vertices" (no genera coord de textura)
+	Malla_TVT GenerarSolidoRevolucion_old(int num_caras);
+
+	// ---------------------------------------------------------------------
 	//  Calcula las normales a los vértices, las caras y a ambos
 	void CalcularNormalesVertices();
 	void CalcularNormalesCaras();

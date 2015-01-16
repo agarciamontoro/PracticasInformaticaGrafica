@@ -21,6 +21,14 @@ Tupla<N,T>::Tupla( const T coot[N] ){
 
 }
 
+template <unsigned int N, class T>
+Tupla<N,T>::Tupla( T x, T y ){
+	assert(N == 2);
+
+	val[X] = x;
+	val[Y] = y;
+}
+
 
 template <unsigned int N, class T>
 Tupla<N,T>::Tupla( T x, T y, T z ){

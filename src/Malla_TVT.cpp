@@ -190,7 +190,7 @@ void Malla_TVT::set_color_secundario(Tupla3f color){
 	this->color_secundario = color;
 }
 
-Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
+Malla_TVT Malla_TVT::GenerarSolidoRevolucion_old(int num_caras){
 	///////////////////////////
 	// Variables necesarias //
 	///////////////////////////
@@ -272,13 +272,13 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 			//Generación de caras
 			cara_par 	= Tupla3i(	num_vert * (i-1) + j,
-									num_vert * (i-1) + (j-1),
-									num_vert * (i) + (j-1)
-								);
+			num_vert * (i-1) + (j-1),
+			num_vert * (i) + (j-1)
+			);
 			cara_impar 	= Tupla3i(	num_vert * (i-1) + j,
-									num_vert * (i) + (j-1),
-									num_vert * (i) + j
-								);
+			num_vert * (i) + (j-1),
+			num_vert * (i) + j
+			);
 
 			//Actualizamos el nuevo perfil para la siguiente iteración
 			perfil_actual.push_back( vert_rotado );
@@ -300,13 +300,13 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	for (unsigned int j = 1; j < num_vert; ++j){
 		//Generación de caras
 		cara_par 	= Tupla3i(	num_vert * (num_caras-1) + j,
-								num_vert * (num_caras-1) + (j-1),
-								num_vert * (0) + (j-1)
-							);
+		num_vert * (num_caras-1) + (j-1),
+		num_vert * (0) + (j-1)
+		);
 		cara_impar 	= Tupla3i(	num_vert * (num_caras-1) + j,
-								num_vert * (0) + (j-1),
-								num_vert * (0) + j
-							);
+		num_vert * (0) + (j-1),
+		num_vert * (0) + j
+		);
 
 
 		caras_rev.push_back( cara_par );
@@ -320,9 +320,9 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 
 	Tupla3i cara;
 
-		////////////////////
-		// Tapa inferior //
-		////////////////////
+	////////////////////
+	// Tapa inferior //
+	////////////////////
 
 	vert_rev.push_back(primer_vertice);
 
@@ -331,22 +331,22 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	for (int i = 0; i < num_caras-1; ++i)
 	{
 		cara = Tupla3i(	num_vert * (i),
-						indice_centro_tapa_inferior,
-						num_vert * (i+1) );
+		indice_centro_tapa_inferior,
+		num_vert * (i+1) );
 
 		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa inferior
 	cara = Tupla3i(	num_vert * (num_caras-1),
-					indice_centro_tapa_inferior,
-					0 );
+	indice_centro_tapa_inferior,
+	0 );
 
 	caras_rev.push_back( cara );
 
-		////////////////////
-		// Tapa superior //
-		////////////////////
+	////////////////////
+	// Tapa superior //
+	////////////////////
 
 	vert_rev.push_back(ultimo_vertice);
 
@@ -355,16 +355,249 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	for (int i = 0; i < num_caras-1; ++i)
 	{
 		cara = Tupla3i(	num_vert * (i+1) + (num_vert - 1),
-						indice_centro_tapa_superior,
-						num_vert * (i) + (num_vert - 1) );
+		indice_centro_tapa_superior,
+		num_vert * (i) + (num_vert - 1) );
 
 		caras_rev.push_back( cara );
 	}
 
 	// Última cara de la tapa superior
 	cara = Tupla3i(	num_vert - 1,
-					indice_centro_tapa_superior,
-					num_vert * (num_caras-1)  + (num_vert - 1) );
+	indice_centro_tapa_superior,
+	num_vert * (num_caras-1)  + (num_vert - 1) );
+
+	caras_rev.push_back( cara );
+
+	//////////////////////////
+	// Generación de la nueva malla //
+	//////////////////////////
+
+	Malla_TVT solido_revolucion( vert_rev, caras_rev );
+
+	//////////////////////////
+	// Asignar colores a los vértices //
+	//////////////////////////
+
+	solido_revolucion.AsignarColoresVert();
+
+	return solido_revolucion;
+}
+
+
+Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
+	///////////////////////////
+	// Variables necesarias //
+	///////////////////////////
+
+	//Ángulo de rotación entre perfiles
+	float angulo = 2*M_PI / num_caras;
+	float c = cosf(angulo);
+	float s = sinf(angulo);
+
+	//Matriz de rotacion
+	float mat[3][3] = {
+		{c,0,s},
+		{0,1,0},
+		{-s,0,c}
+	};
+	Matriz3x3f matriz_rotacion(mat);
+
+	//Vectores de vértices y caras de la malla
+	std::vector<Tupla3f> vert_rev;
+	std::vector<Tupla3i> caras_rev;
+
+	//Vector de coordenadas de textura de la malla
+	std::vector<Tupla2f> coord_text;
+
+	///////////////////////
+	// Preprocesamiento //
+	///////////////////////
+
+	//Inicializamos los vértices con los que ya tenemos
+	vert_rev = this->vertices;
+
+	//Procesamos el perfil para que el primer y último vértice no se repitan
+	//durante la rotación y para asegurarnos de que tienen coordenada X = 0
+
+	//Vértices que deben ser tratados por separado
+	Tupla3f primer_vertice, ultimo_vertice;
+	primer_vertice = vert_rev.front();
+	ultimo_vertice = vert_rev.back();
+
+	//Si el primer(resp. último) vértice tiene coordenada X = 0,
+	//se borra del vector original. Si no, se actualiza primer_vertice
+	//(resp. ultimo_vertice) poniendo a cero la componente X.
+	if( primer_vertice[0] != 0.0 ){
+		primer_vertice[0] = 0.0;
+	}
+	else{
+		vert_rev.erase( vert_rev.begin() );
+	}
+
+	if( ultimo_vertice[0] != 0.0){
+		ultimo_vertice[0] = 0.0;
+	}
+	else{
+		vert_rev.pop_back();
+	}
+
+
+	//////////////////////////////////////
+	//  Generación de vértices y caras //
+	//////////////////////////////////////
+
+	//Variables para el bucle
+	unsigned int num_vert = vert_rev.size();
+	std::vector<Tupla3f> perfil_anterior, perfil_actual;
+	Tupla3f vert_rotado;
+	Tupla3i cara_par, cara_impar;
+
+	//Generación de distancias
+	float distancias[num_vert];
+	distancias[0] = 0;
+
+	for(size_t j = 1; j < num_vert; ++j)
+	{
+		distancias[j] = distancias[j-1] + Tupla3f( vert_rev[j] - vert_rev[j-1] ).len();
+	}
+
+	/////////////////////////////////////////////////////////////
+	//  Primera iteración del siguiente bucle antes del mismo  //
+	/////////////////////////////////////////////////////////////
+
+	perfil_anterior = vert_rev; //Primer perfil
+
+	/////// Coordenadas de todos los vértices del primer perfil
+	float text_s, text_t;
+	text_s = 0;
+	text_t = 0;
+	coord_text.push_back( Tupla2f(text_s, text_t) ); //Coordenadas del 1er vértice del 1er perfil
+
+	// Resto de vértices del primer perfil
+	for(unsigned int j = 1; j < num_vert; ++j){
+		text_t = distancias[j] / distancias[num_vert-1];
+		coord_text.push_back( Tupla2f(text_s, text_t) );
+	}
+
+	/////////////////////////////////////////////////
+	//  Bucle de generación de todos los perfiles  //
+	/////////////////////////////////////////////////
+	for (int i = 1; i < num_caras; ++i){
+
+		//Primera iteración del siguiente bucle antes del mismo
+		vert_rotado = toTupla(matriz_rotacion * perfil_anterior[0]);
+		perfil_actual.push_back( vert_rotado );
+		vert_rev.push_back( vert_rotado );
+
+		//Textura
+		text_s = i / (num_caras - 1);
+		text_t = 0;
+		coord_text.push_back( Tupla2f(text_s, text_t) );
+
+		//Bucle de generación de todos los vértices del perfil i
+		for (unsigned int j = 1; j < num_vert; ++j){
+			//Generación de perfiles
+			vert_rotado = toTupla(matriz_rotacion * perfil_anterior[j]);
+
+			//Generación de caras
+			cara_par 	= Tupla3i(	num_vert * (i-1) + j,
+			num_vert * (i-1) + (j-1),
+			num_vert * (i) + (j-1)
+			);
+			cara_impar 	= Tupla3i(	num_vert * (i-1) + j,
+			num_vert * (i) + (j-1),
+			num_vert * (i) + j
+			);
+
+			//Actualizamos el nuevo perfil para la siguiente iteración
+			perfil_actual.push_back( vert_rotado );
+
+			//Asignación a la tupla actual de todo lo calculado
+			vert_rev.push_back( vert_rotado );
+			caras_rev.push_back( cara_par );
+			caras_rev.push_back( cara_impar );
+
+			//Generamos coordenadas de textura
+			text_t = distancias[j] / distancias[num_vert-1];
+			coord_text.push_back( Tupla2f(text_s, text_t) );
+
+		} //Fin de generación de vértices para el perfil i
+
+		//Actualización de las variables del bucle
+		perfil_anterior = perfil_actual;
+		perfil_actual.clear();
+
+	} //Fin de generación de perfiles
+
+	//Generación de la última cara
+	for (unsigned int j = 1; j < num_vert; ++j){
+		//Generación de caras
+		cara_par 	= Tupla3i(	num_vert * (num_caras-1) + j,
+		num_vert * (num_caras-1) + (j-1),
+		num_vert * (0) + (j-1)
+		);
+		cara_impar 	= Tupla3i(	num_vert * (num_caras-1) + j,
+		num_vert * (0) + (j-1),
+		num_vert * (0) + j
+		);
+
+
+		caras_rev.push_back( cara_par );
+		caras_rev.push_back( cara_impar );
+
+	} //Fin de generación de la última cara
+
+	///////////////////////////
+	//  Generación de tapas //
+	///////////////////////////
+
+	Tupla3i cara;
+
+	////////////////////
+	// Tapa inferior //
+	////////////////////
+
+	vert_rev.push_back(primer_vertice);
+
+	int indice_centro_tapa_inferior = vert_rev.size()-1;
+
+	for (int i = 0; i < num_caras-1; ++i)
+	{
+		cara = Tupla3i(	num_vert * (i),
+		indice_centro_tapa_inferior,
+		num_vert * (i+1) );
+
+		caras_rev.push_back( cara );
+	}
+
+	// Última cara de la tapa inferior
+	cara = Tupla3i(	num_vert * (num_caras-1),
+	indice_centro_tapa_inferior,
+	0 );
+
+	caras_rev.push_back( cara );
+
+	////////////////////
+	// Tapa superior //
+	////////////////////
+
+	vert_rev.push_back(ultimo_vertice);
+
+	int indice_centro_tapa_superior = vert_rev.size()-1;
+
+	for (int i = 0; i < num_caras-1; ++i)
+	{
+		cara = Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+		indice_centro_tapa_superior,
+		num_vert * (i) + (num_vert - 1) );
+
+		caras_rev.push_back( cara );
+	}
+
+	// Última cara de la tapa superior
+	cara = Tupla3i(	num_vert - 1,
+	indice_centro_tapa_superior,
+	num_vert * (num_caras-1)  + (num_vert - 1) );
 
 	caras_rev.push_back( cara );
 

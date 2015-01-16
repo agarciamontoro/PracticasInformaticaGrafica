@@ -41,6 +41,7 @@ public:
    Tupla( const std::vector<T>& coot);
    Tupla( const T coot[N] );
 
+   Tupla( T x, T y );
    Tupla( T x, T y, T z );
    Tupla( T x, T y, T z, T w );
 
