@@ -14,6 +14,7 @@
 #include "practica1.hpp"
 #include "practica2.hpp"
 #include "practica3.hpp"
+#include "practica4.hpp"
 #include "tipos.hpp"
 
 // includes de C/C++
@@ -277,12 +278,7 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
          PX_Conmutar_NormalesCaras();
          break;
       default:
-         if( PX_ConsultarPracticaActual() == P3 ){
-             redisp = P3_FGE_TeclaNormal( tecla, x_raton, y_raton );
-         }
-         else{
-             redisp = false;
-         }
+         redisp = PX_FGE_PulsarTeclaNormal( tecla, x_raton, y_raton );
          break ;
    }
    using namespace std ;
@@ -337,13 +333,11 @@ void FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton )
      case GLUT_KEY_F3:
          PX_CambiarPracticaActual(P3);
          break;
+     case GLUT_KEY_F4:
+         PX_CambiarPracticaActual(P4);
+         break;
       default:
-         if( PX_ConsultarPracticaActual() == P3 ){
-             redisp = P3_FGE_TeclaEspecial( tecla, x_raton, y_raton );
-         }
-         else{
-             redisp = false;
-         }
+         redisp = PX_FGE_PulsarTeclaEspecial( tecla, x_raton, y_raton );
          break ;
 	}
    using namespace std ;

@@ -16,7 +16,8 @@ enum modo_lectura{
 enum practicas{
     P1,
     P2,
-    P3
+    P3,
+    P4
 };
 
 enum coord{

@@ -14,6 +14,7 @@
 #include "practica1.hpp"
 #include "practica2.hpp"
 #include "practica3.hpp"
+#include "practica4.hpp"
 #include "tipos.hpp"
 
 void PX_DibujarObjetos() ;
@@ -23,5 +24,7 @@ void PX_CambiarPracticaActual(enum practicas prac);
 enum practicas PX_ConsultarPracticaActual();
 void PX_Conmutar_NormalesVertices();
 void PX_Conmutar_NormalesCaras();
+bool PX_FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton );
+bool PX_FGE_PulsarTeclaEspecial( int tecla, int x_raton, int y_raton );
 
 #endif
