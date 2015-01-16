@@ -555,7 +555,7 @@ void Malla_TVT::DibujarNormales_Vertices(Tupla3f color, float ancho){
 
 	for (unsigned int i = 0; i < this->normales_vertices.size(); ++i){
 		origen = this->vertices[i];
-		extremo = origen + ( this->normales_vertices[i] * 0.2 * this->dimension );
+		extremo = origen + ( this->normales_vertices[i] * 0.1 * this->dimension );
 
 		DibujarLinea(origen, extremo, color, ancho);
 	}
@@ -574,7 +574,7 @@ void Malla_TVT::DibujarNormales_Caras(Tupla3f color, float ancho){
 		origen[1] = (A[1] + B[1] + C[1]) / 3;
 		origen[2] = (A[2] + B[2] + C[2]) / 3;
 
-		extremo =  origen + ( this->normales_caras[i] * 0.2 * this->dimension );
+		extremo =  origen + ( this->normales_caras[i] * 0.1 * this->dimension );
 
 		DibujarLinea(origen, extremo, color, ancho);
 	}
