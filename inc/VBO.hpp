@@ -21,8 +21,8 @@ private:
 public:
 	VBO(){}
 
-	template<class T>
-	VBO( std::vector< Tupla<3,T> >& datos_t );
+	template<unsigned int N, class T>
+	VBO( std::vector< Tupla<N,T> >& datos_t );
 
 	VBO(const VBO& original);
 
@@ -69,6 +69,14 @@ public:
 	GLenum get_tipo_dato();
 	GLsizeiptr get_tam_dato();
 	void Dibujar(enum modo_visualizacion modo, Tupla3f color_sec);
+};
+
+class VBO_Textura: public VBO{
+private:
+public:
+	VBO_Textura(){}
+	VBO_Textura( std::vector<Tupla2f>& datos_t );
+	void Activar();
 };
 
 #endif

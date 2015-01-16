@@ -5,7 +5,9 @@ enum modo_visualizacion{
    ALAMBRE,
    SOLIDO,
    AJEDREZ,
-   PUNTO
+   PUNTO,
+   ILUM_PLANO,
+   ILUM_GOUROUD
 };
 
 enum modo_lectura{

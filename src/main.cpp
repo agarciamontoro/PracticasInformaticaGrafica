@@ -282,7 +282,6 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
          break ;
    }
    using namespace std ;
-   //cout << "tecla normal....." << frustum_factor_escala << endl ;
 
    // si se ha cambiado algo, forzar evento de redibujado
    if (redisp)

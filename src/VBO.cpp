@@ -48,10 +48,10 @@ const VBO& VBO::operator=(const VBO& original){
 	return *this;
 }
 
-template<class T>
-VBO::VBO( std::vector< Tupla<3,T> >& datos_t ){
-	this->num_datos = 3 * datos_t.size();
-	this->tam = get_tam_dato() * 3 * datos_t.size();
+template<unsigned int N, class T>
+VBO::VBO( std::vector< Tupla<N,T> >& datos_t ){
+	this->num_datos = N * datos_t.size();
+	this->tam = get_tam_dato() * N * datos_t.size();
 	this->puntero_datos = datos_t[0].get_ptr();
 
 	this->identificador = Inicializar();
@@ -102,6 +102,8 @@ bool VBO_Normales::Activar(){
 	return activado;
 };
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 bool VBO_Colores::Activar(){
 	bool activado;
 
@@ -121,6 +123,8 @@ bool VBO_Colores::Activar(){
 	return activado;
 };
 
+//-----------------------------------------------------------------------------------------------------------------------------
+
 void VBO_Vertices::Activar(){
 	glBindBuffer( get_tipo_dato(), get_id() );
 	glVertexPointer( 3, GL_FLOAT, 0, 0 );
@@ -128,6 +132,8 @@ void VBO_Vertices::Activar(){
 
 	glEnableClientState( GL_VERTEX_ARRAY );
 };
+
+//-----------------------------------------------------------------------------------------------------------------------------
 
 GLenum VBO_Caras::get_tipo_dato(){
 	return GL_ELEMENT_ARRAY_BUFFER;
@@ -155,5 +161,18 @@ void VBO_Caras::Dibujar(enum modo_visualizacion modo, Tupla3f color_sec){
 	glBindBuffer( get_tipo_dato(), 0 );
 }
 
-template VBO::VBO<float>( std::vector< Tupla3f >& datos_t );
-template VBO::VBO<int>( std::vector< Tupla3i >& datos_t );
+//-----------------------------------------------------------------------------------------------------------------------------
+
+void VBO_Textura::Activar(){
+	glBindBuffer( get_tipo_dato(), get_id() );
+	glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
+	glBindBuffer( get_tipo_dato(), 0 );
+
+	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------
+
+template VBO::VBO<2, float>( std::vector< Tupla2f >& datos_t );
+template VBO::VBO<3, float>( std::vector< Tupla3f >& datos_t );
+template VBO::VBO<3, int>( std::vector< Tupla3i >& datos_t );

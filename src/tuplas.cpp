@@ -211,6 +211,8 @@ Tupla<N,T> Tupla<N,T>::abs(){
 template class Tupla<1,int>;
 template class Tupla<1,float>;
 
+template class Tupla<2,float>;
+
 template class Tupla<3,int>;
 template class Tupla<3,float>;
 
