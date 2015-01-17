@@ -23,6 +23,8 @@
 #include "VBO.hpp"
 #include "Malla_TVT.hpp"
 #include "tipos.hpp"
+#include "fuente_luz.hpp"
+#include "material.hpp"
 
 void P4_DibujarObjetos() ;
 void P4_Inicializar( int argc, char *argv[] ) ;

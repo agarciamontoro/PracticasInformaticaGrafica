@@ -6,7 +6,7 @@ bool FuenteLuz::luz_ocupada[8] = {false};
 FuenteLuz::FuenteLuz(unsigned int id, enum tipo_luz tipo, Tupla4f vec, Tupla3f ambiental, Tupla3f difuso, Tupla3f especular){
     assert(id >= 0 && id <= 7);
     assert(luz_ocupada[id] == false);
-    assert(vec[4] == 0 || vec[4] == 1);
+    assert(vec[W] == 0 || vec[W] == 1);
 
     luz_ocupada[id] = true;
 
