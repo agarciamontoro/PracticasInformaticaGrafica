@@ -22,7 +22,6 @@ private:
 							normales_caras,
                             colores_vertices;
 
-	std::vector<Tupla2f>	coordenadas_textura;
 
 	std::vector<Tupla3i>	caras;
 
@@ -32,7 +31,8 @@ private:
 					VBO_normales_caras;
     VBO_Colores		VBO_colores_vertices;
 
-	Textura			textura;
+	std::vector<Tupla2f>	coordenadas_textura;
+	Textura					textura;
 
 	enum modo_visualizacion visualizacion_actual;
 

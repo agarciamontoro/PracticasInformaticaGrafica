@@ -12,7 +12,7 @@
 class Textura{
 private:
     GLuint          id_text;    // identificador OpenGL de la textura
-    jpg::Imagen*    img;        // puntero a imagen con los texels
+    jpg::Imagen*    img = NULL; // puntero a imagen con los texels
     enum modo_text  mgct;       // modo de gen. cc.tt. (0 = desactivado, 1 = objeto, 2 = camara)
 
     Tupla4f         cs,         // coeficientes para generación de coords. de textura
