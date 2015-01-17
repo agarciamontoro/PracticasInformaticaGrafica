@@ -16,6 +16,11 @@ enum modo_text{
     CAMARA
 };
 
+enum tipo_luz{
+    POSICIONAL,
+    DIRECCIONAL
+};
+
 enum modo_lectura{
    TODO,
    VERT
