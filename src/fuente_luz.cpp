@@ -21,6 +21,8 @@ FuenteLuz::FuenteLuz(unsigned int id, enum tipo_luz tipo, Tupla4f vec, Tupla4f a
     this->alpha = 0;
     this->beta  = 0;
 
+    this->posvec = vec;
+
     this->tipo = tipo;
 }
 
