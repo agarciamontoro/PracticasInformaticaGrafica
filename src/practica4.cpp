@@ -155,7 +155,8 @@ void P4_Inicializar( int argc, char *argv[] ){
 }
 
 void P4_DibujarObjetos(){
-
+    luz_direccional->activar();
+    
     escena->visualizar();
 }
 
