@@ -28,7 +28,9 @@ static Matriz_Escalado      *mat_esc_tabla;
 static Celda_Nodo           *escena,
                             *lata;
 
-static FuenteLuz            *luz_direccional;
+static FuenteLuz            *luz_direccional,
+                            *luz_posicional;
+
 static Material             *reflectante,
                             *material_lata, *material_tapas;
 
@@ -143,6 +145,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     //////////////////////////////////////////////////////////////////
 
     luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(0.0, 0.0, 0.0, 0.0));
+    luz_posicional  = new FuenteLuz(1, POSICIONAL, Tupla4f(M_PI, 0, 0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0));
 
     glEnable( GL_LIGHTING );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
@@ -155,8 +158,13 @@ void P4_DibujarObjetos(){
     glEnable( GL_NORMALIZE );
     glDisable( GL_COLOR_MATERIAL );
 
-    luz_direccional->activar();
+    //luz_direccional->activar();
+    luz_posicional->activar();
+
     escena->visualizar();
+
+    //luz_direccional->desactivar();
+    luz_posicional->desactivar();
 
     glDisable( GL_LIGHTING );
     glDisable( GL_NORMALIZE );
