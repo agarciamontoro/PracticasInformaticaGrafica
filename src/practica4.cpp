@@ -30,7 +30,7 @@ static Celda_Nodo           *escena,
 
 static FuenteLuz            *luz_direccional;
 static Material             *reflectante,
-                            *material_lata;
+                            *material_lata, *material_tapas;
 
 static Textura              *coca_cola;
 
@@ -38,10 +38,10 @@ static Textura              *coca_cola;
 //  Cambia el modo de visualización del modelo PLY
 
 void P4_CambiarVisualizacion(enum modo_visualizacion modo){
-    peon->set_visualizacion(modo);
+    //peon->set_visualizacion(modo);
     //lata_lateral->set_visualizacion(modo);
-    lata_superior->set_visualizacion(modo);
-    lata_inferior->set_visualizacion(modo);
+    //lata_superior->set_visualizacion(modo);
+    //lata_inferior->set_visualizacion(modo);
 }
 
 // ---------------------------------------------------------------------
@@ -58,6 +58,30 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     int num_caras = 100;
 
+
+    //////////////////////////////////////////////////////////////////
+    ///////////////////////                       ////////////////////
+    /////////////////////// DEFINICIÓN MATERIALES ////////////////////
+    ///////////////////////                       ////////////////////
+    //////////////////////////////////////////////////////////////////
+
+    //Material con textura
+    coca_cola = new Textura("IMG/text-lata-1.jpg");
+    material_lata = new Material(   Tupla3f(0.3, 0.3, 0.3),
+                                    Tupla3f(0.05, 0.05, 0.05),
+                                    Tupla3f(0.7, 0.7, 0.7),
+                                    Tupla3f(1.0, 1.0, 1.0),
+                                    6.0,
+                                    coca_cola);
+
+
+    material_tapas = new Material(  Tupla3f(0.3, 0.3, 0.3),
+                                    Tupla3f(0.05, 0.05, 0.05),
+                                    Tupla3f(0.7, 0.7, 0.7),
+                                    Tupla3f(1.0, 1.0, 1.0),
+                                    6.0);
+
+
     //////////////////////////////////////////////////////////////////
     ///////////////////////                   ////////////////////////
     /////////////////////// DEFINICIÓN MALLAS ////////////////////////
@@ -73,15 +97,6 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     // MALLA LATA
 
-    //Material con textura
-    coca_cola = new Textura("IMG/text-lata-1.jpg");
-    material_lata = new Material(Tupla3f(0.3, 0.3, 0.3),
-                                 Tupla3f(0.05, 0.05, 0.05),
-                                 Tupla3f(0.7, 0.7, 0.7),
-                                 Tupla3f(1.0, 1.0, 1.0),
-                                 6.0,
-                                 coca_cola);
-
     // Malla cuerpo
     Malla_TVT lata_lateral_aux(archivo_lata_lateral, VERT);
     lata_lateral = new Malla_TVT(lata_lateral_aux.GenerarSolidoRevolucion(num_caras, true));
@@ -93,14 +108,16 @@ void P4_Inicializar( int argc, char *argv[] ){
     // Malla tapa superior
     Malla_TVT lata_superior_aux(archivo_lata_superior, VERT);
     lata_superior = new Malla_TVT(lata_superior_aux.GenerarSolidoRevolucion(num_caras));
-    lata_superior->set_visualizacion(AJEDREZ);
+    lata_superior->set_visualizacion(ILUM_PLANO);
+    lata_superior->AsignarMaterial(material_tapas);
 
     Celda_Malla* malla_lata_superior = new Celda_Malla(lata_superior);
 
     // Malla inferior
     Malla_TVT lata_inferior_aux(archivo_lata_inferior, VERT);
     lata_inferior = new Malla_TVT(lata_inferior_aux.GenerarSolidoRevolucion(num_caras));
-    lata_inferior->set_visualizacion(AJEDREZ);
+    lata_inferior->set_visualizacion(ILUM_PLANO);
+    lata_inferior->AsignarMaterial(material_tapas);
 
     Celda_Malla* malla_lata_inferior = new Celda_Malla(lata_inferior);
 

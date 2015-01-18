@@ -481,12 +481,12 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras, bool calcular_coorde
 	float text_s, text_t;
 	text_s = 0;
 	text_t = 0;
-	coord_text.push_back( Tupla2f(text_s, text_t) ); //Coordenadas del 1er vértice del 1er perfil
+	coord_text.push_back( Tupla2f(text_s, 1-text_t) ); //Coordenadas del 1er vértice del 1er perfil
 
 	// Resto de vértices del primer perfil
 	for(unsigned int j = 1; j < num_vert; ++j){
 		text_t = distancias[j] / distancias[num_vert-1];
-		coord_text.push_back( Tupla2f(text_s, text_t) );
+		coord_text.push_back( Tupla2f(text_s, 1-text_t) );
 	}
 
 	/////////////////////////////////////////////////
@@ -502,7 +502,7 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras, bool calcular_coorde
 		//Textura
 		text_s = (float)i / (float)(num_caras - 1);
 		text_t = 0;
-		coord_text.push_back( Tupla2f(text_s, text_t) );
+		coord_text.push_back( Tupla2f(text_s, 1-text_t) );
 
 		//Bucle de generación de todos los vértices del perfil i
 		for (unsigned int j = 1; j < num_vert; ++j){
@@ -529,7 +529,7 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras, bool calcular_coorde
 
 			//Generamos coordenadas de textura
 			text_t = distancias[j] / distancias[num_vert-1];
-			coord_text.push_back( Tupla2f(text_s, text_t) );
+			coord_text.push_back( Tupla2f(text_s, 1-text_t) );
 
 		} //Fin de generación de vértices para el perfil i
 
