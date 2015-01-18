@@ -42,6 +42,10 @@ void FuenteLuz::activar(){
     CError();
 }
 
+void FuenteLuz::desactivar(){
+    glDisable(this->id_luz);
+}
+
 void FuenteLuz::activar_direccion_polares(){
     //Tupla4f ejeZ = { 0.0, 0.0, 1.0, 0.0 };
 
