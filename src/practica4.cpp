@@ -13,28 +13,33 @@
 
 ///////////////////////      MALLAS      /////////////////////////
 
-static Malla_TVT *peon, *lata_lateral, *lata_superior, *lata_inferior;
+static Malla_TVT            *peon_madera, *peon_blanco, *peon_negro,
+                            *lata_lateral, *lata_superior, *lata_inferior;
 
 ///////////////    MATRICES DE TRANSFORMACIÓN    /////////////////
 
-static Matriz_Traslacion    *mat_tras_esfera[4];
+static Matriz_Traslacion    *mat_tras_peon[3];
 
-static Matriz_Rotacion      *mat_rot_tabla[8];
-
-static Matriz_Escalado      *mat_esc_tabla;
+static Matriz_Escalado      *mat_esc_lata;
 
 ///////////////////////       NODOS      /////////////////////////
 
-static Celda_Nodo           *escena,
-                            *lata;
+static Celda_Nodo           *nodo_escena,
+                            *nodo_peon_madera,
+                            *nodo_peon_blanco,
+                            *nodo_peon_negro,
+                            *nodo_lata;
 
 static FuenteLuz            *luz_direccional,
                             *luz_posicional;
 
-static Material             *reflectante,
+static Material             *material_peon_madera,
+                            *material_peon_blanco,
+                            *material_peon_negro,
                             *material_lata, *material_tapas;
 
-static Textura              *coca_cola;
+static Textura              *madera,
+                            *coca_cola;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
@@ -67,8 +72,11 @@ void P4_Inicializar( int argc, char *argv[] ){
     ///////////////////////                       ////////////////////
     //////////////////////////////////////////////////////////////////
 
-    //Material con textura
-    coca_cola = new Textura("IMG/text-lata-1.jpg");
+    //Definición texturas
+    coca_cola   = new Textura("IMG/text-lata-1.jpg");
+    madera      = new Textura("IMG/text-madera.jpg", OBJETO);
+
+    //Definición materiales
     material_lata = new Material(   Tupla4f(0.3, 0.3, 0.3, 1.0),
                                     Tupla4f(0.05, 0.05, 0.05, 1.0),
                                     Tupla4f(0.7, 0.7, 0.7, 1.0),
@@ -84,18 +92,53 @@ void P4_Inicializar( int argc, char *argv[] ){
                                     6.0);
 
 
+    material_peon_madera = new Material(
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
+                                    6.0,
+                                    madera);
+
+
+    material_peon_blanco = new Material(
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.8, 0.8, 0.8, 1.0),
+                                    Tupla4f(0.0, 0.0, 0.0, 0.0),
+                                    6.0);
+
+
+    material_peon_negro = new Material(
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.1, 0.1, 0.1, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
+                                    6.0);
+
+
     //////////////////////////////////////////////////////////////////
     ///////////////////////                   ////////////////////////
     /////////////////////// DEFINICIÓN MALLAS ////////////////////////
     ///////////////////////                   ////////////////////////
     //////////////////////////////////////////////////////////////////
 
-    // MALLA PEÓN
-    Malla_TVT peon_aux(archivo_peon, VERT);
-    peon = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
-    peon->set_visualizacion(AJEDREZ);
+    // MALLAS PEONES
 
-    Celda_Malla* malla_peon = new Celda_Malla(peon);
+    Malla_TVT peon_aux(archivo_peon, VERT);
+    peon_madera = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
+    peon_madera->set_visualizacion(ILUM_PLANO);
+    peon_madera->AsignarMaterial(material_lata);
+
+    peon_blanco = new Malla_TVT(*peon_madera);
+    peon_blanco->AsignarMaterial(material_peon_blanco);
+
+    peon_negro = new Malla_TVT(*peon_madera);
+    peon_negro->AsignarMaterial(material_peon_negro);
+
+    Celda_Malla* malla_peon_madera = new Celda_Malla( peon_madera );
+    Celda_Malla* malla_peon_blanco = new Celda_Malla( peon_blanco );
+    Celda_Malla* malla_peon_negro  = new Celda_Malla( peon_negro );
 
     // MALLA LATA
 
@@ -124,19 +167,55 @@ void P4_Inicializar( int argc, char *argv[] ){
     Celda_Malla* malla_lata_inferior = new Celda_Malla(lata_inferior);
 
 
+    ////////////////////////////////////////////////////////////////
+    //////////////////                             /////////////////
+    ////////////////// DEFINICIÓN TRANSFORMACIONES /////////////////
+    //////////////////                             /////////////////
+    ////////////////////////////////////////////////////////////////
+
+    //Escalado lata
+    mat_esc_lata = new Matriz_Escalado(5, 5, 5);
+    Celda_Transformacion* trans_lata = new Celda_Transformacion(mat_esc_lata);
+
+    //Traslación peones
+    Celda_Transformacion* trans_peon[3];
+
+    for(size_t i = 0; i < 3; ++i)
+    {
+        mat_tras_peon[i] = new Matriz_Traslacion(5*cosf(M_PI/(i*2)), 1.4, 5*sinf(M_PI/(i*2)));
+        trans_peon[i] = new Celda_Transformacion(mat_tras_peon[i]);
+    }
+
+
     //////////////////////////////////////////////////////////////////
     ///////////////////////                   ////////////////////////
     /////////////////////// DEFINICIÓN  NODOS ////////////////////////
     ///////////////////////                   ////////////////////////
     //////////////////////////////////////////////////////////////////
 
-    lata = new Celda_Nodo();
-    lata->push_back(malla_lata_lateral);
-    lata->push_back(malla_lata_superior);
-    lata->push_back(malla_lata_inferior);
+    nodo_lata = new Celda_Nodo();
+    nodo_lata->push_back(trans_lata);
+    nodo_lata->push_back(malla_lata_lateral);
+    nodo_lata->push_back(malla_lata_superior);
+    nodo_lata->push_back(malla_lata_inferior);
 
-    escena = new Celda_Nodo();
-    escena->push_back(lata);
+    nodo_peon_madera = new Celda_Nodo();
+    nodo_peon_madera->push_back(trans_peon[0]);
+    nodo_peon_madera->push_back(malla_peon_madera);
+
+    nodo_peon_blanco = new Celda_Nodo();
+    nodo_peon_blanco->push_back(trans_peon[1]);
+    nodo_peon_blanco->push_back(malla_peon_blanco);
+
+    nodo_peon_negro  = new Celda_Nodo();
+    nodo_peon_negro->push_back(trans_peon[2]);
+    nodo_peon_negro->push_back(malla_peon_negro);
+
+    nodo_escena = new Celda_Nodo();
+    nodo_escena->push_back(nodo_lata);
+    nodo_escena->push_back(nodo_peon_madera);
+    nodo_escena->push_back(nodo_peon_blanco);
+    nodo_escena->push_back(nodo_peon_negro);
 
     //////////////////////////////////////////////////////////////////
     ///////////////////////                   ////////////////////////
@@ -161,7 +240,7 @@ void P4_DibujarObjetos(){
     luz_direccional->activar();
     luz_posicional->activar();
 
-    escena->visualizar();
+    nodo_escena->visualizar();
 
     luz_direccional->desactivar();
     luz_posicional->desactivar();

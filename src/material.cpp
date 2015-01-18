@@ -9,7 +9,9 @@ Material::Material(Tupla4f emision, Tupla4f ambiental, Tupla4f difuso, Tupla4f e
     this->exponente = exponente;
 }
 
-void Material::activar(){
+bool Material::activar(){
+    enum modo_text modo = DESACTIVADO;
+
     glEnable(GL_LIGHTING);
 
     glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION,  this->color[0].get_ptr() );
@@ -20,11 +22,13 @@ void Material::activar(){
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, &(this->exponente) ) ;
 
     if( hayTextura() ){
-        textura->activar();
+        modo = textura->activar();
     }
     else{
         glDisable( GL_TEXTURE_2D );
     }
+
+    return modo != DESACTIVADO;
 }
 
 bool Material::hayTextura(){

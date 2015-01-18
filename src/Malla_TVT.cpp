@@ -744,9 +744,9 @@ void Malla_TVT::DibujarMalla_TVT(){
 		visualizacion_actual == ILUM_GOUROUD &&
 		this->material != NULL
 		){
-		material->activar();
+		bool auto_generacion = material->activar();
 
-		if( material->hayTextura() ){
+		if( material->hayTextura() && !auto_generacion ){
 			textura_activada = true;
 			VBO_coord_textura.Activar();
 			std::cout << "TEXTURA ACTIVADA" << std::endl;

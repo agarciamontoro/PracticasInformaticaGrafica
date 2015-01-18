@@ -16,7 +16,7 @@ private:
 public:
     Material(Tupla4f emision, Tupla4f ambiental, Tupla4f difuso, Tupla4f especular, float exponente, Textura* textura = NULL);
 
-    void activar();       // activa material en el cauce fijo
+    bool activar();       // activa material en el cauce fijo
     bool hayTextura();
 } ;
 
