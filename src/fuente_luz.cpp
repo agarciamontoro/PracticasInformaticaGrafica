@@ -45,15 +45,17 @@ void FuenteLuz::activar(){
 void FuenteLuz::activar_direccion_polares(){
     //Tupla4f ejeZ = { 0.0, 0.0, 1.0, 0.0 };
 
-    //glMatrixMode( GL_MODELVIEW );
-    //glPushMatrix();
-        //glLoadIdentity(); // hacer M = Ide
+    /*
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+        glLoadIdentity(); // hacer M = Ide
 
-        //glRotatef( this->alpha, 0.0, 1.0, 0.0 ); // (3) rotación alpha grados en torno a eje Y
-        //glRotatef( this->beta, -1.0, 0.0, 0.0 ); // (2) rotación β grados en torno al eje X
+        glRotatef( this->alpha, 0.0, 1.0, 0.0 ); // (3) rotación alpha grados en torno a eje Y
+        glRotatef( this->beta, -1.0, 0.0, 0.0 ); // (2) rotación β grados en torno al eje X
 
-        //glLightfv( this->id_luz, GL_POSITION, ejeZ.get_ptr() );//(1)hacer li:(0,0,1)(paral. eje Z+)
-    //glPopMatrix() ;
+        glLightfv( this->id_luz, GL_POSITION, ejeZ.get_ptr() );//(1)hacer li:(0,0,1)(paral. eje Z+)
+    glPopMatrix() ;
+    */
 
     Tupla4f ejeZ(cosf(alpha)*sinf(beta),sinf(alpha)*sinf(beta),cosf(beta),0.0);
     glLightfv( this->id_luz, GL_POSITION, ejeZ.get_ptr() );//(1)hacer li:(0,0,1)(paral. eje Z+)

@@ -145,16 +145,16 @@ void P4_Inicializar( int argc, char *argv[] ){
     luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(0.0, 0.0, 0.0, 0.0));
     luz_direccional->activar();
 
-    Tupla3f prueba(0.1, 0.2, 1.0);
-}
 
-void P4_DibujarObjetos(){
     glEnable( GL_LIGHTING );
     glEnable( GL_NORMALIZE );
     glDisable( GL_COLOR_MATERIAL );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
     glLightModeli( GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR ) ;
     glLightModeli( GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
+}
+
+void P4_DibujarObjetos(){
 
     escena->visualizar();
 }
