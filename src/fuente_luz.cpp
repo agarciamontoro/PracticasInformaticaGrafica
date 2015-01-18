@@ -5,7 +5,7 @@ GLuint equivalencia[8] = {GL_LIGHT0, GL_LIGHT1, GL_LIGHT2, GL_LIGHT3, GL_LIGHT4,
 //DEFINICIÓN DEL ATRIBUTO ESTÁTICO
 bool FuenteLuz::luz_ocupada[8] = {false};
 
-FuenteLuz::FuenteLuz(unsigned int id, enum tipo_luz tipo, Tupla4f vec, Tupla3f ambiental, Tupla3f difuso, Tupla3f especular){
+FuenteLuz::FuenteLuz(unsigned int id, enum tipo_luz tipo, Tupla4f vec, Tupla4f ambiental, Tupla4f difuso, Tupla4f especular){
     assert(id >= 0 && id <= 7);
     assert(luz_ocupada[id] == false);
     assert(vec[W] == 0 || vec[W] == 1);
@@ -20,6 +20,8 @@ FuenteLuz::FuenteLuz(unsigned int id, enum tipo_luz tipo, Tupla4f vec, Tupla3f a
 
     this->alpha = 0;
     this->beta  = 0;
+
+    this->tipo = tipo;
 }
 
 void FuenteLuz::activar(){

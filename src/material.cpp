@@ -1,6 +1,6 @@
 #include "material.hpp"
 
-Material::Material(Tupla3f emision, Tupla3f ambiental, Tupla3f difuso, Tupla3f especular, float exponente, Textura* textura){
+Material::Material(Tupla4f emision, Tupla4f ambiental, Tupla4f difuso, Tupla4f especular, float exponente, Textura* textura){
     this->textura   = textura;
     this->color[0]  = emision;
     this->color[1]  = ambiental;

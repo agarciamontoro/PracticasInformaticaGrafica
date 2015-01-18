@@ -67,18 +67,18 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     //Material con textura
     coca_cola = new Textura("IMG/text-lata-1.jpg");
-    material_lata = new Material(   Tupla3f(0.3, 0.3, 0.3),
-                                    Tupla3f(0.05, 0.05, 0.05),
-                                    Tupla3f(0.7, 0.7, 0.7),
-                                    Tupla3f(1.0, 1.0, 1.0),
+    material_lata = new Material(   Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
                                     6.0,
                                     coca_cola);
 
 
-    material_tapas = new Material(  Tupla3f(0.3, 0.3, 0.3),
-                                    Tupla3f(0.05, 0.05, 0.05),
-                                    Tupla3f(0.7, 0.7, 0.7),
-                                    Tupla3f(1.0, 1.0, 1.0),
+    material_tapas = new Material(  Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
                                     6.0);
 
 
