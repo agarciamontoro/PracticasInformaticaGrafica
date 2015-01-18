@@ -145,7 +145,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     //////////////////////////////////////////////////////////////////
 
     luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(0.0, 0.0, 0.0, 0.0));
-    luz_posicional  = new FuenteLuz(1, POSICIONAL, Tupla4f(M_PI, 0, 0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0));
+    luz_posicional  = new FuenteLuz(1, POSICIONAL, Tupla4f(2.5, 2.5, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0));
 
     glEnable( GL_LIGHTING );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
@@ -158,12 +158,12 @@ void P4_DibujarObjetos(){
     glEnable( GL_NORMALIZE );
     glDisable( GL_COLOR_MATERIAL );
 
-    //luz_direccional->activar();
+    luz_direccional->activar();
     luz_posicional->activar();
 
     escena->visualizar();
 
-    //luz_direccional->desactivar();
+    luz_direccional->desactivar();
     luz_posicional->desactivar();
 
     glDisable( GL_LIGHTING );

@@ -23,9 +23,13 @@ private:
 public:
     Textura(){}
 
-    Textura(char* img_text);
+    Textura(char* img_text,
+            enum modo_text modo = DESACTIVADO,
+            Tupla4f cs = Tupla4f(1.0, 0.0, 0.0, 0.0),
+            Tupla4f ct = Tupla4f(0.0, 1.0, 0.0, 0.0)
+            );
 
-    void activar();          // activa textura en el cauce fijo
+    enum modo_text activar();          // activa textura en el cauce fijo
 
     // ---------------------------------------------------------------------
     //  Operador de asignación

@@ -1,13 +1,16 @@
 #include "textura.hpp"
 
 
-Textura::Textura(char* img_text){
+Textura::Textura(char* img_text, enum modo_text modo, Tupla4f cs, Tupla4f ct){
     CError();
 
     glEnable( GL_TEXTURE_2D );
 
     // cargar la imagen
-    img = new jpg::Imagen(img_text);
+    this->img = new jpg::Imagen(img_text);
+
+    //Ajustar el modo
+    this->mgct = modo;
 
     // Asignar identificador de textura
     glGenTextures( 1, &(this->id_text) );
@@ -32,11 +35,10 @@ Textura::Textura(char* img_text){
     );
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    Tupla4f cs_(1.0, 0.0, 0.0, 0.0);
-    Tupla4f ct_(0.0, 1.0, 0.0, 0.0);
+    this->cs = cs;
+    this->ct = ct;
 
-    this->cs = cs_;
-    this->ct = ct_;
+    glDisable( GL_TEXTURE_2D );
 
     CError();
 }
@@ -58,14 +60,48 @@ const Textura& Textura::operator=(const Textura &original){
     return *this;
 }
 
-void Textura::activar(){
+enum modo_text Textura::activar(){
     CError();
 
+    //Activamos el modo de textura y la textura actual
     glEnable( GL_TEXTURE_2D );
     glBindTexture( GL_TEXTURE_2D, this->id_text );
 
-    glDisable(GL_TEXTURE_GEN_S);
-    glDisable(GL_TEXTURE_GEN_T);
+    //Definimos el tipo de generación de coordenadas según mgct
+    GLuint tipo_funcion_generacion, tipo_especificacion_coeficientes;
+
+    switch( this->mgct ){
+        case OBJETO:
+            tipo_funcion_generacion             = GL_OBJECT_LINEAR;
+            tipo_especificacion_coeficientes    = GL_OBJECT_PLANE;
+            break;
+
+        case CAMARA:
+            tipo_funcion_generacion             = GL_EYE_LINEAR;
+            tipo_especificacion_coeficientes    = GL_EYE_PLANE;
+            break;
+
+        default:
+            break;
+    }
+
+    //Configuramos la textura con la definición anterior
+    if( this->mgct != DESACTIVADO ){
+        glEnable( GL_TEXTURE_GEN_S );
+        glEnable( GL_TEXTURE_GEN_T );
+
+        glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, tipo_funcion_generacion );
+        glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, tipo_funcion_generacion );
+
+        glTexGenfv( GL_S, tipo_especificacion_coeficientes, this->cs.get_ptr() );
+        glTexGenfv( GL_T, tipo_especificacion_coeficientes, this->ct.get_ptr() );
+    }
+    else{
+        glDisable( GL_TEXTURE_GEN_S );
+        glDisable( GL_TEXTURE_GEN_T );
+    }
 
     CError();
+
+    return this->mgct;
 }
