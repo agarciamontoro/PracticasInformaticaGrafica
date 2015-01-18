@@ -9,20 +9,19 @@
 #include "VBO.hpp"
 #include "jpg_imagen.hpp"
 
+#include "error-ogl.hpp"
+
 class Textura{
 private:
-    GLuint          id_text;    // identificador OpenGL de la textura
+    GLuint          id_text = 0;    // identificador OpenGL de la textura
     jpg::Imagen*    img = NULL; // puntero a imagen con los texels
     enum modo_text  mgct;       // modo de gen. cc.tt. (0 = desactivado, 1 = objeto, 2 = camara)
 
     Tupla4f         cs,         // coeficientes para generación de coords. de textura
                     ct;
 
-    VBO_Textura     VBO_coord_textura;
-
 public:
-    Textura():
-        id_text(0){}
+    Textura(){}
 
     Textura(char* img_text);
 

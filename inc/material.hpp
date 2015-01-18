@@ -17,6 +17,7 @@ public:
     Material(Tupla3f emision, Tupla3f ambiental, Tupla3f difuso, Tupla3f especular, float exponente, Textura* textura = NULL);
 
     void activar();       // activa material en el cauce fijo
+    bool hayTextura();
 } ;
 
 #endif

@@ -1,17 +1,20 @@
 #ifndef IG_FUENTE_LUZ_HPP
 #define IG_FUENTE_LUZ_HPP
 
+#include <iostream>
+
 #include <GL/glew.h>
 #include <GL/glut.h>
 
 #include "tipos.hpp"
 #include "tuplas.hpp"
+#include "error-ogl.hpp"
 
 class FuenteLuz{
 private:
     static bool luz_ocupada[8];
 
-    unsigned int id_luz;   //GL_LIGHT0, GL_LIGHT1, ..., GL_LIGHT7
+    GLuint id_luz;   //GL_LIGHT0, GL_LIGHT1, ..., GL_LIGHT7
     enum tipo_luz tipo;
 
     Tupla4f  posvec;       // posición (w=1) o vector (w=0)

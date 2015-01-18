@@ -29,14 +29,17 @@ static Celda_Nodo           *escena,
                             *lata;
 
 static FuenteLuz            *luz_direccional;
-static Material             *reflectante;
+static Material             *reflectante,
+                            *material_lata;
+
+static Textura              *coca_cola;
 
 // ---------------------------------------------------------------------
 //  Cambia el modo de visualización del modelo PLY
 
 void P4_CambiarVisualizacion(enum modo_visualizacion modo){
     peon->set_visualizacion(modo);
-    lata_lateral->set_visualizacion(modo);
+    //lata_lateral->set_visualizacion(modo);
     lata_superior->set_visualizacion(modo);
     lata_inferior->set_visualizacion(modo);
 }
@@ -47,6 +50,7 @@ void P4_CambiarVisualizacion(enum modo_visualizacion modo){
 // incializado OpenGL. El PLY se debe cargar aquí.
 
 void P4_Inicializar( int argc, char *argv[] ){
+    CError();
     char archivo_lata_lateral[]     = "./PLY/lata-pcue.ply";
     char archivo_lata_superior[]    = "./PLY/lata-psup.ply";
     char archivo_lata_inferior[]    = "./PLY/lata-pinf.ply";
@@ -69,10 +73,20 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     // MALLA LATA
 
+    //Material con textura
+    coca_cola = new Textura("IMG/text-lata-1.jpg");
+    material_lata = new Material(Tupla3f(0.3, 0.3, 0.3),
+                                 Tupla3f(0.05, 0.05, 0.05),
+                                 Tupla3f(0.7, 0.7, 0.7),
+                                 Tupla3f(1.0, 1.0, 1.0),
+                                 6.0,
+                                 coca_cola);
+
     // Malla cuerpo
     Malla_TVT lata_lateral_aux(archivo_lata_lateral, VERT);
-    lata_lateral = new Malla_TVT(lata_lateral_aux.GenerarSolidoRevolucion(num_caras));
-    lata_lateral->set_visualizacion(AJEDREZ);
+    lata_lateral = new Malla_TVT(lata_lateral_aux.GenerarSolidoRevolucion(num_caras, true));
+    lata_lateral->set_visualizacion(ILUM_PLANO);
+    lata_lateral->AsignarMaterial(material_lata);
 
     Celda_Malla* malla_lata_lateral = new Celda_Malla(lata_lateral);
 
@@ -111,16 +125,20 @@ void P4_Inicializar( int argc, char *argv[] ){
     ///////////////////////                   ////////////////////////
     //////////////////////////////////////////////////////////////////
 
-    luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(3.0, 7.0, 0.0, 0.0));
+    luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(0.0, 0.0, 0.0, 0.0));
     luz_direccional->activar();
 
     Tupla3f prueba(0.1, 0.2, 1.0);
-    reflectante = new Material(prueba, prueba, prueba, prueba, 2.0);
-    reflectante->activar();
-
 }
 
 void P4_DibujarObjetos(){
+    glEnable( GL_LIGHTING );
+    glEnable( GL_NORMALIZE );
+    glDisable( GL_COLOR_MATERIAL );
+    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
+    glLightModeli( GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR ) ;
+    glLightModeli( GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE );
+
     escena->visualizar();
 }
 

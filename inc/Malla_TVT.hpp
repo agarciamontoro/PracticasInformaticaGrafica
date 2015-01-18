@@ -13,7 +13,7 @@
 #include "file_ply_stl.hpp"
 #include "VBO.hpp"
 #include "tipos.hpp"
-#include "textura.hpp"
+#include "material.hpp"
 
 class Malla_TVT{
 private:
@@ -30,9 +30,10 @@ private:
 	VBO_Normales	VBO_normales_vertices,
 					VBO_normales_caras;
     VBO_Colores		VBO_colores_vertices;
+	VBO_Textura     VBO_coord_textura;
 
 	std::vector<Tupla2f>	coordenadas_textura;
-	Textura					textura;
+	Material*				material = NULL;
 
 	enum modo_visualizacion visualizacion_actual;
 
@@ -52,6 +53,7 @@ private:
 	void GenerarVBO_normales_vertices();
     void GenerarVBO_normales_caras();
     void GenerarVBO_colores_vertices();
+	void GenerarVBO_coord_textura();
 
 	bool LeerPLY(char* archivo_PLY, enum modo_lectura lec);
 	void cambiar_color(Tupla3f color);
@@ -101,7 +103,7 @@ public:
 
 	// ---------------------------------------------------------------------
 	//  Genera un sólido de revolución una vez cargado el perfil en "vertices"
-	Malla_TVT GenerarSolidoRevolucion(int num_caras);
+	Malla_TVT GenerarSolidoRevolucion(int num_caras, bool calcular_coordenadas = false);
 
 	// ---------------------------------------------------------------------
 	//  Genera un sólido de revolución una vez cargado el perfil en "vertices" (no genera coord de textura)
@@ -117,6 +119,9 @@ public:
 	void AsignarColores( std::vector<Tupla3f> colores );
 	//Asigna a cada vértice un color según su normal
 	void AsignarColoresVert();
+
+	void AsignarCoordenadasTextura( std::vector<Tupla2f> coordenadas );
+	void AsignarMaterial( Material* material );
 
 	// ---------------------------------------------------------------------
 	//  Visualiza la malla TVT

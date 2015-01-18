@@ -166,7 +166,7 @@ void VBO_Caras::Dibujar(enum modo_visualizacion modo, Tupla3f color_sec){
 void VBO_Textura::Activar(){
 	glBindBuffer( get_tipo_dato(), get_id() );
 	glTexCoordPointer( 2, GL_FLOAT, 0, 0 );
-	glBindBuffer( get_tipo_dato(), 0 );
+	//glBindBuffer( get_tipo_dato(), 0 );
 
 	glEnableClientState( GL_TEXTURE_COORD_ARRAY );
 }

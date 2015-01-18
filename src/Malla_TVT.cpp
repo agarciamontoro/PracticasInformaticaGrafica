@@ -1,4 +1,5 @@
 #include <vector>
+#include <algorithm>
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -38,12 +39,20 @@ void Malla_TVT::GenerarVBO_colores_vertices(){
 		this->VBO_colores_vertices	=	VBO_Colores( colores_vertices );
 }
 
+void Malla_TVT::GenerarVBO_coord_textura(){
+	if( !coordenadas_textura.empty() )
+		this->VBO_coord_textura		=	VBO_Textura( coordenadas_textura );
+}
+
 void Malla_TVT::GenerarVBO_TODO(){
+	CError();
 	GenerarVBO_vertices();
 	GenerarVBO_caras();
 	GenerarVBO_normales_vertices();
 	GenerarVBO_normales_caras();
 	GenerarVBO_colores_vertices();
+	GenerarVBO_coord_textura();
+	CError();
 }
 
 bool Malla_TVT::LeerPLY(char* archivo_PLY, enum modo_lectura lec){
@@ -94,9 +103,9 @@ Malla_TVT::Malla_TVT( char* archivo_PLY,
 	LeerPLY(archivo_PLY, lec);
 	CalcularNormales();
 	AsignarColoresVert();
-	GenerarVBO_TODO();
 	this->color_principal = color_principal_t;
 	this->color_secundario = color_secundario_t;
+	GenerarVBO_TODO();
 	set_visualizacion(visualizacion_t);
 	ObtenerDimension();
 }
@@ -130,7 +139,7 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 		this->normales_caras = original.normales_caras;
 		this->normales_vertices = original.normales_vertices;
 		this->colores_vertices = original.colores_vertices;
-		this->textura = original.textura;
+		this->material = original.material;
 
 		this->color_principal = original.color_principal;
 		this->color_secundario = original.color_secundario;
@@ -150,9 +159,10 @@ const Malla_TVT& Malla_TVT::operator=(const Malla_TVT& original){
 
 void Malla_TVT::set_visualizacion(enum modo_visualizacion modo){
 	this->visualizacion_actual = modo;
-
 	//Por defecto usamos sombreado suave
 	glShadeModel(GL_SMOOTH);
+
+	render_actual = GL_FILL;
 
 	switch(modo){
 		case ALAMBRE:
@@ -384,7 +394,7 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion_old(int num_caras){
 }
 
 
-Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
+Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras, bool calcular_coordenadas){
 	///////////////////////////
 	// Variables necesarias //
 	///////////////////////////
@@ -490,7 +500,7 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 		vert_rev.push_back( vert_rotado );
 
 		//Textura
-		text_s = i / (num_caras - 1);
+		text_s = (float)i / (float)(num_caras - 1);
 		text_t = 0;
 		coord_text.push_back( Tupla2f(text_s, text_t) );
 
@@ -551,55 +561,57 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	//  Generación de tapas //
 	///////////////////////////
 
-	Tupla3i cara;
+	if(!calcular_coordenadas){
+		Tupla3i cara;
 
-	////////////////////
-	// Tapa inferior //
-	////////////////////
+		////////////////////
+		// Tapa inferior //
+		////////////////////
 
-	vert_rev.push_back(primer_vertice);
+		vert_rev.push_back(primer_vertice);
 
-	int indice_centro_tapa_inferior = vert_rev.size()-1;
+		int indice_centro_tapa_inferior = vert_rev.size()-1;
 
-	for (int i = 0; i < num_caras-1; ++i)
-	{
-		cara = Tupla3i(	num_vert * (i),
+		for (int i = 0; i < num_caras-1; ++i)
+		{
+			cara = Tupla3i(	num_vert * (i),
+			indice_centro_tapa_inferior,
+			num_vert * (i+1) );
+
+			caras_rev.push_back( cara );
+		}
+
+		// Última cara de la tapa inferior
+		cara = Tupla3i(	num_vert * (num_caras-1),
 		indice_centro_tapa_inferior,
-		num_vert * (i+1) );
+		0 );
 
 		caras_rev.push_back( cara );
-	}
 
-	// Última cara de la tapa inferior
-	cara = Tupla3i(	num_vert * (num_caras-1),
-	indice_centro_tapa_inferior,
-	0 );
+		////////////////////
+		// Tapa superior //
+		////////////////////
 
-	caras_rev.push_back( cara );
+		vert_rev.push_back(ultimo_vertice);
 
-	////////////////////
-	// Tapa superior //
-	////////////////////
+		int indice_centro_tapa_superior = vert_rev.size()-1;
 
-	vert_rev.push_back(ultimo_vertice);
+		for (int i = 0; i < num_caras-1; ++i)
+		{
+			cara = Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+			indice_centro_tapa_superior,
+			num_vert * (i) + (num_vert - 1) );
 
-	int indice_centro_tapa_superior = vert_rev.size()-1;
+			caras_rev.push_back( cara );
+		}
 
-	for (int i = 0; i < num_caras-1; ++i)
-	{
-		cara = Tupla3i(	num_vert * (i+1) + (num_vert - 1),
+		// Última cara de la tapa superior
+		cara = Tupla3i(	num_vert - 1,
 		indice_centro_tapa_superior,
-		num_vert * (i) + (num_vert - 1) );
+		num_vert * (num_caras-1)  + (num_vert - 1) );
 
 		caras_rev.push_back( cara );
 	}
-
-	// Última cara de la tapa superior
-	cara = Tupla3i(	num_vert - 1,
-	indice_centro_tapa_superior,
-	num_vert * (num_caras-1)  + (num_vert - 1) );
-
-	caras_rev.push_back( cara );
 
 	//////////////////////////
 	// Generación de la nueva malla //
@@ -608,10 +620,14 @@ Malla_TVT Malla_TVT::GenerarSolidoRevolucion(int num_caras){
 	Malla_TVT solido_revolucion( vert_rev, caras_rev );
 
 	//////////////////////////
-	// Asignar colores a los vértices //
+	// Asignar atributos    //
 	//////////////////////////
 
-	solido_revolucion.AsignarColoresVert();
+	if(calcular_coordenadas){
+		solido_revolucion.AsignarCoordenadasTextura(coord_text);
+	}
+	else
+		solido_revolucion.AsignarColoresVert();
 
 	return solido_revolucion;
 }
@@ -682,6 +698,18 @@ void Malla_TVT::AsignarColoresVert(){
 	this->AsignarColores( colores_vertices );
 }
 
+
+void Malla_TVT::AsignarCoordenadasTextura( std::vector<Tupla2f> coordenadas ){
+	assert( coordenadas.size() == this->vertices.size() );
+	//std::reverse(coordenadas.begin(), coordenadas.end());
+	this->coordenadas_textura = coordenadas;
+	this->GenerarVBO_coord_textura();
+}
+
+void Malla_TVT::AsignarMaterial( Material* material ){
+	this->material = material;
+}
+
 void Malla_TVT::DibujarMalla_TVT(){
 	CError();
 	////////////////////////
@@ -698,16 +726,36 @@ void Malla_TVT::DibujarMalla_TVT(){
 	//////////////////////
 	// Enviar atributos //
 	//////////////////////
-
-	bool normales_activadas, colores_activados;
+	bool normales_activadas, colores_activados, textura_activada;
 
 	normales_activadas = VBO_normales_vertices.Activar();
 
-	if( visualizacion_actual != AJEDREZ ){
+	if( visualizacion_actual != AJEDREZ &&
+		visualizacion_actual != ILUM_PLANO &&
+		visualizacion_actual != ILUM_GOUROUD
+		){
 		colores_activados = VBO_colores_vertices.Activar();
 	}
 	else{
 		colores_activados = false;
+	}
+
+	if( visualizacion_actual == ILUM_PLANO ||
+		visualizacion_actual == ILUM_GOUROUD &&
+		this->material != NULL
+		){
+		material->activar();
+
+		if( material->hayTextura() ){
+			textura_activada = true;
+			VBO_coord_textura.Activar();
+			std::cout << "TEXTURA ACTIVADA" << std::endl;
+		}
+		else
+			textura_activada = false;
+	}
+	else{
+		textura_activada = false;
 	}
 
 	//////////////////////
@@ -736,6 +784,11 @@ void Malla_TVT::DibujarMalla_TVT(){
 		glDisableClientState( GL_COLOR_ARRAY );
 	}
 
+	// desactivar uso de array de coordenadas de textura
+	if( textura_activada ){
+		glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+	}
+
 	// desactivar uso de array de vértices
 	glDisableClientState( GL_VERTEX_ARRAY );
 
@@ -755,7 +808,6 @@ void Malla_TVT::DibujarMalla_TVT(){
 		DibujarNormales_Caras( color_secundario + Tupla3f(0.5, 0.5, 0.5), 0.5 );
 	}
 
-	CError();
 }
 
 void Malla_TVT::ObtenerDimension(){

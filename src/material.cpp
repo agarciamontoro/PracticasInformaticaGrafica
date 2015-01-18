@@ -19,10 +19,14 @@ void Material::activar(){
 
     glMaterialfv( GL_FRONT_AND_BACK, GL_SHININESS, &(this->exponente) ) ;
 
-    if( textura != NULL ){
+    if( hayTextura() ){
         textura->activar();
     }
     else{
         glDisable( GL_TEXTURE_2D );
     }
+}
+
+bool Material::hayTextura(){
+    return this->textura != NULL;
 }
