@@ -110,11 +110,11 @@ void P4_Inicializar( int argc, char *argv[] ){
 
 
     material_peon_negro = new Material(
-                                    Tupla4f(0.2, 0.2, 0.2, 1.0),
-                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
-                                    Tupla4f(0.1, 0.1, 0.1, 1.0),
-                                    Tupla4f(0.8, 0.8, 0.8, 1.0),
-                                    2.0);
+                                    Tupla4f(0.0, 0.0, 0.0, 1.0),
+                                    Tupla4f(0.02, 0.02, 0.02, 1.0),
+                                    Tupla4f(0.0, 0.0, 0.0, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
+                                    3.0);
 
 
     //////////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     Malla_TVT peon_aux(archivo_peon, VERT);
     peon_madera = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
-    peon_madera->set_visualizacion(ILUM_PLANO);
+    peon_madera->set_visualizacion(ILUM_GOUROUD);
     peon_madera->AsignarMaterial(material_peon_madera);
 
     peon_blanco = new Malla_TVT(*peon_madera);
@@ -145,7 +145,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     // Malla cuerpo
     Malla_TVT lata_lateral_aux(archivo_lata_lateral, VERT);
     lata_lateral = new Malla_TVT(lata_lateral_aux.GenerarSolidoRevolucion(num_caras, true));
-    lata_lateral->set_visualizacion(ILUM_PLANO);
+    lata_lateral->set_visualizacion(ILUM_GOUROUD);
     lata_lateral->AsignarMaterial(material_lata);
 
     Celda_Malla* malla_lata_lateral = new Celda_Malla(lata_lateral);
@@ -153,7 +153,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     // Malla tapa superior
     Malla_TVT lata_superior_aux(archivo_lata_superior, VERT);
     lata_superior = new Malla_TVT(lata_superior_aux.GenerarSolidoRevolucion(num_caras));
-    lata_superior->set_visualizacion(ILUM_PLANO);
+    lata_superior->set_visualizacion(ILUM_GOUROUD);
     lata_superior->AsignarMaterial(material_tapas);
 
     Celda_Malla* malla_lata_superior = new Celda_Malla(lata_superior);
@@ -161,7 +161,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     // Malla inferior
     Malla_TVT lata_inferior_aux(archivo_lata_inferior, VERT);
     lata_inferior = new Malla_TVT(lata_inferior_aux.GenerarSolidoRevolucion(num_caras));
-    lata_inferior->set_visualizacion(ILUM_PLANO);
+    lata_inferior->set_visualizacion(ILUM_GOUROUD);
     lata_inferior->AsignarMaterial(material_tapas);
 
     Celda_Malla* malla_lata_inferior = new Celda_Malla(lata_inferior);
@@ -182,7 +182,7 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     for(size_t i = 0; i < 3; ++i)
     {
-        mat_tras_peon[i] = new Matriz_Traslacion(5*cosf(i*M_PI/4), 1.4, 5*sinf(i*M_PI/4));
+        mat_tras_peon[i] = new Matriz_Traslacion(4*cosf(i*M_PI/4), 1.4, 4*sinf(i*M_PI/4));
         trans_peon[i] = new Celda_Transformacion(mat_tras_peon[i]);
     }
 
@@ -225,11 +225,12 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     luz_direccional = new FuenteLuz(0, DIRECCIONAL,
                                     Tupla4f(0.0, 0.0, 0.0, 0.0));
+
     luz_posicional  = new FuenteLuz(1, POSICIONAL,
-                                    Tupla4f(2.5, 2.5, 0.0, 1.0),
-                                    Tupla4f(0.0, 1.0, 0.0, 1.0),
-                                    Tupla4f(0.0, 1.0, 0.0, 1.0),
-                                    Tupla4f(0.0, 1.0, 0.0, 1.0));
+                                    Tupla4f(7.0, 0.0, 7.0, 1.0),
+                                    Tupla4f(0.2, 0.7, 0.7, 1.0),
+                                    Tupla4f(0.2, 0.7, 0.7, 1.0),
+                                    Tupla4f(0.2, 0.7, 0.7, 1.0));
 
     glEnable( GL_LIGHTING );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
@@ -274,19 +275,19 @@ bool P4_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
     std::cout << "TECLA" << std::endl;
     switch( toupper(tecla) ){
         case 'A':
-        luz_direccional->modificar_direccion(0,+1);
+        luz_direccional->modificar_direccion(0,+0.1);
         break;
 
         case 'Z':
-        luz_direccional->modificar_direccion(0,-1);
+        luz_direccional->modificar_direccion(0,-0.1);
         break;
 
         case 'X':
-        luz_direccional->modificar_direccion(+1,0);
+        luz_direccional->modificar_direccion(+0.1,0);
         break;
 
         case 'C':
-        luz_direccional->modificar_direccion(-1,0);
+        luz_direccional->modificar_direccion(-0.1,0);
         break;
 
     }
