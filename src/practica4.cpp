@@ -102,19 +102,19 @@ void P4_Inicializar( int argc, char *argv[] ){
 
 
     material_peon_blanco = new Material(
-                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.6, 0.6, 0.6, 1.0),
                                     Tupla4f(0.05, 0.05, 0.05, 1.0),
-                                    Tupla4f(0.8, 0.8, 0.8, 1.0),
+                                    Tupla4f(0.5, 0.5, 0.5, 1.0),
                                     Tupla4f(0.0, 0.0, 0.0, 0.0),
                                     6.0);
 
 
     material_peon_negro = new Material(
-                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.2, 0.2, 0.2, 1.0),
                                     Tupla4f(0.05, 0.05, 0.05, 1.0),
                                     Tupla4f(0.1, 0.1, 0.1, 1.0),
-                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
-                                    6.0);
+                                    Tupla4f(0.8, 0.8, 0.8, 1.0),
+                                    2.0);
 
 
     //////////////////////////////////////////////////////////////////
@@ -128,7 +128,7 @@ void P4_Inicializar( int argc, char *argv[] ){
     Malla_TVT peon_aux(archivo_peon, VERT);
     peon_madera = new Malla_TVT(peon_aux.GenerarSolidoRevolucion(num_caras));
     peon_madera->set_visualizacion(ILUM_PLANO);
-    peon_madera->AsignarMaterial(material_lata);
+    peon_madera->AsignarMaterial(material_peon_madera);
 
     peon_blanco = new Malla_TVT(*peon_madera);
     peon_blanco->AsignarMaterial(material_peon_blanco);
@@ -182,7 +182,7 @@ void P4_Inicializar( int argc, char *argv[] ){
 
     for(size_t i = 0; i < 3; ++i)
     {
-        mat_tras_peon[i] = new Matriz_Traslacion(5*cosf(M_PI/(i*2)), 1.4, 5*sinf(M_PI/(i*2)));
+        mat_tras_peon[i] = new Matriz_Traslacion(5*cosf(i*M_PI/4), 1.4, 5*sinf(i*M_PI/4));
         trans_peon[i] = new Celda_Transformacion(mat_tras_peon[i]);
     }
 
