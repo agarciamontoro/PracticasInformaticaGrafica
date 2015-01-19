@@ -55,7 +55,8 @@ enum solidos_GLUT{
 enum grados_libertad{
     CABEZA,
     OJO,
-    ARMAS
+    ARMAS,
+    CABEZA_ALTURA
 };
 
 #endif

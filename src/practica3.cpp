@@ -65,6 +65,8 @@ static Matriz_Rotacion      *grado_libertad_cabeza,
                             *grado_libertad_ojo,
                             *grado_libertad_armas;
 
+static Matriz_Traslacion    *grado_libertad_cabeza_altura;
+
 /////////////////////  VARIABLES  ANIMACIÓN  ///////////////////////
 
 static float velocidad_animacion    = 0;
@@ -454,6 +456,7 @@ void P3_Inicializar( int argc, char *argv[] )
    grado_libertad_cabeza    = mat_rot_cabeza;
    grado_libertad_ojo       = mat_rot_ojo;
    grado_libertad_armas     = mat_rot_pecho;
+   grado_libertad_cabeza_altura = mat_tras_cabeza;
 
 }
 
@@ -491,7 +494,7 @@ void P3_Conmutar_NormalesVertices(){
    copa->Conmutar_NormalesVertices();
 }
 
-void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio){
+void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio, Tupla3f cambio_tras){
     float angulo;
 
     switch(grado){
@@ -508,6 +511,9 @@ void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio){
         case ARMAS:
             grado_libertad_armas->set_angulo( grado_libertad_armas->get_angulo() + cambio );
                 break;
+
+        case CABEZA_ALTURA:
+            grado_libertad_cabeza_altura->set_direccion( grado_libertad_cabeza_altura->get_direccion() + cambio_tras);
 
         default:
             break;
@@ -557,6 +563,14 @@ bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
 
         case 'c':
             P3_Modificar_Grado_Libertad(ARMAS, -0.1);
+            break;
+
+        case 'Y':
+            P3_Modificar_Grado_Libertad(CABEZA_ALTURA, 0, Tupla3f(0.0, +0.1, 0.0));
+            break;
+
+        case 'y':
+            P3_Modificar_Grado_Libertad(CABEZA_ALTURA, 0, Tupla3f(0.0, -0.1, 0.0));
             break;
 
         case 'B':

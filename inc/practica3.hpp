@@ -30,7 +30,7 @@ void P3_CambiarVisualizacion(enum modo_visualizacion modo);
 void P3_Conmutar_NormalesCaras();
 void P3_Conmutar_NormalesVertices();
 
-void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio);
+void P3_Modificar_Grado_Libertad(enum grados_libertad grado, float cambio, Tupla3f cambio_tras = Tupla3f(0,0,0));
 void P3_Modificar_Velocidad_Animacion(double incremento);
 void P3_Establecer_Valores_Animacion();
 
