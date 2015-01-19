@@ -35,6 +35,9 @@ public:
     void activar();
     void desactivar();
 
+    void set_direccion( float alpha, float beta );
+    void modificar_direccion( float alpha, float beta );
+
 };
 
 #endif

@@ -80,7 +80,7 @@ bool PX_FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
 			break;
 		default:
 			redisp = false;
-		break;
+			break;
 	}
 
 	return redisp;

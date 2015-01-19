@@ -223,8 +223,13 @@ void P4_Inicializar( int argc, char *argv[] ){
     ///////////////////////                   ////////////////////////
     //////////////////////////////////////////////////////////////////
 
-    luz_direccional = new FuenteLuz(0, DIRECCIONAL, Tupla4f(0.0, 0.0, 0.0, 0.0));
-    luz_posicional  = new FuenteLuz(1, POSICIONAL, Tupla4f(2.5, 2.5, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0), Tupla4f(0.0, 1.0, 0.0, 1.0));
+    luz_direccional = new FuenteLuz(0, DIRECCIONAL,
+                                    Tupla4f(0.0, 0.0, 0.0, 0.0));
+    luz_posicional  = new FuenteLuz(1, POSICIONAL,
+                                    Tupla4f(2.5, 2.5, 0.0, 1.0),
+                                    Tupla4f(0.0, 1.0, 0.0, 1.0),
+                                    Tupla4f(0.0, 1.0, 0.0, 1.0),
+                                    Tupla4f(0.0, 1.0, 0.0, 1.0));
 
     glEnable( GL_LIGHTING );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
@@ -266,6 +271,25 @@ void P4_Establecer_Valores_Animacion(){
 }
 
 bool P4_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
+    std::cout << "TECLA" << std::endl;
+    switch( toupper(tecla) ){
+        case 'A':
+        luz_direccional->modificar_direccion(0,+1);
+        break;
+
+        case 'Z':
+        luz_direccional->modificar_direccion(0,-1);
+        break;
+
+        case 'X':
+        luz_direccional->modificar_direccion(+1,0);
+        break;
+
+        case 'C':
+        luz_direccional->modificar_direccion(-1,0);
+        break;
+
+    }
     return false;
 }
 

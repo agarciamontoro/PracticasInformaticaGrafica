@@ -259,16 +259,16 @@ void FGE_PulsarTeclaNormal( unsigned char tecla, int x_raton, int y_raton )
       case '-' :
          frustum_factor_escala /= 1.05;
          break;
-      case 'L' :
+      case '1' :
          PX_CambiarVisualizacion(ALAMBRE);
          break;
-      case 'S' :
+      case '2' :
          PX_CambiarVisualizacion(SOLIDO);
          break;
-      case 'A' :
+      case '3' :
          PX_CambiarVisualizacion(AJEDREZ);
          break;
-      case 'P' :
+      case '4' :
          PX_CambiarVisualizacion(PUNTO);
          break;
       case 'V' :
