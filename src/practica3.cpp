@@ -487,11 +487,12 @@ void P3_Inicializar( int argc, char *argv[] )
                                     6.0);
 
     material_tabla = new Material(
-                                    Tupla4f(0.0, 0.0, 0.0, 1.0),
+                                    Tupla4f(0.2, 0.2, 0.2, 1.0),
                                     Tupla4f(0.02, 0.02, 0.02, 1.0),
                                     Tupla4f(0.0, 0.0, 0.0, 1.0),
-                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
-                                    3.0);
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    3.0,
+                                    madera);
 
     material_copa = new Material(
                                     Tupla4f(0.3, 0.0, 0.0, 1.0),
@@ -516,22 +517,22 @@ void P3_Inicializar( int argc, char *argv[] )
 void P3_DibujarObjetos()
 {
   if(ILUMINACION_ACTIVADA){
-      glEnable( GL_LIGHTING );
-      glEnable( GL_NORMALIZE );
-      glDisable( GL_COLOR_MATERIAL );
+    glEnable( GL_LIGHTING );
+    glEnable( GL_NORMALIZE );
+    glDisable( GL_COLOR_MATERIAL );
 
-          esfera->AsignarMaterial(material_esfera);
+    esfera->AsignarMaterial(material_esfera);
     cubo->AsignarMaterial(material_tabla);
     copa->AsignarMaterial(material_copa);
     cilindro->AsignarMaterial(material_cilindro);
-  
-      luz_direccional->activar();
-      luz_posicional->activar();
+
+    luz_direccional->activar();
+    luz_posicional->activar();
   }
   else{
     glDisable(GL_LIGHTING);
     glEnable( GL_COLOR_MATERIAL );
-        esfera->AsignarMaterial(NULL);
+    esfera->AsignarMaterial(NULL);
     cubo->AsignarMaterial(NULL);
     copa->AsignarMaterial(NULL);
     cilindro->AsignarMaterial(NULL);
@@ -552,9 +553,9 @@ void P3_DibujarObjetos()
    dalek->visualizar();
 
    if(ILUMINACION_ACTIVADA){
-       glDisable( GL_LIGHTING );
-       glDisable( GL_NORMALIZE );
-       glEnable( GL_COLOR_MATERIAL );
+     glDisable( GL_LIGHTING );
+     glDisable( GL_NORMALIZE );
+     glEnable( GL_COLOR_MATERIAL );
   }
 }
 
