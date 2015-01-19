@@ -227,10 +227,10 @@ void P4_Inicializar( int argc, char *argv[] ){
                                     Tupla4f(0.0, 0.0, 0.0, 0.0));
 
     luz_posicional  = new FuenteLuz(1, POSICIONAL,
-                                    Tupla4f(7.0, 0.0, 7.0, 1.0),
-                                    Tupla4f(0.2, 0.7, 0.7, 1.0),
-                                    Tupla4f(0.2, 0.7, 0.7, 1.0),
-                                    Tupla4f(0.2, 0.7, 0.7, 1.0));
+                                    Tupla4f(0.0, 6.0, 0.0, 1.0),
+                                    Tupla4f(0.2, 0.2, 0.7, 1.0),
+                                    Tupla4f(0.2, 0.2, 0.7, 1.0),
+                                    Tupla4f(0.2, 0.2, 0.7, 1.0));
 
     glEnable( GL_LIGHTING );
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );
