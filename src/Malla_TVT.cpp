@@ -740,9 +740,7 @@ void Malla_TVT::DibujarMalla_TVT(){
 		colores_activados = false;
 	}
 
-	if( visualizacion_actual == ILUM_PLANO ||
-		visualizacion_actual == ILUM_GOUROUD &&
-		this->material != NULL
+	if( this->material != NULL
 		){
 		bool auto_generacion = material->activar();
 
