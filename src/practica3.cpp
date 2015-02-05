@@ -11,9 +11,16 @@
 
 #include <stdio.h>
 
+int ILUMINACION_ACTIVADA = 0;
+
+Material* material_esfera, *material_copa, *material_tabla, *material_cilindro;
+
 ///////////////////////      MALLAS      /////////////////////////
 
 static Malla_TVT *cubo, *esfera, *cilindro, *copa;
+
+static FuenteLuz            *luz_direccional,
+                            *luz_posicional;
 
 ///////////////    MATRICES DE TRANSFORMACIÓN    /////////////////
 
@@ -98,7 +105,7 @@ void P3_Inicializar( int argc, char *argv[] )
    char archivo_cilindro[]  = "./PLY/cilinder.ply";
    char archivo_copa[]      = "./PLY/cup.ply";
 
-   int num_caras = 100;
+   int num_caras = 20;
 
    //////////////////////////////////////////////////////////////////
    ///////////////////////                   ////////////////////////
@@ -458,6 +465,53 @@ void P3_Inicializar( int argc, char *argv[] )
    grado_libertad_armas     = mat_rot_pecho;
    grado_libertad_cabeza_altura = mat_tras_cabeza;
 
+    //////////////////////////////////////////////////////////////////
+    ///////////////////////                   ////////////////////////
+    /////////////////////// DEFINICIÓN  LUCES ////////////////////////
+    ///////////////////////                   ////////////////////////
+    //////////////////////////////////////////////////////////////////
+    
+    Textura* madera = new Textura("IMG/text-madera.jpg", OBJETO);
+
+    luz_direccional = new FuenteLuz(2, DIRECCIONAL,
+                                    Tupla4f(0.0, 0.0, 0.0, 0.0));
+
+    luz_posicional  = new FuenteLuz(3, POSICIONAL,
+                                    Tupla4f(5.0, 5.0, 5.0, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0));
+
+    material_esfera = new Material(
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.5, 0.5, 0.5, 1.0),
+                                    Tupla4f(0.0, 0.0, 0.0, 0.0),
+                                    6.0);
+
+    material_tabla = new Material(
+                                    Tupla4f(0.2, 0.2, 0.2, 1.0),
+                                    Tupla4f(0.02, 0.02, 0.02, 1.0),
+                                    Tupla4f(0.0, 0.0, 0.0, 1.0),
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    3.0,
+                                    madera);
+
+    material_copa = new Material(
+                                    Tupla4f(0.3, 0.0, 0.0, 1.0),
+                                    Tupla4f(0.02, 0.02, 0.02, 1.0),
+                                    Tupla4f(0.0, 0.0, 0.0, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
+                                    3.0);
+
+    material_cilindro = new Material(
+                                    Tupla4f(0.3, 0.3, 0.3, 1.0),
+                                    Tupla4f(0.05, 0.05, 0.05, 1.0),
+                                    Tupla4f(0.7, 0.7, 0.7, 1.0),
+                                    Tupla4f(1.0, 1.0, 1.0, 1.0),
+                                    6.0,
+                                    madera);
+
 }
 
 // ---------------------------------------------------------------------
@@ -465,6 +519,28 @@ void P3_Inicializar( int argc, char *argv[] )
 
 void P3_DibujarObjetos()
 {
+  if(ILUMINACION_ACTIVADA){
+    glEnable( GL_LIGHTING );
+    glEnable( GL_NORMALIZE );
+    glDisable( GL_COLOR_MATERIAL );
+
+    esfera->AsignarMaterial(material_esfera);
+    cubo->AsignarMaterial(material_tabla);
+    copa->AsignarMaterial(material_copa);
+    cilindro->AsignarMaterial(material_cilindro);
+
+    luz_direccional->activar();
+    luz_posicional->activar();
+  }
+  else{
+    glDisable(GL_LIGHTING);
+    glEnable( GL_COLOR_MATERIAL );
+    esfera->AsignarMaterial(NULL);
+    cubo->AsignarMaterial(NULL);
+    copa->AsignarMaterial(NULL);
+    cilindro->AsignarMaterial(NULL);
+  }
+
    cubo->set_color_principal(Tupla3f(0.5, 0.0, 0.0));
    cubo->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
@@ -478,6 +554,12 @@ void P3_DibujarObjetos()
    copa->set_color_secundario(Tupla3f(0.0, 0.0, 0.3));
 
    dalek->visualizar();
+
+   if(ILUMINACION_ACTIVADA){
+     glDisable( GL_LIGHTING );
+     glDisable( GL_NORMALIZE );
+     glEnable( GL_COLOR_MATERIAL );
+  }
 }
 
 void P3_Conmutar_NormalesCaras(){
@@ -537,6 +619,12 @@ void P3_Establecer_Valores_Animacion(){
   animacion_tras->set_direccion(10*sin(angulo_animacion), 0.0, 10*cos(angulo_animacion));
 }
 
+void P3_Conmutar_Iluminacion(){
+  ILUMINACION_ACTIVADA++;
+  ILUMINACION_ACTIVADA %= 2;
+
+}
+
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
     bool redisp = true ;
 
@@ -580,6 +668,10 @@ bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton ){
         case 'b':
             P3_Modificar_Velocidad_Animacion(-0.01);
             break;
+
+        case 'i':
+        case 'I':
+            P3_Conmutar_Iluminacion();
 
 
         default:

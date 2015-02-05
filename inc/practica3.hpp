@@ -23,6 +23,8 @@
 #include "VBO.hpp"
 #include "Malla_TVT.hpp"
 #include "tipos.hpp"
+#include "fuente_luz.hpp"
+#include "material.hpp"
 
 void P3_DibujarObjetos() ;
 void P3_Inicializar( int argc, char *argv[] ) ;
@@ -36,5 +38,7 @@ void P3_Establecer_Valores_Animacion();
 
 bool P3_FGE_TeclaNormal( unsigned char tecla, int x_raton, int y_raton );
 bool P3_FGE_TeclaEspecial( int tecla, int x_raton, int y_raton );
+
+void P3_Conmutar_Iluminacion();
 
 #endif
