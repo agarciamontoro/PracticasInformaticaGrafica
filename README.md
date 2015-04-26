@@ -1,76 +1,81 @@
-Prácticas de Informática Gráfica
+Computer Graphics assignments
 =============================
 
-Proyecto cuatrimestral para la asignatura de Informática Gráfica, cuyo objetivo principal
-es el aprendizaje de OpenGL.
+Computer Graphics project, built entirely with OpenGL and C++.
 
-## Estructura
+## Structure
 
-El proyecto se estructura en prácticas sucesivas, cada una de las cuales se apoya en la anterior.
-Hasta ahora, este repositorio contiene:
+The project is structured in consecutive assignments, one of each is based in the previous work.
+This repo contains:
 
-* **Práctica 1 - Visualización de modelos PLY**: Visualización de modelos almacenados en archivos PLY.
-* **Práctica 2 - Modelos poligonales**: Creación de modelos mediante revolución de perfiles.
-* **Práctica 3 - Modelos jerárquicos**: Creación de modelos jerárquicos con algunos grados de libertad.
+* **Assignment 1 - PLY model visualization**: Model visualization of PLY files.
+* **Assignment 2 - Poligonal models**: Model generation, surfaces of revolution.
+* **Assignment 3 - Hierarchical models**: Hierarchical model generation with several degrees of freedom.
+* **Assignment 4 - Illumination**: Illumination control in a more complex scene.
 
-## Instalación y uso
+## Installation
 
-Para la compilación del proyecto es necesaria las librerías freeglut y libjpeg (en su versión de desarrollo), que se encuentran disponibles en la mayoría de las distribuciones Linux usuales. La compilación y ejecución por defecto se realiza con la siguiente órden:
+The libraries freeglut and libjpeg (in its development version) are needed in the compilation process. These libraries are available in the majority of Linux distributions. For compiling and/or running with the default settings, execute the following order:
 
     make
 
-Una vez compilado, se ejecuta con la siguiente órden:
+Once the project is compiled, run it with the following order:
 
-    ./bin/prac <ruta_archivo_PLY> <ruta_perfil_PLY> <num_caras>
+    ./bin/prac <PLY_file> <PLY_revolution> <face_num>
 
-Donde *\<ruta_archivo_PLY\>* es la ruta al archivo PLY que cargará la práctica 1 y *\<ruta_perfil_PLY\>* es la ruta al archivo PLY que cargará la práctica 2 para generar el sólido por revolución, con un número de caras igual a *\<num_caras\>*. Si no se especifica ningún parámetro, se cargarán el proyecto por defecto.
+Where *\<PLY_file\>* is the path to the PLY file loaded by assignment 1 and *\<PLY_revolution\>* is the path to the PLY file loaded by assignment 2 to generate the surface of revolution with *\<face_num\>* number of faces.
 
-### Teclas disponibles
+### Keys
 
-* Tecla F1: Muestra la primera práctica.
-* Tecla F2: Muestra la segunda práctica.
-* Tecla F3: Muestra la tercera práctica.
-* Tecla A: El modelo se visualiza en modo ALAMBRE. (Este es el modo por defecto).
-* Tecla S: El modelo se visualiza en modo SÓLIDO.
-* Tecla Z: El modelo se visualiza en modo AJEDREZ.
-* Tecla P: El modelo se visualiza en modo PUNTO.
-* Tecla F: Conmuta la visualización de las normales de caras.
-* Tecla V: Conmuta la visualización de las normales de vértices.
-* Tecla Q: Finaliza el programa
+* F1: Shows first assignment.
+* F2: Shows second assignment.
+* F3: Shows third assignment.
+* F4: Shows fourth assignment (default).
+* 1: The model is rendered in WIRE mode.
+* 2: The model is rendered in SOLID mode.
+* 3: The model is rendered in CHESS mode (default mode).
+* 4: The model is rendered in POINT mode.
+* F: Switches the visualization of the faces normals.
+* V: Switches the visualization of the vertices normals.
+* Q: Quits the program.
 
-Además, en el modo Práctica 3, se pueden usar las siguientes teclas para manipular el modelo:
+Furthermore, in the third assignment (F3), the following keys are used to manipulate the model:
 
-* Teclas Z/z: Control del primer grado de libertad.
-* Teclas X/x: Control del segundo grado de libertad.
-* Teclas C/c: Control del tercer grado de libertad.
-* Teclas B/b: Control automático del cuarto grado de libertad. La tecla B aumenta la velocidad
-del movimiento rotatorio de todo el modelo alrededor del origen de coordenadas. La tecla b lo disminuye.
+* Z/z: First degree of freedom control.
+* X/x: Second degree of freedom control.
+* C/c: Third degree of freedom control.
+* B/b: Fourth degree of freedom automatic control.
 
-## Capturas de pantalla
+In the fourth assignment (F4), the illumination is controlled with:
 
-Práctica 1 - Modelo PLY de Beethoven en modo AJEDREZ:
+* A/Z: Changes position of white light in the horizonal plane.
+* X/C: Changes position of white light in the vertical plane.
+
+## Screenshots
+
+Assignment 1 - Beethoven PLY model in CHESS mode.
 
 ![Beethoven](https://cloud.githubusercontent.com/assets/3924815/5709707/60023f28-9a9c-11e4-866d-be10715fa5d6.png)
 
-Práctica 1 - Modelo PLY de un coche en modo AJEDREZ:
+Assignment 1 - Car PLY model in CHESS mode.
 
-![Coche](https://cloud.githubusercontent.com/assets/3924815/5709708/6006d61e-9a9c-11e4-8630-ec637b8f5689.png)
+![Car](https://cloud.githubusercontent.com/assets/3924815/5709708/6006d61e-9a9c-11e4-8630-ec637b8f5689.png)
 
-Práctica 3 - Modelo jerárquico de un dalek creado desde cero.
+Assignment 3 - Hierarchical model of a Dalek generated from scratch.
 
 ![Dalek](https://cloud.githubusercontent.com/assets/3924815/5709861/871ca930-9a9d-11e4-8c0f-6813928e04c7.png)
 [EXTERMINATE, EXTERMINAAAAAAAAAAAAAAAAAATE!](http://en.wikipedia.org/wiki/Dalek)
 
-Práctica 2 - Sólidos generados por revolución y coloreados según las normales de los vértices.
+Assignment 2 - Surface of revolution coloured according to the vertices normals.
 
-![Origen](https://cloud.githubusercontent.com/assets/3924815/5709710/604d2998-9a9c-11e4-807d-593ed9681b98.png)
+![Inception](https://cloud.githubusercontent.com/assets/3924815/5709710/604d2998-9a9c-11e4-807d-593ed9681b98.png)
 
-![Peón](https://cloud.githubusercontent.com/assets/3924815/5709711/60508926-9a9c-11e4-87b2-bc552060f34b.png)
+![Pawn](https://cloud.githubusercontent.com/assets/3924815/5709711/60508926-9a9c-11e4-87b2-bc552060f34b.png)
 
-Práctica 4 - Escenas e iluminación
+Assignment 4 - Scene illumination.
 
-![Iluminación](https://cloud.githubusercontent.com/assets/3924815/7338716/3d485070-ec55-11e4-922c-be6138162b95.png)
+![Illumination](https://cloud.githubusercontent.com/assets/3924815/7338716/3d485070-ec55-11e4-922c-be6138162b95.png)
 
 
 =============================
-Doble Grado de Ingeniería Informática y Matemáticas. Universidad de Granada.
+Computer Science and Mathematics Degree. University of Granada.
