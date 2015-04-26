@@ -67,6 +67,10 @@ Práctica 2 - Sólidos generados por revolución y coloreados según las normale
 
 ![Peón](https://cloud.githubusercontent.com/assets/3924815/5709711/60508926-9a9c-11e4-87b2-bc552060f34b.png)
 
+Práctica 4 - Escenas e iluminación
+
+![Iluminación](https://cloud.githubusercontent.com/assets/3924815/7338716/3d485070-ec55-11e4-922c-be6138162b95.png)
+
 
 =============================
 Doble Grado de Ingeniería Informática y Matemáticas. Universidad de Granada.
